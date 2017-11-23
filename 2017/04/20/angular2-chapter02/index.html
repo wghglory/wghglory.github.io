@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        angular2-chapter02 -- Creating and Communicating Between Components｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/04/20/angular2-chapter02/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>angular2-chapter02 -- Creating and Communicating Between Components</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-04-20
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- angular2-chapter02 -- Creating and Communicating Between Components -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Creating-and-Communicating-Between-Components"><a href="#Creating-and-Communicating-Between-Components" class="headerlink" title="Creating and Communicating Between Components"></a>Creating and Communicating Between Components</h1><p>Check code at: <a href="https://github.com/wghglory/angular2-fundamental" target="_blank" rel="noopener">https://github.com/wghglory/angular2-fundamental</a></p>
+<h2 id="Creating-Our-First-Data-bound-Component"><a href="#Creating-Our-First-Data-bound-Component" class="headerlink" title="Creating Our First Data-bound Component"></a>Creating Our First Data-bound Component</h2><p>1) create events/events-list.component.ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-list'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">        &lt;h1&gt;Upcoming Angular 2 Events&lt;/h1&gt;</span></span><br><span class="line"><span class="string">        &lt;div class="well hoverwell thumbnail"&gt;</span></span><br><span class="line"><span class="string">            &lt;h2&gt;Event: &#123;&#123;event.name&#125;&#125;&lt;/h2&gt;</span></span><br><span class="line"><span class="string">            &lt;div&gt;Price: \$&#123;&#123;event.price&#125;&#125;&lt;/div&gt;     //in ts file must use \$ as $!</span></span><br><span class="line"><span class="string">            &lt;div&gt;Date: &#123;&#123;event.date&#125;&#125;&lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;div&gt;Time: &#123;&#123;event.time&#125;&#125;&lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;div&gt;Address: &#123;&#123;event.location.address&#125;&#125;, &#123;&#123;event.location.city&#125;&#125;, &#123;&#123;event.location.country&#125;&#125;&lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">    `</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsListComponent</span> </span>&#123;</span><br><span class="line">    event = &#123;</span><br><span class="line">        name: <span class="string">'ngConf 2025'</span>,</span><br><span class="line">        date: <span class="string">'3/1/2025'</span>,</span><br><span class="line">        time: <span class="string">'8am'</span>,</span><br><span class="line">        price: <span class="string">'599'</span>,</span><br><span class="line">        location: &#123; <span class="attr">address</span>: <span class="string">'123 Main St'</span>, <span class="attr">city</span>: <span class="string">'Salt Lake City, UT'</span>, <span class="attr">country</span>: <span class="string">'USA'</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) modify app.component.ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-app'</span>,</span><br><span class="line">-    <span class="comment">// template: '&lt;h2&gt;hello world&lt;/h2&gt;'</span></span><br><span class="line">+    template: <span class="string">'&lt;events-list&gt;&lt;/events-list&gt;'</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppComponent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>3) update module:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; NgModule &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; BrowserModule &#125; <span class="keyword">from</span> <span class="string">'@angular/platform-browser'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; AppComponent &#125; <span class="keyword">from</span> <span class="string">'./app.component'</span></span><br><span class="line">+ <span class="keyword">import</span> &#123; EventsListComponent &#125; <span class="keyword">from</span> <span class="string">'./events/events-list.component'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [BrowserModule],</span><br><span class="line">+   declarations: [AppComponent, EventsListComponent],</span><br><span class="line">    bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Using-External-Templates"><a href="#Using-External-Templates" class="headerlink" title="Using External Templates"></a>Using External Templates</h2><p>1) create events-list.component.html as template:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Upcoming Angular 2 Events<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"well hoverwell thumbnail"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Event: &#123;&#123;event.name&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Price: $&#123;&#123;event.price&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span>  <span class="comment">&lt;!-- no need \$ --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Date: &#123;&#123;event.date&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Time: &#123;&#123;event.time&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Address: &#123;&#123;event.location.address&#125;&#125;, &#123;&#123;event.location.city&#125;&#125;, &#123;&#123;event.location.country&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>2) modify events-list.component.ts using templateUrl instead of template:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-list'</span>,</span><br><span class="line">-    <span class="comment">// template: ``</span></span><br><span class="line">+    templateUrl: <span class="string">'app/events/events-list.component.html'</span>   <span class="comment">//relative to index.html</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsListComponent</span> </span>&#123;</span><br><span class="line">    event = &#123;</span><br><span class="line">        name: <span class="string">'ngConf 2025'</span>,</span><br><span class="line">        date: <span class="string">'3/1/2025'</span>,</span><br><span class="line">        time: <span class="string">'8am'</span>,</span><br><span class="line">        price: <span class="string">'599'</span>,</span><br><span class="line">        location: &#123; <span class="attr">address</span>: <span class="string">'123 Main St'</span>, <span class="attr">city</span>: <span class="string">'Salt Lake City, UT'</span>, <span class="attr">country</span>: <span class="string">'USA'</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Components-Interaction"><a href="#Components-Interaction" class="headerlink" title="Components Interaction"></a>Components Interaction</h2><h3 id="1-Communicating-with-Child-Components-Using-Input-Parent-pass-data-to-child"><a href="#1-Communicating-with-Child-Components-Using-Input-Parent-pass-data-to-child" class="headerlink" title="1. Communicating with Child Components Using @Input (Parent pass data to child)"></a>1. Communicating with Child Components Using @Input (Parent pass data to child)</h3><p>I want to create a address component as a child component. The parent component, events-list, will pass the event object to the child. To get this done:</p>
+<ul>
+<li>child component needs import Input from angular/core</li>
+<li>parent template uses the child selector, and [child object name] = “parent”</li>
+</ul>
+<p>1) create child component events-address.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//child component, talk with parent events-list.component.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123;Component,Input&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-address'</span>,</span><br><span class="line">    template: <span class="string">'&lt;span&gt;&#123;&#123;address.address&#125;&#125;,&#123;&#123;address.city&#125;&#125;,&#123;&#123;address.country&#125;&#125;&lt;/span&gt;'</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsAddressComponent</span></span>&#123;</span><br><span class="line">    @Input() address:any  <span class="comment">//define address object</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) modify parent component template, [address] is child object name, “event.location” is parent data</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Upcoming Angular 2 Events<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"well hoverwell thumbnail"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Event: &#123;&#123;event.name&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Price: $&#123;&#123;event.price&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Date: &#123;&#123;event.date&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Time: &#123;&#123;event.time&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- &lt;div&gt;Address: &#123;&#123;event.location.address&#125;&#125;, &#123;&#123;event.location.city&#125;&#125;, &#123;&#123;event.location.country&#125;&#125;&lt;/div&gt; --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">events-address</span> [<span class="attr">address</span>]=<span class="string">"event.location"</span>&gt;</span><span class="tag">&lt;/<span class="name">events-address</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>3) import child component to app.module</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; EventsAddressComponent &#125; <span class="keyword">from</span> <span class="string">'./events/events-address.component'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    declarations: [AppComponent, EventsListComponent, EventsAddressComponent],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="2-Communicating-with-Parent-Components-Using-Output-and-EventEmitter-child-pass-data-to-parent"><a href="#2-Communicating-with-Parent-Components-Using-Output-and-EventEmitter-child-pass-data-to-parent" class="headerlink" title="2. Communicating with Parent Components Using @Output and EventEmitter (child pass data to parent)"></a>2. Communicating with Parent Components Using @Output and EventEmitter (child pass data to parent)</h3><p>1) child component “events-address.component.ts”:</p>
+<ul>
+<li>import Output, EventEmitter</li>
+<li>define a variable accepting EventEmitter</li>
+<li>define buttonClick</li>
+<li>the EventEmitter variable emit any data from child component</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//child component, talk with parent events-list.component.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123;Component, Output, EventEmitter&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-address'</span>,</span><br><span class="line">    template: <span class="string">'&lt;button (click)="buttonClick()"&gt;Click me!&lt;/button&gt;'</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsAddressComponent</span></span>&#123;</span><br><span class="line">    @Output() myclick = <span class="keyword">new</span> EventEmitter()</span><br><span class="line"></span><br><span class="line">    buttonClick()&#123;</span><br><span class="line">        <span class="keyword">this</span>.myclick.emit(<span class="string">'I am from child component, should pass data to parent component'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) parent Component “events-list.component.ts”:</p>
+<ul>
+<li><p>update template: (the EventEmitter variable name defined in child component) = “randomFuncInParent($event)”</p>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">events-address</span> (<span class="attr">myclick</span>)=<span class="string">"clickWithAnyName($event)"</span>&gt;</span><span class="tag">&lt;/<span class="name">events-address</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>define random function in parent component class</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsListComponent</span> </span>&#123;</span><br><span class="line">    clickWithAnyName(dataFromChild)&#123;</span><br><span class="line">        alert(dataFromChild)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="3-Using-Template-Variables-To-Interact-with-Child-Components-parent-access-to-child-data-easier-than-method-2"><a href="#3-Using-Template-Variables-To-Interact-with-Child-Components-parent-access-to-child-data-easier-than-method-2" class="headerlink" title="3. Using Template Variables To Interact with Child Components (parent access to child data, easier than method 2)"></a>3. Using Template Variables To Interact with Child Components (parent access to child data, easier than method 2)</h3><p>1) child component events-address.component.ts define public property and method</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//child component, talk with parent events-list.component.ts</span></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-address'</span>,</span><br><span class="line">    template: <span class="string">''</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsAddressComponent</span> </span>&#123;</span><br><span class="line">    <span class="comment">//use template variable to interact with child public method/property: parent accesses child data</span></span><br><span class="line">    author:string = <span class="string">'Guanghui Wang'</span>  <span class="comment">//child public property</span></span><br><span class="line">    getAuthor()&#123;</span><br><span class="line">        alert(<span class="keyword">this</span>.author)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) access child component data from parent component template’s childPointer variable</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">events-address</span> [<span class="attr">address</span>]=<span class="string">"event.location"</span> (<span class="attr">myclick</span>)=<span class="string">"clickWithAnyName($event)"</span> #<span class="attr">childPointer</span>&gt;</span><span class="tag">&lt;/<span class="name">events-address</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> (<span class="attr">click</span>)=<span class="string">"childPointer.getAuthor()"</span> <span class="attr">class</span>=<span class="string">"btn-primary btn"</span>&gt;</span>Test template variable<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>&#123;&#123;childPointer.author&#125;&#125;<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Styling-Components"><a href="#Styling-Components" class="headerlink" title="Styling Components"></a>Styling Components</h2><blockquote>
+<p>By default, style scope is current component: the class defined below works only in current component, any other component applied same class won’t work.</p>
+<p>Global css can be placed in styles.css</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">    template: <span class="string">`&lt;button class="mybutton"&gt;styling component&lt;/button&gt;`</span>,</span><br><span class="line">    styles: [<span class="string">`.mybutton&#123;background:purple;&#125;`</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsAddressComponent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Create-Navbar"><a href="#Create-Navbar" class="headerlink" title="Create Navbar"></a>Create Navbar</h2><p>create nav/nav.component.ts and its template nav.component.html, then export component into module.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'nav-bar'</span>,</span><br><span class="line">    templateUrl: <span class="string">'app/nav/nav.component.html'</span>,</span><br><span class="line">    styles: [<span class="string">`</span></span><br><span class="line"><span class="string">        .nav.navbar-nav &#123;font-size:15px;&#125;</span></span><br><span class="line"><span class="string">        #searchForm &#123;margin-right:100px;&#125;</span></span><br><span class="line"><span class="string">        @media(max-width:1200px) &#123;#searchForm &#123;display:none;&#125;&#125;</span></span><br><span class="line"><span class="string">    `</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">NavBarComponent</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/04/18/angular2-chapter01/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter01 -- systemJS, tsconfig, package.json; first component, module and bootstrap module">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/04/21/angular2-chapter03/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter03 -- Exploring the New Template Syntax">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Creating-and-Communicating-Between-Components"><span class="toc-text">Creating and Communicating Between Components</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-Our-First-Data-bound-Component"><span class="toc-text">Creating Our First Data-bound Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-External-Templates"><span class="toc-text">Using External Templates</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components-Interaction"><span class="toc-text">Components Interaction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Communicating-with-Child-Components-Using-Input-Parent-pass-data-to-child"><span class="toc-text">1. Communicating with Child Components Using @Input (Parent pass data to child)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Communicating-with-Parent-Components-Using-Output-and-EventEmitter-child-pass-data-to-parent"><span class="toc-text">2. Communicating with Parent Components Using @Output and EventEmitter (child pass data to parent)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Using-Template-Variables-To-Interact-with-Child-Components-parent-access-to-child-data-easier-than-method-2"><span class="toc-text">3. Using Template Variables To Interact with Child Components (parent access to child data, easier than method 2)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Styling-Components"><span class="toc-text">Styling Components</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Create-Navbar"><span class="toc-text">Create Navbar</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/04/20/angular2-chapter02/";
+    var disqus_url = "https://wghglory.github.io/2017/04/20/angular2-chapter02/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

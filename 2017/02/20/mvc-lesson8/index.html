@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Asp.net MVC系列教程8——完善登录功能｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/02/20/mvc-lesson8/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Asp.net MVC系列教程8——完善登录功能</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-02-20
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#c#"
+                           title="c#">c#</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- Asp.net MVC系列教程8——完善登录功能 -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文转自<a href="http://yuangang.cnblogs.com并加以整理。" target="_blank" rel="noopener">http://yuangang.cnblogs.com并加以整理。</a> 今天我们来完善登录功能</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p><a href="/2017/02/14/mvc-lesson1/" target="_blank">Asp.net MVC项目系列教程</a></p>
+<h1 id="项目开始"><a href="#项目开始" class="headerlink" title="项目开始"></a>项目开始</h1><h3 id="一、登录页面增加验证码"><a href="#一、登录页面增加验证码" class="headerlink" title="一、登录页面增加验证码"></a>一、登录页面增加验证码</h3><p>我们前面做了个简单的登录页，只有用户名和密码，现在我们增加一个验证码。</p>
+<p>首先，原作者新建的验证码类verify_code.cs放在Models文件夹下面。我认为这个类放在Common类库要比Models要好，并且修改命名为Captcha。</p>
+<blockquote>
+<p>知识小百科：<strong>全自动区分计算机和人类的公開</strong><a href="https://zh.wikipedia.org/wiki/%E5%9B%BE%E7%81%B5%E6%B5%8B%E8%AF%95" target="_blank" rel="noopener"><strong>图灵测试</strong></a>（英语：<strong>C</strong>ompletely <strong>A</strong>utomated <strong>P</strong>ublic <strong>T</strong>uring test to tell <strong>C</strong>omputers and <strong>H</strong>umans <strong>A</strong>part，簡稱<strong>CAPTCHA</strong>），俗称<strong>验证码</strong>，是一种区分用户是计算机或人的公共全自动程序。在CAPTCHA测试中，作为服务器的计算机会自动生成一个问题由用户来解答。这个问题可以由计算机生成并评判，但是必须只有人类才能解答。由于计算机无法解答CAPTCHA的问题，所以回答出问题的用户就可以被认为是人类。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Drawing;</span><br><span class="line"><span class="keyword">using</span> System.Drawing.Imaging;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Common</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">    <span class="comment">/// 验证码构造类</span></span><br><span class="line">    <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Captcha</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 该方法用于生成指定位数的随机数</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="VcodeNum"&gt;参数是随机数的位数&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;returns&gt;返回一个随机数字符串&lt;/returns&gt;</span></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">RndNum</span><span class="params">(<span class="keyword">int</span> VcodeNum)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="comment">//验证码可以显示的字符集合</span></span><br><span class="line">            <span class="built_in">string</span> Vchar = <span class="string">"0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j,k,l,m,n,p"</span> +</span><br><span class="line">                <span class="string">",q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,P,P,Q"</span> +</span><br><span class="line">                <span class="string">",R,S,T,U,V,W,X,Y,Z"</span>;</span><br><span class="line">            <span class="built_in">string</span>[] VcArray = Vchar.Split(<span class="keyword">new</span> Char[] &#123; <span class="string">','</span> &#125;);<span class="comment">//拆分成数组</span></span><br><span class="line">            <span class="built_in">string</span> VNum = <span class="string">""</span>;<span class="comment">//产生的随机数</span></span><br><span class="line">            <span class="keyword">int</span> temp = <span class="number">-1</span>;<span class="comment">//记录上次随机数值，尽量避避免生产几个一样的随机数</span></span><br><span class="line"></span><br><span class="line">            Random rand = <span class="keyword">new</span> Random();</span><br><span class="line">            <span class="comment">//采用一个简单的算法以保证生成随机数的不同</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; VcodeNum + <span class="number">1</span>; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (temp != <span class="number">-1</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    rand = <span class="keyword">new</span> Random(i * temp * unchecked((<span class="keyword">int</span>)DateTime.Now.Ticks));<span class="comment">//初始化随机类</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">int</span> t = rand.Next(<span class="number">61</span>);<span class="comment">//获取随机数</span></span><br><span class="line">                <span class="keyword">if</span> (temp != <span class="number">-1</span> &amp;&amp; temp == t)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">return</span> RndNum(VcodeNum);<span class="comment">//如果获取的随机数重复，则递归调用</span></span><br><span class="line">                &#125;</span><br><span class="line">                temp = t;<span class="comment">//把本次产生的随机数记录起来</span></span><br><span class="line">                VNum += VcArray[t];<span class="comment">//随机数的位数加一</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> VNum;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 该方法是将生成的随机数写入图像文件</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="VNum"&gt;VNum是一个随机数&lt;/param&gt;</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> MemoryStream <span class="title">Create</span><span class="params">(out <span class="built_in">string</span> VNum)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            VNum = RndNum(<span class="number">4</span>);</span><br><span class="line">            Bitmap Img = null;</span><br><span class="line">            Graphics g = null;</span><br><span class="line">            MemoryStream ms = null;</span><br><span class="line">            System.Random random = <span class="keyword">new</span> Random();</span><br><span class="line">            <span class="comment">//验证码颜色集合</span></span><br><span class="line">            Color[] c = &#123; Color.Black, Color.Red, Color.DarkBlue, Color.Green, Color.Orange, Color.Brown, Color.DarkCyan, Color.Purple &#125;;</span><br><span class="line">            <span class="comment">//验证码字体集合</span></span><br><span class="line">            <span class="built_in">string</span>[] fonts = &#123; <span class="string">"Verdana"</span>, <span class="string">"Microsoft Sans Serif"</span>, <span class="string">"Comic Sans MS"</span>, <span class="string">"Arial"</span>, <span class="string">"宋体"</span> &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">//定义图像的大小，生成图像的实例</span></span><br><span class="line">            Img = <span class="keyword">new</span> Bitmap((<span class="keyword">int</span>)VNum.Length * <span class="number">18</span>, <span class="number">32</span>);</span><br><span class="line"></span><br><span class="line">            g = Graphics.FromImage(Img);<span class="comment">//从Img对象生成新的Graphics对象</span></span><br><span class="line"></span><br><span class="line">            g.Clear(Color.White);<span class="comment">//背景设为白色</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">//在随机位置画背景点</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">int</span> x = random.Next(Img.Width);</span><br><span class="line">                <span class="keyword">int</span> y = random.Next(Img.Height);</span><br><span class="line">                g.DrawRectangle(<span class="keyword">new</span> Pen(Color.LightGray, <span class="number">0</span>), x, y, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//验证码绘制在g中</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VNum.Length; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">int</span> cindex = random.Next(<span class="number">7</span>);<span class="comment">//随机颜色索引值</span></span><br><span class="line">                <span class="keyword">int</span> findex = random.Next(<span class="number">5</span>);<span class="comment">//随机字体索引值</span></span><br><span class="line">                Font f = <span class="keyword">new</span> System.Drawing.Font(fonts[findex], <span class="number">15</span>, System.Drawing.FontStyle.Bold);<span class="comment">//字体</span></span><br><span class="line">                Brush b = <span class="keyword">new</span> System.Drawing.SolidBrush(c[cindex]);<span class="comment">//颜色</span></span><br><span class="line">                <span class="keyword">int</span> ii = <span class="number">4</span>;</span><br><span class="line">                <span class="keyword">if</span> ((i + <span class="number">1</span>) % <span class="number">2</span> == <span class="number">0</span>)<span class="comment">//控制验证码不在同一高度</span></span><br><span class="line">                &#123;</span><br><span class="line">                    ii = <span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                g.DrawString(VNum.Substring(i, <span class="number">1</span>), f, b, <span class="number">3</span> + (i * <span class="number">12</span>), ii);<span class="comment">//绘制一个验证字符</span></span><br><span class="line">            &#125;</span><br><span class="line">            ms = <span class="keyword">new</span> MemoryStream();<span class="comment">//生成内存流对象</span></span><br><span class="line">            Img.Save(ms, ImageFormat.Jpeg);<span class="comment">//将此图像以Png图像文件的格式保存到流中</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">//回收资源</span></span><br><span class="line">            g.Dispose();</span><br><span class="line">            Img.Dispose();</span><br><span class="line">            <span class="keyword">return</span> ms;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在AccountController.cs下面新建一个生成图片的二进制图片</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// &lt;summary&gt;</span></span><br><span class="line"><span class="comment">/// 验证码</span></span><br><span class="line"><span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> FileContentResult <span class="title">ValidateCode</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> code = <span class="string">""</span>;</span><br><span class="line">    System.IO.MemoryStream ms = <span class="keyword">new</span> Captcha().Create(out code);</span><br><span class="line">    Session[<span class="string">"gif"</span>] = code;<span class="comment">//验证码存储在Session中，供验证。</span></span><br><span class="line">    Response.ClearContent();<span class="comment">//清空输出流</span></span><br><span class="line">    <span class="keyword">return</span> File(ms.ToArray(), @<span class="string">"image/png"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在登录页面插入这个图片，放在登陆按钮之前。this.src+？是为了防止缓存，在点击图片是让浏览器发送新的请求，当然也有很多其他的方法，只要让每次url地址querystring不同就可以。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"from-control"</span>&gt;</span></span><br><span class="line">    @Html.TextBox("code", "",</span><br><span class="line">            new</span><br><span class="line">            &#123;</span><br><span class="line">                @class = "form-control",</span><br><span class="line">                @placeholder = "请输入验证码",</span><br><span class="line">                @datatype = "*",</span><br><span class="line">                @nullmsg = "请输入验证码！",</span><br><span class="line">                @maxlength = 4,</span><br><span class="line">                @required = "required",</span><br><span class="line">                @autocomplete = "off"</span><br><span class="line">            &#125;)</span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"code-img"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"imgVerify"</span> <span class="attr">src</span>=<span class="string">"/Sys/Account/ValidateCode"</span> <span class="attr">alt</span>=<span class="string">"看不清？点击更换"</span> <span class="attr">onclick</span>=<span class="string">"this.src = this.src + '?'"</span> <span class="attr">style</span>=<span class="string">"vertical-align:middle;"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>带验证码的完整登录页面表单就好了。</p>
+<p><img src="/2017/02/20/mvc-lesson8/login.png" style="height:220px;"></p>
+<h3 id="二、增加验证码的功能"><a href="#二、增加验证码的功能" class="headerlink" title="二、增加验证码的功能"></a>二、增加验证码的功能</h3><ol>
+<li>首先获取一下表单验证码<code>string code = Request.Form[&quot;code&quot;];</code></li>
+<li>然后判断验证码图片是否过期，即 Session存储的验证码是否存在<code>if (Session[&quot;gif&quot;] != null)</code></li>
+<li>在Session存储的验证码没有过期，即Session[“gif”] != null里面判断一下用户输入的验证码是否正确<code>if (!string.IsNullOrEmpty(code) &amp;&amp; code.ToLower() == Session[&quot;gif&quot;].ToString().ToLower())</code></li>
+<li><p>把登录验证方法放到用户验证码输入正确的方法体里面（如果用户输入的验证码不正确，就没有必要验证用户信息了）</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// &lt;summary&gt;</span></span><br><span class="line"><span class="comment">/// 登录验证</span></span><br><span class="line"><span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">[ValidateAntiForgeryToken]</span><br><span class="line"><span class="function"><span class="keyword">public</span> ActionResult <span class="title">Login</span><span class="params">(Domain.SYS_USER item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    var json = <span class="keyword">new</span> JsonHelper() &#123; Msg = <span class="string">"登录成功"</span>, Status = <span class="string">"n"</span> &#125;;</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//获取表单验证码</span></span><br><span class="line">        <span class="built_in">string</span> code = Request.Form[<span class="string">"code"</span>];</span><br><span class="line">        <span class="keyword">if</span> (Session[<span class="string">"gif"</span>] != null)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">string</span>.IsNullOrEmpty(code) &amp;&amp; code.ToLower() == Session[<span class="string">"gif"</span>].ToString().ToLower())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//调用登录验证接口 返回用户实体类</span></span><br><span class="line">                var user = UserManage.UserLogin(item.ACCOUNT.Trim(), item.PASSWORD.Trim());</span><br><span class="line">                <span class="keyword">if</span> (user != null)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//是否锁定</span></span><br><span class="line">                    <span class="keyword">if</span> (user.ISCANLOGIN == <span class="number">1</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        json.Msg = <span class="string">"用户已锁定，禁止登录，请联系管理员进行解锁"</span>;</span><br><span class="line">                        <span class="built_in">log</span>.Warn(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">                        <span class="keyword">return</span> Json(json);</span><br><span class="line">                    &#125;</span><br><span class="line">                    json.Status = <span class="string">"y"</span>;</span><br><span class="line">                    <span class="built_in">log</span>.Info(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    json.Msg = <span class="string">"用户名或密码不正确"</span>;</span><br><span class="line">                    <span class="built_in">log</span>.Error(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                json.Msg = <span class="string">"验证码不正确"</span>;</span><br><span class="line">                <span class="built_in">log</span>.Error(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            json.Msg = <span class="string">"验证码已过期，请刷新验证码"</span>;</span><br><span class="line">            <span class="built_in">log</span>.Error(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Exception e)</span><br><span class="line">    &#123;</span><br><span class="line">        json.Msg = e.Message;</span><br><span class="line">        <span class="built_in">log</span>.Error(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Json(json, JsonRequestBehavior.AllowGet);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="三、修改验证方法"><a href="#三、修改验证方法" class="headerlink" title="三、修改验证方法"></a>三、修改验证方法</h3><p>验证码没有过期且用户输入的验证码正确，这种情况下就应该验证用户信息了。</p>
+<p>上一篇，我们验证用户信息真实的情况下，直接通过Json输出了Status=”y”，但是并没有存储用户信息。现在我们分两步来存储用户，首先通过Session存储，然后把用户非关键信息加密后写入Cookies，当Session过期的时候，通过Cookies重新获取用户并存储用户信息。这是大致的流程，很多朋友会说这也不是很安全，是的，软件是没有绝对的100%安全的，我们只能做到自己最好的安全。</p>
+<ol>
+<li><p>在前一章用户类Account描述了用户的详细信息，包括部门、权限、岗位、角色等。在<em>是否锁定那个if语句</em>后面，我们开始写下面的代码。通过用户基础表来获取一下这些信息：</p>
+<p><code>var account = this.UserManage.GetAccountByUser(user);</code></p>
+</li>
+<li><p>写入当前用户到Session中</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//写入Session 当前登录用户</span></span><br><span class="line">SessionHelper.SetSession(<span class="string">"CurrentUser"</span>, account);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>记录用户ID、登录名、密码到Cookie</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//记录用户信息到Cookies</span></span><br><span class="line"><span class="built_in">string</span> cookieValue = <span class="string">"&#123;\"id\":\""</span> + account.Id + <span class="string">"\",\"username\":\""</span> + account.LogName +  <span class="string">"\",\"password\":\""</span> + account.PassWord + <span class="string">"\",\"ToKen\":\""</span> + Session.SessionID + <span class="string">"\"&#125;"</span>;</span><br><span class="line"></span><br><span class="line">CookieHelper.SetCookie(<span class="string">"cookie_rememberme"</span>, <span class="keyword">new</span> Common.CryptHelper.AESCrypt().Encrypt(cookieValue),null);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新用户本次登录的IP</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//更新用户本次登录IP</span></span><br><span class="line">user.LastLoginIP = Utils.GetIP();</span><br><span class="line">UserManage.Update(user);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果验证成功，跳转到管理中心首页 </p>
+<p> <code>json.ReUrl = &quot;/Sys/Home/Index&quot;;</code></p>
+</li>
+</ol>
+<p>这样，我们的登录就OK了。</p>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/19/mvc-lesson7/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程7——创建与登录用户相关的接口和实现类">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/23/mvc-lesson9/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程9——控制器基类 主要做登录用户、权限认证、日志记录等工作">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简述"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目开始"><span class="toc-text">项目开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、登录页面增加验证码"><span class="toc-text">一、登录页面增加验证码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、增加验证码的功能"><span class="toc-text">二、增加验证码的功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、修改验证方法"><span class="toc-text">三、修改验证方法</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#c#"
+                           title="c#">c#</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/02/20/mvc-lesson8/";
+    var disqus_url = "https://wghglory.github.io/2017/02/20/mvc-lesson8/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

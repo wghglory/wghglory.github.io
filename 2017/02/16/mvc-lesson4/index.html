@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Asp.net MVC系列教程4——Spring IOC、DI｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/02/16/mvc-lesson4/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Asp.net MVC系列教程4——Spring IOC、DI</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-02-16
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#IOC"
+                           title="IOC">IOC</a>
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- Asp.net MVC系列教程4——Spring IOC、DI -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文转自<a href="http://yuangang.cnblogs.com并加以整理。" target="_blank" rel="noopener">http://yuangang.cnblogs.com并加以整理。</a> 本文用到了Spring的IOC和DI、接口的使用、实现</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p><a href="/2017/02/14/mvc-lesson1/" target="_blank">Asp.net MVC项目系列教程</a></p>
+<h1 id="项目开始"><a href="#项目开始" class="headerlink" title="项目开始"></a>项目开始</h1><h3 id="一、IOC和DI"><a href="#一、IOC和DI" class="headerlink" title="一、IOC和DI"></a>一、IOC和DI</h3><ul>
+<li>Ioc：Inversion of Control，即“控制反转”，是一种设计思想。</li>
+<li>传统的设计思想是在对象内部直接控制，而IOC是将设计好的对象交给容器控制。<blockquote>
+<p>打个比方：我们租房子，在我们和房主之间插入了一个中间人（房介），我们只需要跟房介提出我们的要求，比如房子要三室一厅、卧室向阳、房东是女的等，房介就会按照我们的要求提供房产信息。我们满意就入住，如果我们不满意（抛出异常），房介就会帮我们做后续处理。整个过程不再是由我们控制，而是由房介这么一个容器去控制。所有的类都会在spring容器中登记，告诉spring你是谁，你需要什么，然后spring会在系统运行到适当的时候，把你要的东西主动给你，同时也把你交给其他需要你的东西。所有的类的创建、销毁都由 spring来控制，也就是说控制对象生存周期的不再是引用它的对象，而是spring。对于某个具体的对象而言，以前是它控制其他对象，现在是所有对象都被spring控制，所以这叫控制反转。</p>
+</blockquote>
+</li>
+<li>DI: IOC的一个重点是在系统运行中，动态地向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）来实现的。<blockquote>
+<p>比如对象A需要操作数据库，以前我们总是要在A中自己编写代码来获得一个Connection对象，有了 spring我们就只需要告诉spring，A中需要一个Connection，至于这个Connection怎么构造，何时构造，A不需要知道。在系统运行时，spring会在适当的时候制造一个Connection，然后像打针一样，注射到A当中，这样就完成了对各个对象之间关系的控制。A需要依赖 Connection才能正常运行，而这个Connection是由spring注入到A中的，依赖注入的名字就这么来的。那么DI是如何实现的呢？ 有一个重要特征是<strong>反射reflection</strong>，它允许程序在运行的时候动态的生成对象、执行对象的方法、改变对象的属性，spring就是通过反射来实现注入的。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="二、用户管理的接口和实现"><a href="#二、用户管理的接口和实现" class="headerlink" title="二、用户管理的接口和实现"></a>二、用户管理的接口和实现</h3><ol>
+<li><p>首先在Service类库下面创建两个文件夹 IService(存放接口)、ServiceImp(实现类)，并且在这两个文件夹下面再分别建两个文件夹ComManage和SysManage，用于区分管理我们的接口和实现类。</p>
+<img src="/2017/02/16/mvc-lesson4/mvc4-serviceFolder.jpg">
+</li>
+<li><p>我们创建系统管理用户SYS_USER的接口：右击IService/SysManage→添加→新建项→接口，IUserManage.cs。SysManage只是我们为了区分管理我们的接口文件，我们修改一下命名空间，让他们统一在Service.IService空间下，并且继承基础数据操作接口IRepository。</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> Service.IService</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> interface IUserManage : IRepository&lt;Domain.SYS_USER&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 管理用户登录验证,并返回用户信息与权限集合</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="username"&gt;用户账号&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="password"&gt;用户密码&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;returns&gt;&lt;/returns&gt;</span></span><br><span class="line">        Domain.<span class="function">SYS_USER <span class="title">UserLogin</span><span class="params">(<span class="built_in">string</span> useraccount, <span class="built_in">string</span> password)</span></span>;</span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 是否超级管理员</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="userId"&gt;用户ID&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;returns&gt;&lt;/returns&gt;</span></span><br><span class="line">        <span class="function"><span class="keyword">bool</span> <span class="title">IsAdmin</span><span class="params">(<span class="keyword">int</span> userId)</span></span>;</span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 根据用户ID获取用户名，不存在返回空</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="userId"&gt;用户ID&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;returns&gt;&lt;/returns&gt;</span></span><br><span class="line">        <span class="function"><span class="built_in">string</span> <span class="title">GetUserName</span><span class="params">(<span class="keyword">int</span> userId)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建用户接口的实现类：右击ServiceImp/SysManage→添加→类UserManage.cs。同样，我们修改一下命名空间，让他们统一在Service.ServiceImp空间下，并且继承基础数据操作类RepositoryBase和他的接口IUserManage.</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Service.IService;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Service.ServiceImp</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserManage</span> :</span> RepositoryBase&lt;Domain.SYS_USER&gt;, IUserManage</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 管理用户登录验证</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="userAccount"&gt;用户名&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="password"&gt;加密密码（AES）&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;returns&gt;&lt;/returns&gt;</span></span><br><span class="line">        <span class="keyword">public</span> Domain.<span class="function">SYS_USER <span class="title">UserLogin</span><span class="params">(<span class="built_in">string</span> userAccount, <span class="built_in">string</span> password)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            var entity = <span class="keyword">this</span>.Get(p =&gt; p.ACCOUNT == userAccount);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//因为我们用的是AES的动态加密算法，也就是没有统一的密钥，那么两次同样字符串的加密结果是不一样的，所以这里要通过解密来匹配</span></span><br><span class="line">            <span class="comment">//而不能通过再次加密输入的密码来匹配</span></span><br><span class="line">            <span class="keyword">if</span> (entity != null &amp;&amp; <span class="keyword">new</span> Common.CryptHelper.AESCrypt().Decrypt(entity.PASSWORD) == password)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> entity;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> null;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 是否超级管理员</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">bool</span> <span class="title">IsAdmin</span><span class="params">(<span class="keyword">int</span> userId)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="comment">//这里我们还没有做用户角色 所以先返回个True，后面我们做角色的时候再回来修改</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">        <span class="comment">/// 根据用户ID获取用户名</span></span><br><span class="line">        <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;param name="Id"&gt;用户ID&lt;/param&gt;</span></span><br><span class="line">        <span class="comment">/// &lt;returns&gt;&lt;/returns&gt;</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetUserName</span><span class="params">(<span class="keyword">int</span> Id)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            var query = <span class="keyword">this</span>.LoadAll(c =&gt; c.ID == Id);</span><br><span class="line">            <span class="keyword">if</span> (query == null || !query.Any())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> query.First().NAME;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="三、添加引用并配置spring启动"><a href="#三、添加引用并配置spring启动" class="headerlink" title="三、添加引用并配置spring启动"></a>三、添加引用并配置spring启动</h3><ol>
+<li>在Webpage项目中使用nuget添加spring.web.mvc5，会在项目引用中添加Spring.Core, Spring.Web, Spring.Web.Mvc5, Common.Logging, Common.Logging.Core</li>
+<li>修改Global.asax的MvcApplication类继承于Spring.Web.Mvc.SpringMvcApplication</li>
+</ol>
+<h3 id="四、Spring配置"><a href="#四、Spring配置" class="headerlink" title="四、Spring配置"></a>四、Spring配置</h3><ol>
+<li><p>在Service类库下面新建一个文件夹Config用于存放注入文件，在Config文件夹下面新建两个XML文件ComService.xml和Service.xml</p>
+</li>
+<li><p>我们把这两个文件属性的生成操作修改为嵌入的资源：分别右击这两个XML文件→属性→生成操作→嵌入的资源。这样在编译生成时会把文件放在bin目录中。</p>
+</li>
+<li><p>移步操作WebPage，新建文件夹Config，新建3个XML文件并更改文件属性的生成操作修改为嵌入的资源（同上）：</p>
+<ul>
+<li>ComControllers.xml：后台管理Com控制器</li>
+<li>Controllers.xml：后台管理Sys控制器</li>
+<li><p>IndexControllers.xml：网站前台控制器</p>
+<blockquote>
+<p>note1: 如果忘记潜入资源，会报错：<br><img src="/2017/02/16/mvc-lesson4/embedded.png"></p>
+<p>note2: 注意以上xml文件至少写上</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">objects</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.net"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">objects</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果只有<code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;</code>可能报错：<br><img src="/2017/02/16/mvc-lesson4/springRoot.png"></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>修改一下WebPage的Web.Config，声明一下Spring容器和配置指向，注意他们的位置</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configSections</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">section</span> <span class="attr">name</span>=<span class="string">"entityFramework"</span> <span class="attr">type</span>=<span class="string">"System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"</span> <span class="attr">requirePermission</span>=<span class="string">"false"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">sectionGroup</span> <span class="attr">name</span>=<span class="string">"spring"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Spring声明容器--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">section</span> <span class="attr">name</span>=<span class="string">"context"</span> <span class="attr">type</span>=<span class="string">"Spring.Context.Support.MvcContextHandler, Spring.Web.Mvc5"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">section</span> <span class="attr">name</span>=<span class="string">"objects"</span> <span class="attr">type</span>=<span class="string">"Spring.Context.Support.DefaultSectionHandler, Spring.Core"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">sectionGroup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configSections</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--Spring配置指向--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">spring</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">context</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--WebPage--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resource</span> <span class="attr">uri</span>=<span class="string">"assembly://WebPage/WebPage.Config/IndexControllers.xml"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resource</span> <span class="attr">uri</span>=<span class="string">"assembly://WebPage/WebPage.Config/Controllers.xml"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resource</span> <span class="attr">uri</span>=<span class="string">"assembly://WebPage/WebPage.Config/ComControllers.xml"</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Service--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resource</span> <span class="attr">uri</span>=<span class="string">"assembly://Service/Service.Config/Service.xml"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resource</span> <span class="attr">uri</span>=<span class="string">"assembly://Service/Service.Config/ComService.xml"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">context</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">spring</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--Spring配置指向 end--&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="五、Spring容器的配置注入"><a href="#五、Spring容器的配置注入" class="headerlink" title="五、Spring容器的配置注入"></a>五、Spring容器的配置注入</h3><p>Service类库Config/service.xml: 因为我们创建的用户表是管理员表，所以把这个配置放到Service.xml里</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">objects</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.net"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>Spring注入Service，容器指向本层层封装的接口，舍弃Dao层，减少代码量<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--系统管理begin--&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--用户管理--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">object</span> <span class="attr">id</span>=<span class="string">"Service.User"</span> <span class="attr">type</span>=<span class="string">"Service.ServiceImp.UserManage,Service"</span> <span class="attr">singleton</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--系统管理end--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">objects</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/16/mvc-lesson3/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程3——公共基础数据操作类">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/17/mvc-lesson5/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程5——登录功能, Spring, log4net">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简述"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目开始"><span class="toc-text">项目开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、IOC和DI"><span class="toc-text">一、IOC和DI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、用户管理的接口和实现"><span class="toc-text">二、用户管理的接口和实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、添加引用并配置spring启动"><span class="toc-text">三、添加引用并配置spring启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、Spring配置"><span class="toc-text">四、Spring配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、Spring容器的配置注入"><span class="toc-text">五、Spring容器的配置注入</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#IOC"
+                           title="IOC">IOC</a>
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/02/16/mvc-lesson4/";
+    var disqus_url = "https://wghglory.github.io/2017/02/16/mvc-lesson4/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

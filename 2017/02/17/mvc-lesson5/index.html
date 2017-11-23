@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Asp.net MVC系列教程5——登录功能, Spring, log4net｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/02/17/mvc-lesson5/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Asp.net MVC系列教程5——登录功能, Spring, log4net</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-02-17
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                        <a class="tag" href="/tags/#log4net"
+                           title="log4net">log4net</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- Asp.net MVC系列教程5——登录功能, Spring, log4net -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文转自<a href="http://yuangang.cnblogs.com并加以整理。" target="_blank" rel="noopener">http://yuangang.cnblogs.com并加以整理。</a> 本文用到了Spring的IOC和DI、接口的使用、实现</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p><a href="/2017/02/14/mvc-lesson1/" target="_blank">Asp.net MVC项目系列教程</a></p>
+<h1 id="项目开始"><a href="#项目开始" class="headerlink" title="项目开始"></a>项目开始</h1><h3 id="一、Log4net"><a href="#一、Log4net" class="headerlink" title="一、Log4net"></a>一、Log4net</h3><p>log4net是一个功能著名的开源日志记录组件。利用log4net可以方便地将日志信息记录到文件、控制台、Windows事件日志和数据库（包括MS SQL Server, Access, Oracle9i, Oracle8i, DB2, SQLite）中。并且我们还可以记载控制要记载的日志级别，可以记载的日志类别包括：FATAL（致命错误）、ERROR（一般错误）、WARN（警告）、INFO（一般信息）、DEBUG（调试信息）。大部分的日志记录都是记录到文件。我们主要记录到数据库，这比较有利于我们的管理员查看日志事件。</p>
+<ol>
+<li><p>通过NuGet安装log4net到Webpage中<code>Install-Package log4net -ProjectName WebPage</code></p>
+</li>
+<li><p>在项目的程序集信息描述文件中(properties/assembly.cs)，设置Log4net的可记录属性</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">assembly: log4net.Config.XmlConfigurator(ConfigFile = <span class="meta-string">"log4net.config"</span>, Watch = true)</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在Webpage程序根目录添加log4net的配置文件log4net.config:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">configSections</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">section</span> <span class="attr">name</span>=<span class="string">"log4net"</span> <span class="attr">type</span>=<span class="string">"log4net.Config.Log4NetConfigurationSectionHandler,log4net"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">configSections</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">log4net</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">level</span> <span class="attr">value</span>=<span class="string">"ALL"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"dblog"</span> <span class="attr">additivity</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">level</span> <span class="attr">value</span>=<span class="string">"ALL"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"SqlServerAppender"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">logger</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Oracle数据库--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"OracleAppender"</span> <span class="attr">type</span>=<span class="string">"log4net.Appender.AdoNetAppender"</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- Oracle数据源--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">connectionType</span> <span class="attr">value</span>=<span class="string">"Oracle.ManagedDataAccess.Client.OracleConnection, Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342"</span> /&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- Oracle连接字符串--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">connectionString</span> <span class="attr">value</span>=<span class="string">"DATA SOURCE=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.3.206)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl)));PASSWORD=watdb;PERSIST SECURITY INFO=True;USER ID=watdb;"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">commandText</span> <span class="attr">value</span>=<span class="string">"INSERT INTO SYS_LOG(Dates,Levels,Logger,Message,Exception,ClientUser,ClientIP,RequestUrl,Action)VALUES(:Dates,:Levels,:Logger,:Message,:Exception,:ClientUser,:ClientIP,:RequestUrl,:Action)"</span>/&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--  </span></span><br><span class="line"><span class="comment">             设置缓存区大小  </span></span><br><span class="line"><span class="comment">             1表明有一条日志就要写入  </span></span><br><span class="line"><span class="comment">             如果10就表示日志到达10条时一起写入  </span></span><br><span class="line"><span class="comment">             --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">bufferSize</span> <span class="attr">value</span>=<span class="string">"0"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":Dates"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"DateTime"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.RawTimeStampLayout"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":Levels"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"50"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%level"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":Logger"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"200"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%logger"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":Message"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"4000"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%message"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":Exception"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"4000"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%exception"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--DIY--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":ClientUser"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"100"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;ClientUser&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":ClientIP"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;ClientIP&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":RequestUrl"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"500"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;RequestUrl&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">":Action"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;Action&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Sqlite数据库--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"SqliteAppender"</span> <span class="attr">type</span>=<span class="string">"log4net.Appender.AdoNetAppender"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">bufferSize</span> <span class="attr">value</span>=<span class="string">"0"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">connectionType</span> <span class="attr">value</span>=<span class="string">"System.Data.SQLite.SQLiteConnection, System.Data.SQLite, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">connectionString</span> <span class="attr">value</span>=<span class="string">"Data Source=|DataDirectory|test.db;Version=3;"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">commandText</span> <span class="attr">value</span>=<span class="string">"INSERT INTO Log (Date, Level, Logger, ClientUser,ClientIP, RequestUrl,Action, Message, Exception) VALUES (@Date, @Level, @Logger,@ClientUser,@ClientIP, @RequestUrl,@Action, @Message, @Exception)"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Date"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"DateTime"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.RawTimeStampLayout"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Level"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%level"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Logger"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%logger"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@ClientUser"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;ClientUser&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@ClientIP"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;ClientIP&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@RequestUrl"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;RequestUrl&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Action"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%property&#123;Action&#125;"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Message"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%message"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Exception"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%exception"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--SqlServer数据库--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"SqlServerAppender"</span> <span class="attr">type</span>=<span class="string">"log4net.Appender.AdoNetAppender"</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- SqlServer数据源--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">connectionType</span> <span class="attr">value</span>=<span class="string">"System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"</span> /&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- SqlServer连接字符串--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">connectionString</span> <span class="attr">value</span>=<span class="string">"data source=.;initial catalog=wkmvc_db;integrated security=false;persist security info=True;User ID=sa_wkmvc;Password=123456"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">commandText</span> <span class="attr">value</span>=<span class="string">"INSERT INTO SYS_LOG(Dates,Levels,Logger,ClientUser,ClientIP,RequestUrl,Action,Message,Exception)VALUES(@Dates,@Levels,@Logger,@ClientUser,@ClientIP,@RequestUrl,@Action,@Message,@Exception)"</span>/&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--  </span></span><br><span class="line"><span class="comment">             设置缓存区大小  </span></span><br><span class="line"><span class="comment">             1表明有一条日志就要写入  </span></span><br><span class="line"><span class="comment">             如果10就表示日志到达10条时一起写入  </span></span><br><span class="line"><span class="comment">             --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">bufferSize</span> <span class="attr">value</span>=<span class="string">"0"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Dates"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"DateTime"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.RawTimeStampLayout"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Levels"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"50"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%level"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Logger"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"255"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%logger"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Message"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"4000"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">conversionPattern</span> <span class="attr">value</span>=<span class="string">"%message"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Exception"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"2000"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.ExceptionLayout"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--DIY--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@ClientUser"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"100"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span> &gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"ConversionPattern"</span> <span class="attr">value</span>=<span class="string">"%property&#123;ClientUser&#125;"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@ClientIP"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"100"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span> &gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"ConversionPattern"</span> <span class="attr">value</span>=<span class="string">"%property&#123;ClientIP&#125;"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@RequestUrl"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"500"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span> &gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"ConversionPattern"</span> <span class="attr">value</span>=<span class="string">"%property&#123;RequestUrl&#125;"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">parameter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parameterName</span> <span class="attr">value</span>=<span class="string">"@Action"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dbType</span> <span class="attr">value</span>=<span class="string">"String"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">size</span> <span class="attr">value</span>=<span class="string">"100"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout"</span> &gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"ConversionPattern"</span> <span class="attr">value</span>=<span class="string">"%property&#123;Action&#125;"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--记录到文件--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"SysAppender"</span> <span class="attr">type</span>=<span class="string">"log4net.Appender.RollingFileAppender,log4net"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"File"</span> <span class="attr">value</span>=<span class="string">"datalog"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"AppendToFile"</span> <span class="attr">value</span>=<span class="string">"true"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"RollingStyle"</span> <span class="attr">value</span>=<span class="string">"Date"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"DatePattern"</span> <span class="attr">value</span>=<span class="string">"\\yyyy\\MM-dd-HH\\"</span><span class="attr">SQL_</span>"<span class="attr">yyyy-MM-dd</span>"<span class="attr">.log</span>"" /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"StaticLogFileName"</span> <span class="attr">value</span>=<span class="string">"false"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">layout</span> <span class="attr">type</span>=<span class="string">"log4net.Layout.PatternLayout,log4net"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"ConversionPattern"</span> <span class="attr">value</span>=<span class="string">"%d - %m%n"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"Header"</span> <span class="attr">value</span>=<span class="string">"&amp;#xD;&amp;#xA----------------------begin--------------------------&amp;#xD;&amp;#xA"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"Footer"</span> <span class="attr">value</span>=<span class="string">"&amp;#xD;&amp;#xA----------------------end--------------------------&amp;#xD;&amp;#xA"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">log4net</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--必须指定框架，否则不执行,新版本默认支持4.0，可修改源文件，项目属性设定为.NET FRAMEWORK2.0后，打开重新编译，去掉其中的.NET 4.0编译导致错误环节，如此只能使用在.net 2.0框架--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">startup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">supportedRuntime</span> <span class="attr">version</span>=<span class="string">"v4.0"</span> <span class="attr">sku</span>=<span class="string">".NETFramework,Version=v4.0"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">startup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">   调用实例</span></span><br><span class="line"><span class="comment">   log4net.ILog log = log4net.LogManager.GetLogger("Filelog");</span></span><br><span class="line"><span class="comment">   log.Info(Message);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %m(message):输出的日志消息，如ILog.Debug(…)输出的一条消息</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %n(new line):换行</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %d(datetime):输出当前语句运行的时刻</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %r(run time):输出程序从运行到执行到当前语句时消耗的毫秒数</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %t(thread id):当前语句所在的线程ID</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %p(priority): 日志的当前优先级别，即DEBUG、INFO、WARN…等</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %c(class):当前日志对象的名称</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %L：输出语句所在的行号</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %F：输出语句所在的文件名</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    %-数字：表示该项的最小长度，如果不够，则用空格填充</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    例如，转换模式为%r [%t]%-5p %c - %m%n 的 PatternLayout 将生成类似于以下内容的输出：</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    176 [main] INFO  org.foo.Bar - Located nearest gas station.</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="二、创建日志表SYS-LOG"><a href="#二、创建日志表SYS-LOG" class="headerlink" title="二、创建日志表SYS_LOG"></a>二、创建日志表SYS_LOG</h3><p>上面的代码中，我们配置日志记录到了数据库的日志表SYS_LOG</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">commandText</span> <span class="attr">value</span>=<span class="string">"INSERT INTO SYS_LOG(Dates,Levels,Logger,ClientUser,ClientIP,RequestUrl,Action,Message,Exception)VALUES(@Dates,@Levels,@Logger,@ClientUser,@ClientIP,@RequestUrl,@Action,@Message,@Exception)"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我们在数据库中新建这个日志表SYS_LOG:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">序号</th>
+<th style="text-align:left">列名</th>
+<th style="text-align:left">数据类型</th>
+<th style="text-align:left">长度</th>
+<th style="text-align:left">小数位</th>
+<th style="text-align:left">允许空</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">ID</td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">主键ID</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">DATES</td>
+<td style="text-align:left">datetime</td>
+<td style="text-align:left">8</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">创建时间</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">LEVELS</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">日志等级</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">LOGGER</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">200</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">日志调用</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">CLIENTUSER</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">100</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">使用用户</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">CLIENTIP</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">访问IP</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">REQUESTURL</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">500</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">访问来源</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">ACTION</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">操作动作</td>
+</tr>
+<tr>
+<td style="text-align:left">9</td>
+<td style="text-align:left">MESSAGE</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">4000</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">消息</td>
+</tr>
+<tr>
+<td style="text-align:left">10</td>
+<td style="text-align:left">EXCEPTION</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">4000</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">异常消息</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">USE</span> [wkmvc_db]</span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line"><span class="comment">/****** Object:  Table [dbo].[SYS_LOG]    Script Date: 2016/5/16 9:06:19 ******/</span></span><br><span class="line"><span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line"><span class="keyword">SET</span> QUOTED_IDENTIFIER <span class="keyword">ON</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [dbo].[SYS_LOG](</span><br><span class="line">    [<span class="keyword">ID</span>] [<span class="built_in">int</span>] <span class="keyword">IDENTITY</span>(<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    [DATES] [datetime] <span class="literal">NULL</span>,</span><br><span class="line">    [<span class="keyword">LEVELS</span>] [<span class="keyword">nvarchar</span>](<span class="number">20</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [LOGGER] [<span class="keyword">nvarchar</span>](<span class="number">200</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [CLIENTUSER] [<span class="keyword">nvarchar</span>](<span class="number">100</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [CLIENTIP] [<span class="keyword">nvarchar</span>](<span class="number">20</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [REQUESTURL] [<span class="keyword">nvarchar</span>](<span class="number">500</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [<span class="keyword">ACTION</span>] [<span class="keyword">nvarchar</span>](<span class="number">20</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [MESSAGE] [<span class="keyword">nvarchar</span>](<span class="number">4000</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [<span class="keyword">EXCEPTION</span>] [<span class="keyword">nvarchar</span>](<span class="number">4000</span>) <span class="literal">NULL</span>,</span><br><span class="line"> <span class="keyword">CONSTRAINT</span> [PK_SYS_LOG] PRIMARY <span class="keyword">KEY</span> CLUSTERED</span><br><span class="line">(</span><br><span class="line">    [<span class="keyword">ID</span>] <span class="keyword">ASC</span></span><br><span class="line">)<span class="keyword">WITH</span> (PAD_INDEX = <span class="keyword">OFF</span>, STATISTICS_NORECOMPUTE = <span class="keyword">OFF</span>, IGNORE_DUP_KEY = <span class="keyword">OFF</span>, ALLOW_ROW_LOCKS = <span class="keyword">ON</span>, ALLOW_PAGE_LOCKS = <span class="keyword">ON</span>) <span class="keyword">ON</span> [PRIMARY]</span><br><span class="line">) <span class="keyword">ON</span> [PRIMARY]</span><br><span class="line"></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'主键ID'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'ID'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'创建时间'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'DATES'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'日志等级'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'LEVELS'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'日志调用'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'LOGGER'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'使用用户'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'CLIENTUSER'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'访问IP'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'CLIENTIP'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'访问来源'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'REQUESTURL'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'操作动作'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'ACTION'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'消息'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'MESSAGE'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'异常消息'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_LOG'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'EXCEPTION'</span></span><br><span class="line"><span class="keyword">GO</span></span><br></pre></td></tr></table></figure>
+<h3 id="三、新建用户登录控制器AccountController"><a href="#三、新建用户登录控制器AccountController" class="headerlink" title="三、新建用户登录控制器AccountController"></a>三、新建用户登录控制器AccountController</h3><ol>
+<li><p>首先添加webpage对其他3个类库的引用</p>
+</li>
+<li><p>配置Config/controllers.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">objects</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.net"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>Spring注入控制器，容器指向Service层封装的接口<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--系统管理 Begin--&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--登录控制器--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"WebPage.Areas.SysManage.Controllers.AccountController,WebPage"</span> <span class="attr">singleton</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"UserManage"</span> <span class="attr">ref</span>=<span class="string">"Service.User"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--系统管理 end--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">objects</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在/Areas/SysManage/Controllers下新建AccountController控制器</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Common;</span><br><span class="line"><span class="keyword">using</span> Common.JsonHelper;</span><br><span class="line"><span class="keyword">using</span> Service.IService;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Web.Mvc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">WebPage.Areas.SysManage.Controllers</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AccountController</span> : <span class="title">Controller</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="meta">#<span class="meta-keyword">region</span> 声明容器</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 用户管理</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        IUserManage UserManage &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 日志记录</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        Common.Log4NetHelper.IExtLog log = Common.Log4NetHelper.ExtLogManager.GetLogger(<span class="string">"dblog"</span>);</span><br><span class="line">        <span class="meta">#<span class="meta-keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">region</span> 基本视图</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> ActionResult <span class="title">Index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> View();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 登录验证</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        [<span class="meta">ValidateAntiForgeryToken</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> ActionResult <span class="title">Login</span>(<span class="params">Domain.SYS_USER item</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> json = <span class="keyword">new</span> JsonHelper() &#123; Msg = <span class="string">"登录成功"</span>, Status = <span class="string">"n"</span> &#125;;</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//调用登录验证接口 返回用户实体类</span></span><br><span class="line">                <span class="keyword">var</span> users = UserManage.UserLogin(item.ACCOUNT.Trim(), item.PASSWORD.Trim());</span><br><span class="line">                <span class="keyword">if</span> (users != <span class="literal">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//是否锁定</span></span><br><span class="line">                    <span class="keyword">if</span> (users.ISCANLOGIN == <span class="number">1</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        json.Msg = <span class="string">"用户已锁定，禁止登录，请联系管理员进行解锁"</span>;</span><br><span class="line">                        log.Warn(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">                        <span class="keyword">return</span> Json(json);</span><br><span class="line">                    &#125;</span><br><span class="line">                    json.Status = <span class="string">"y"</span>;</span><br><span class="line">                    log.Info(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    json.Msg = <span class="string">"用户名或密码不正确"</span>;</span><br><span class="line">                    log.Error(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (Exception e)</span><br><span class="line">            &#123;</span><br><span class="line">                json.Msg = e.Message;</span><br><span class="line">                log.Error(Utils.GetIP(), item.ACCOUNT, Request.Url.ToString(), <span class="string">"Login"</span>, <span class="string">"系统登录，登录结果："</span> + json.Msg);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> Json(json, JsonRequestBehavior.AllowGet);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">#<span class="meta-keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">region</span> 帮助方法</span></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">endregion</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加视图SysManage/Views/Account/Index.cshtml:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">@model Domain.SYS_USER</span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge,chrome=1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>后台登录<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">            @using (Ajax.BeginForm("login", null, new AjaxOptions()</span><br><span class="line">            &#123;</span><br><span class="line">                HttpMethod = "Post",</span><br><span class="line">                OnBegin = "dig.Loading",</span><br><span class="line">                OnSuccess = "dig.Success",</span><br><span class="line">                OnFailure = "dig.Failure",</span><br><span class="line">                OnComplete = "dig.Complete"</span><br><span class="line">            &#125;, new &#123; @class = "form-signin" &#125;))</span><br><span class="line">            &#123;</span><br><span class="line">                @Html.AntiForgeryToken()</span><br><span class="line">                @Html.TextBoxFor(model =&gt; model.ACCOUNT,</span><br><span class="line">                                                        new</span><br><span class="line">                                                        &#123;</span><br><span class="line">                                                            @class = "form-control",</span><br><span class="line">                                                            @placeholder = "登录用户名",</span><br><span class="line">                                                            @maxlength = 15,</span><br><span class="line">                                                            @required = "required"</span><br><span class="line">                                                        &#125;)</span><br><span class="line">                @Html.PasswordFor(model =&gt; model.PASSWORD,</span><br><span class="line">                                                        new</span><br><span class="line">                                                        &#123;</span><br><span class="line">                                                            @class = "form-control",</span><br><span class="line">                                                            @placeholder = "登录密码",</span><br><span class="line">                                                            @maxlength = 12,</span><br><span class="line">                                                            @required = "required"</span><br><span class="line">                                                        &#125;)</span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">id</span>=<span class="string">"login-button"</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"/Content/js/jquery-1.10.2.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"/Content/js/jquery.unobtrusive-ajax.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">        var dig = &#123;</span></span><br><span class="line"><span class="undefined">            Loading: function () &#123;</span></span><br><span class="line"><span class="undefined">                $("#login-button").attr("disabled", "disabled");;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            Success: function (result) &#123;</span></span><br><span class="line"><span class="undefined">                if (result.Status == "y") &#123;</span></span><br><span class="line"><span class="undefined">                    alert(result.Msg);</span></span><br><span class="line"><span class="undefined">                &#125; else &#123;</span></span><br><span class="line"><span class="undefined">                    alert(result.Msg);</span></span><br><span class="line"><span class="undefined">                    dig.Complete();</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            Failure: function () &#123;</span></span><br><span class="line"><span class="undefined">                alert(result.Msg);</span></span><br><span class="line"><span class="undefined">                dig.Complete();</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            Complete: function () &#123;</span></span><br><span class="line"><span class="undefined">                $("#login-button").attr("disabled", false);</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            ErrorMsg: function (msg) &#123;</span></span><br><span class="line"><span class="undefined">                alert(msg);</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行程序，访问<a href="http://localhost:50458/Sys/account" target="_blank" rel="noopener">http://localhost:50458/Sys/account</a></p>
+</li>
+</ol>
+<p>随便输入用户名密码，点击登录，如果出现如下图片，你成功了！</p>
+<img src="/2017/02/17/mvc-lesson5/success.png">
+<h1 id="常见错误解决"><a href="#常见错误解决" class="headerlink" title="常见错误解决"></a>常见错误解决</h1><p>有时候暴露出错误再解决问题更易于加深我们的理解和未来应对相似问题的解决能力。如果你遇到如下错误，那么恭喜你，你有这样的机会去尝试解决问题了。我总结了目前最可能遇到的几个问题并给出相应解决方案。如果你遇到其他的问题，并且感到很难解决，可以留言，咱们共同解决。</p>
+<ol>
+<li><p>出现类似log4net版本不正确，一般解决方法是把用到log4net的项目、类库用nuget更新到一致，一般跟新到最新就可以</p>
+</li>
+<li><p>未能加载System.Web.Http</p>
+<p> <img src="/2017/02/17/mvc-lesson5/missingWebapi.png"></p>
+<p> 因为我们新建的是一个空的MVC项目，缺少引用。所以通过NuGet 程序包管理器控制台添加：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Install-Package Microsoft.AspNet.WebApi</span><br><span class="line">Update-Package Microsoft.AspNet.WebApi -reinstall（存在）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>忘记把Service或者Webpage中Config文件夹下的xml文件属性改成嵌入资源<br> <img src="/2017/02/17/mvc-lesson5/embedded.png"></p>
+</li>
+<li><p>缺少根元素</p>
+<p><img src="/2017/02/17/mvc-lesson5/springRoot.png"></p>
+<p>xml只有<code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;</code>，在这后面至少添加上</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">objects</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.net"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">objects</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果缺少连接字符串，则在Domain/app.config拷贝connectionStrings添加到web.config</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">connectionStrings</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">add</span> <span class="attr">name</span>=<span class="string">"Entities"</span> <span class="attr">connectionString</span>=<span class="string">"metadata=res://*/Sql_Wkdb.csdl|res://*/Sql_Wkdb.ssdl|res://*/Sql_Wkdb.msl;provider=System.Data.SqlClient;provider connection string=&amp;quot;data source=.;initial catalog=wkmvc_db;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&amp;quot;"</span> <span class="attr">providerName</span>=<span class="string">"System.Data.EntityClient"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">connectionStrings</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/16/mvc-lesson4/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程4——Spring IOC、DI">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/17/mvc-lesson6/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程6——丰富数据表、建立关联">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简述"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目开始"><span class="toc-text">项目开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、Log4net"><span class="toc-text">一、Log4net</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、创建日志表SYS-LOG"><span class="toc-text">二、创建日志表SYS_LOG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、新建用户登录控制器AccountController"><span class="toc-text">三、新建用户登录控制器AccountController</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#常见错误解决"><span class="toc-text">常见错误解决</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                        <a class="tag" href="/tags/#log4net"
+                           title="log4net">log4net</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/02/17/mvc-lesson5/";
+    var disqus_url = "https://wghglory.github.io/2017/02/17/mvc-lesson5/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

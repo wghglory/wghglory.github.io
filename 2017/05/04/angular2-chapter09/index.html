@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        angular2-chapter09 -- Displaying Data with Pipes｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/05/04/angular2-chapter09/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>angular2-chapter09 -- Displaying Data with Pipes</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-05-04
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- angular2-chapter09 -- Displaying Data with Pipes -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Displaying-Data-with-Pipes"><a href="#Displaying-Data-with-Pipes" class="headerlink" title="Displaying Data with Pipes"></a>Displaying Data with Pipes</h1><p>Check code at: <a href="https://github.com/wghglory/angular2-fundamental" target="_blank" rel="noopener">https://github.com/wghglory/angular2-fundamental</a></p>
+<h3 id="Using-Built-in-Pipes"><a href="#Using-Built-in-Pipes" class="headerlink" title="Using Built-in Pipes"></a>Using Built-in Pipes</h3><p>Now in event list page, you can see event title case is not unique, so we can use pipe to make all titles uppercase.</p>
+<p>Take event-detail.component.html for instance:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123;event?.name | uppercase&#125;&#125; <span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>Date:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> &#123;&#123;event?.date | date:'shortDate'&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>Price:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> &#123;&#123;event?.price | currency:'USD':true&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Creating-a-Custom-Pipe"><a href="#Creating-a-Custom-Pipe" class="headerlink" title="Creating a Custom Pipe"></a>Creating a Custom Pipe</h3><p>Now a problem is duration shows number instead of readable text in event-detail’s session list.</p>
+<p>1) create events/shared/duration.pipe.ts. Register it in barrel, AppModule</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Pipe, PipeTransform &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Pipe(&#123; <span class="attr">name</span>: <span class="string">'duration'</span> &#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">DurationPipe</span> <span class="title">implements</span> <span class="title">PipeTransform</span> </span>&#123;</span><br><span class="line">    transform(value: number): string &#123;</span><br><span class="line">        <span class="keyword">switch</span> (value) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="string">'Half Hour'</span></span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="string">'One Hour'</span></span><br><span class="line">            <span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">return</span> <span class="string">'Half Day'</span></span><br><span class="line">            <span class="keyword">case</span> <span class="number">4</span>: <span class="keyword">return</span> <span class="string">'Full Hour'</span></span><br><span class="line">            <span class="keyword">default</span>: <span class="keyword">return</span> value.toString();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) session-list add duration pipe:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Duration: &#123;&#123;session.duration | duration&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Sorting-and-Filtering-Overview"><a href="#Sorting-and-Filtering-Overview" class="headerlink" title="Sorting and Filtering Overview"></a>Sorting and Filtering Overview</h3><p>Angular 1 has performance issues. One is using filter, sort by pipe. If a object array have thousands of objects and each object has many properties, it will be very costly to filter or sort. Angular 1 checks if each property of all objects has changed…</p>
+<p>Angular 2 pipe is no longer responsible for sorting or filtering. By default, angular 2 runs the pipe only when the identity of source has changed. Angular 2 also can use “impure pipes”, which is same mechanism as angular 1 with performance issue</p>
+<h3 id="Filtering"><a href="#Filtering" class="headerlink" title="Filtering"></a>Filtering</h3><p><img src="http://om1o84p1p.bkt.clouddn.com//1493229011.png"></p>
+<p>In event-detail page, session-list has “level”, and we want to filter session-list by “level”. We put 4 buttons on top.</p>
+<p>event-detail.component.ts add “filterBy” property:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventDetailComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService, private route: ActivatedRoute) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    event: IEvent</span><br><span class="line">    addMode: boolean = <span class="literal">false</span></span><br><span class="line">+    filterBy: string = <span class="string">'all'</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>event-detail.component.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"row"</span> <span class="attr">style</span>=<span class="string">"margin-bottom:10px;"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-2"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h3</span> <span class="attr">style</span>=<span class="string">"margin:0"</span>&gt;</span>Sessions<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">+    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-7"</span>&gt;</span></span><br><span class="line">+        <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='all'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='all'"</span>&gt;</span>All<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">+        <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='beginner'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='beginner'"</span>&gt;</span>Beginner<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">+        <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='intermediate'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='intermediate'"</span>&gt;</span>Intermediate<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">+        <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='advanced'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='advanced'"</span>&gt;</span>Advanced<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">+    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-2"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> (<span class="attr">click</span>)=<span class="string">"addSession()"</span>&gt;</span>Add Session<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">+ <span class="tag">&lt;<span class="name">session-list</span> [<span class="attr">filterBy</span>]=<span class="string">"filterBy"</span> *<span class="attr">ngIf</span>=<span class="string">"!addMode"</span> [<span class="attr">sessions</span>]=<span class="string">"event?.sessions"</span>&gt;</span><span class="tag">&lt;/<span class="name">session-list</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>session-list.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="keyword">import</span> &#123; Component, Input, OnChanges &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; ISession &#125; <span class="keyword">from</span> <span class="string">'../shared/index'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'session-list'</span>,</span><br><span class="line">    templateUrl: <span class="string">'app/events/event-detail/session-list.component.html'</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">SessionListComponent</span> <span class="title">implements</span> <span class="title">OnChanges</span> </span>&#123;</span><br><span class="line">    @Input() sessions: ISession[]</span><br><span class="line">+    @Input() filterBy: string</span><br><span class="line">+    visibleSessions: ISession[] = [];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//whenever the input variable changes</span></span><br><span class="line">+    ngOnChanges() &#123;</span><br><span class="line">+        <span class="keyword">if</span> (<span class="keyword">this</span>.sessions) &#123;</span><br><span class="line">+            <span class="keyword">this</span>.filterSessions(<span class="keyword">this</span>.filterBy);</span><br><span class="line">+        &#125;</span><br><span class="line">+    &#125;</span><br><span class="line"></span><br><span class="line">+    filterSessions(filter) &#123;</span><br><span class="line">+        <span class="keyword">if</span> (filter === <span class="string">'all'</span>) &#123;</span><br><span class="line">+            <span class="comment">// this.visibleSessions = this.sessions;  //wrong, we want to make a copy</span></span><br><span class="line">+            <span class="keyword">this</span>.visibleSessions = <span class="keyword">this</span>.sessions.slice(<span class="number">0</span>);  <span class="comment">//clone the arr</span></span><br><span class="line">+        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">+            <span class="keyword">this</span>.visibleSessions = <span class="keyword">this</span>.sessions.filter(<span class="function"><span class="params">s</span> =&gt;</span> &#123;</span><br><span class="line">+                <span class="keyword">return</span> s.level.toLocaleLowerCase() == filter;</span><br><span class="line">+            &#125;)</span><br><span class="line">+        &#125;</span><br><span class="line">+    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>session-list.component.html: use visiableSessions instead of sessions</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"row"</span> *<span class="attr">ngFor</span>=<span class="string">"let session of visibleSessions"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Sorting"><a href="#Sorting" class="headerlink" title="Sorting"></a>Sorting</h3><p>sorting by name, voters</p>
+<p>event-detail.component.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"row"</span> <span class="attr">style</span>=<span class="string">"margin-bottom:10px;"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-2"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span> <span class="attr">style</span>=<span class="string">"margin:0"</span>&gt;</span>Sessions<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-7"</span>&gt;</span></span><br><span class="line">+            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"btn-group btn-group-sm"</span> <span class="attr">style</span>=<span class="string">"margin:0 20px;"</span>&gt;</span></span><br><span class="line">+                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"sortBy==='name'"</span> (<span class="attr">click</span>)=<span class="string">"sortBy='name'"</span>&gt;</span>By Name<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">+                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"sortBy==='votes'"</span> (<span class="attr">click</span>)=<span class="string">"sortBy='votes'"</span>&gt;</span>By Votes<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">+            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"btn-group btn-group-sm"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='all'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='all'"</span>&gt;</span>All<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='beginner'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='beginner'"</span>&gt;</span>Beginner<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='intermediate'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='intermediate'"</span>&gt;</span>Intermediate<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> [<span class="attr">class.active</span>]=<span class="string">"filterBy==='advanced'"</span> (<span class="attr">click</span>)=<span class="string">"filterBy='advanced'"</span>&gt;</span>Advanced<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-2"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a</span> (<span class="attr">click</span>)=<span class="string">"addSession()"</span>&gt;</span>Add Session<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">+    <span class="tag">&lt;<span class="name">session-list</span> [<span class="attr">sortBy</span>]=<span class="string">"sortBy"</span> [<span class="attr">filterBy</span>]=<span class="string">"filterBy"</span> *<span class="attr">ngIf</span>=<span class="string">"!addMode"</span> [<span class="attr">sessions</span>]=<span class="string">"event?.sessions"</span>&gt;</span><span class="tag">&lt;/<span class="name">session-list</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">create-session</span> *<span class="attr">ngIf</span>=<span class="string">"addMode"</span> (<span class="attr">saveNewSession</span>)=<span class="string">"saveNewSession($event)"</span> (<span class="attr">cancelAddSession</span>)=<span class="string">"cancelAddSession()"</span>&gt;</span><span class="tag">&lt;/<span class="name">create-session</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>event-detail.component.ts add sortBy property:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sortBy: string = <span class="string">'votes'</span>;  <span class="comment">//default votes</span></span><br></pre></td></tr></table></figure>
+<p>session-list.component.ts</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component, Input, OnChanges &#125; from '@angular/core'</span><br><span class="line">import &#123; ISession &#125; from '../shared/index'</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: 'session-list',</span><br><span class="line">    templateUrl: 'app/events/event-detail/session-list.component.html'</span><br><span class="line">&#125;)</span><br><span class="line">export class SessionListComponent implements OnChanges &#123;</span><br><span class="line">    @Input() sessions: ISession[]</span><br><span class="line">    @Input() filterBy: string</span><br><span class="line">    visibleSessions: ISession[] = [];</span><br><span class="line"><span class="addition">+    @Input() sortBy: string</span></span><br><span class="line"></span><br><span class="line">    //whenever the input variable changes</span><br><span class="line">    ngOnChanges() &#123;</span><br><span class="line">        if (this.sessions) &#123;</span><br><span class="line">            this.filterSessions(this.filterBy);</span><br><span class="line"><span class="addition">+           this.sortBy === 'name' ? this.visibleSessions.sort(sortByNameAsc) : this.visibleSessions.sort(sortByVotesDesc)</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    filterSessions(filter) &#123;</span><br><span class="line">        if (filter <span class="comment">=== 'all') &#123;</span></span><br><span class="line">            // this.visibleSessions = this.sessions;  //wrong, we want to make a copy</span><br><span class="line">            this.visibleSessions = this.sessions.slice(0);  //clone the arr</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            this.visibleSessions = this.sessions.filter(s =&gt; &#123;</span><br><span class="line">                return s.level.toLocaleLowerCase() == filter;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="addition">+ function sortByNameAsc(s1: ISession, s2: ISession) &#123;</span></span><br><span class="line"><span class="addition">+    if (s1.name &gt; s2.name) return 1;</span></span><br><span class="line"><span class="addition">+    else if (s1.name === s2.name) return 0;</span></span><br><span class="line"><span class="addition">+    else return -1;</span></span><br><span class="line"><span class="addition">+ &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="addition">+ function sortByVotesDesc(s1: ISession, s2: ISession) &#123;</span></span><br><span class="line"><span class="addition">+    return (s2.voters.length - s1.voters.length);</span></span><br><span class="line"><span class="addition">+ &#125;</span></span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/05/02/angular2-chapter08/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter08 -- Reusing Components with Content Projection">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/05/05/angular2-chapter10/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter10 -- DI">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Displaying-Data-with-Pipes"><span class="toc-text">Displaying Data with Pipes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-Built-in-Pipes"><span class="toc-text">Using Built-in Pipes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-a-Custom-Pipe"><span class="toc-text">Creating a Custom Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sorting-and-Filtering-Overview"><span class="toc-text">Sorting and Filtering Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Filtering"><span class="toc-text">Filtering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sorting"><span class="toc-text">Sorting</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/05/04/angular2-chapter09/";
+    var disqus_url = "https://wghglory.github.io/2017/05/04/angular2-chapter09/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        angular2-chapter13 -- Communicating with the Server Using HTTP, Observables, and Rx｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/05/13/angular2-chapter13/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>angular2-chapter13 -- Communicating with the Server Using HTTP, Observables, and Rx</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-05-13
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- angular2-chapter13 -- Communicating with the Server Using HTTP, Observables, and Rx -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Communicating-with-the-Server-Using-HTTP-Observables-and-Rx"><a href="#Communicating-with-the-Server-Using-HTTP-Observables-and-Rx" class="headerlink" title="Communicating with the Server Using HTTP, Observables, and Rx"></a>Communicating with the Server Using HTTP, Observables, and Rx</h1><p>Check code at: <a href="https://github.com/wghglory/angular2-fundamental" target="_blank" rel="noopener">https://github.com/wghglory/angular2-fundamental</a></p>
+<h3 id="Observable-features"><a href="#Observable-features" class="headerlink" title="Observable features"></a>Observable features</h3><ul>
+<li>Can be Synchronous and Async</li>
+<li>Impoved Error Handling</li>
+<li>Can be closed independently of returning a value</li>
+<li>Can deal with Time</li>
+<li>Advanced Operations<ul>
+<li>Mathmetical Aggregation</li>
+<li>Buffering</li>
+<li>Debounce</li>
+<li>Distinct</li>
+<li>Filtering</li>
+<li>Combining Observables</li>
+<li>Retry</li>
+</ul>
+</li>
+</ul>
+<h3 id="Observables-VS-Promise"><a href="#Observables-VS-Promise" class="headerlink" title="Observables VS Promise"></a>Observables VS Promise</h3><p>Promise:</p>
+<ul>
+<li>represent a single value in the future</li>
+<li>Async</li>
+</ul>
+<p>Observables:</p>
+<ul>
+<li>represent 0 or more values now or in the future</li>
+<li>both sync and async</li>
+</ul>
+<h3 id="HttpModule"><a href="#HttpModule" class="headerlink" title="HttpModule"></a>HttpModule</h3><p>app.module.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="keyword">import</span> &#123;HttpModule&#125; <span class="keyword">from</span> <span class="string">'@angular/http'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [</span><br><span class="line">        BrowserModule,</span><br><span class="line">        RouterModule.forRoot(appRoutes),</span><br><span class="line">        FormsModule,</span><br><span class="line">        ReactiveFormsModule,</span><br><span class="line">+        HttpModule</span><br><span class="line">    ]&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="EventService-Http"><a href="#EventService-Http" class="headerlink" title="EventService Http"></a>EventService Http</h3><blockquote>
+<p>note: normally, http return Observable, there must be somewhere call subscribe() to return real data.<br>If we don’t need response data, probably call subscribe() immediately after the http.<br>Otherwise, call subscribe() when you call the service<br>Exception: when using resolver, subscribe is not needed (Eventlist and event-detail)</p>
+</blockquote>
+<p>event.service.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Injectable, EventEmitter &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; Subject, Observable &#125; <span class="keyword">from</span> <span class="string">'rxjs/RX'</span></span><br><span class="line"><span class="keyword">import</span> &#123; IEvent, ISession &#125; <span class="keyword">from</span> <span class="string">'./event.model'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; Http, Response, Headers, RequestOptions &#125; <span class="keyword">from</span> <span class="string">'@angular/http'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(private http: Http) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    getEvents(): Observable&lt;IEvent[]&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.http.get(<span class="string">'/api/events'</span>).map(<span class="function">(<span class="params">res: Response</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">IEvent[]</span>&gt;</span>res.json();</span></span><br><span class="line"><span class="xml">        &#125;).catch(this.handleError);</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line">    getEvent(id: number): Observable&lt;IEvent&gt; &#123;</span><br><span class="line">        return this.http.get('/api/events/' + id).map((res: Response) =&gt; &#123;</span><br><span class="line">            return &lt;IEvent&gt;res.json();</span><br><span class="line">        &#125;).catch(this.handleError);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    saveEvent(event): Observable&lt;IEvent&gt; &#123;</span><br><span class="line">        let headers = new Headers(&#123; 'Content-Type': 'applicaton/json' &#125;);</span><br><span class="line">        let options = new RequestOptions(&#123; headers: headers &#125;);</span><br><span class="line"></span><br><span class="line">        //put is exactly same code with post</span><br><span class="line">        return this.http.post('/api/events', JSON.stringify(event), options)</span><br><span class="line">            .map((res: Response) =&gt; &#123;</span><br><span class="line">                console.log(res)</span><br><span class="line">                return res.json();</span><br><span class="line">            &#125;).catch(this.handleError);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // move this to saveEvent, if id passes =&gt; update, no id =&gt; add</span><br><span class="line">    // updateEvent(event) &#123;</span><br><span class="line">    //     let index = EVENTS.findIndex(x =&gt; x.id == event.id)</span><br><span class="line">    //     EVENTS[index] = event</span><br><span class="line">    // &#125;</span><br><span class="line"></span><br><span class="line">    searchSessions(searchTerm: string) &#123;</span><br><span class="line">        return this.http.get('/api/sessions/search?search=' + searchTerm).map((res: Response) =&gt; &#123;</span><br><span class="line">            return res.json();</span><br><span class="line">        &#125;).catch(this.handleError);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private handleError(err: Response) &#123;</span><br><span class="line">        return Observable.throw(err.statusText);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>event-list-resolver.service.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Injectable&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;Resolve&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventService&#125; <span class="keyword">from</span> <span class="string">'./shared/event.service'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventListResolver</span> <span class="title">implements</span> <span class="title">Resolve</span>&lt;<span class="title">any</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService) &#123;    &#125;</span><br><span class="line"></span><br><span class="line">    resolve() &#123;</span><br><span class="line">        <span class="comment">// subscribe is not needed when calling the service in resolver</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.eventService.getEvents();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>create events/event-resolver.service.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Injectable&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;Resolve, ActivatedRouteSnapshot&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventService&#125; <span class="keyword">from</span> <span class="string">'./shared/event.service'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventResolver</span> <span class="title">implements</span> <span class="title">Resolve</span>&lt;<span class="title">any</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService) &#123;    &#125;</span><br><span class="line"></span><br><span class="line">    resolve(route: ActivatedRouteSnapshot) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.eventService.getEvent(+route.params[<span class="string">'id'</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>event-detail.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">ngOnInit() &#123;</span><br><span class="line">    <span class="comment">// //+ convert string to number</span></span><br><span class="line">    <span class="comment">// this.event = this.eventService.getEvent(+this.route.snapshot.params['id'])</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// whenever route params changes, reset all the states</span></span><br><span class="line">    <span class="keyword">this</span>.route.data.forEach(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// this.event = this.eventService.getEvent(+params['id']);  //sync</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// //async, removed because we use EventResolver</span></span><br><span class="line">        <span class="comment">// this.eventService.getEvent(+params['id']).subscribe((e: IEvent) =&gt; &#123;</span></span><br><span class="line">        <span class="comment">//     this.event = e;</span></span><br><span class="line">        <span class="comment">//     this.addMode = false;</span></span><br><span class="line">        <span class="comment">//     this.filterBy = 'all';</span></span><br><span class="line">        <span class="comment">//     this.sortBy = 'votes';</span></span><br><span class="line">        <span class="comment">// &#125;);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//async and use EventResolver</span></span><br><span class="line">        <span class="keyword">this</span>.event = data[<span class="string">'event'</span>];</span><br><span class="line">        <span class="keyword">this</span>.addMode = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">this</span>.filterBy = <span class="string">'all'</span>;</span><br><span class="line">        <span class="keyword">this</span>.sortBy = <span class="string">'votes'</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>delete event-route-activator.ts guard since we don’t want to call httprequrest twice, also delete any related code in module, route.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventRouteActivator</span> <span class="title">implements</span> <span class="title">CanActivate</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService, private router: Router) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    canActivate(route: ActivatedRouteSnapshot) &#123;</span><br><span class="line">        <span class="comment">//call twice</span></span><br><span class="line">        <span class="keyword">const</span> eventExists = !!<span class="keyword">this</span>.eventService.getEvent(+route.params[<span class="string">'id'</span>])  <span class="comment">//+ convert</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!eventExists)</span><br><span class="line">            <span class="keyword">this</span>.router.navigate([<span class="string">'/404'</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> eventExists</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>modify route.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="attr">path</span>: <span class="string">'events/:id'</span>, <span class="attr">component</span>: EventDetailComponent, <span class="attr">resolve</span>: &#123; <span class="attr">event</span>: EventResolver &#125; &#125;, <span class="comment">//Guarding Against Route Activation using service</span></span><br></pre></td></tr></table></figure>
+<p>create-event.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">CreateEventComponent</span> </span>&#123;</span><br><span class="line">    isDirty: boolean = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(private router: Router, private eventService: EventService) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    cancel() &#123;</span><br><span class="line">        <span class="keyword">this</span>.router.navigate([<span class="string">'/events'</span>])</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    saveEvent(formValues) &#123;</span><br><span class="line">+        <span class="keyword">this</span>.eventService.saveEvent(formValues).subscribe(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">+            <span class="keyword">this</span>.isDirty = <span class="literal">false</span></span><br><span class="line">+            <span class="keyword">this</span>.router.navigate([<span class="string">'/events'</span>])</span><br><span class="line">+        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="VoterService-Http"><a href="#VoterService-Http" class="headerlink" title="VoterService Http"></a>VoterService Http</h3><p>voter.service.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Injectable &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; ISession &#125; <span class="keyword">from</span> <span class="string">'../shared/event.model'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;Http, Response, Headers, RequestOptions&#125; <span class="keyword">from</span> <span class="string">'@angular/http'</span></span><br><span class="line"><span class="keyword">import</span> &#123; Observable &#125; <span class="keyword">from</span> <span class="string">'rxjs/Rx'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">VoterService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(private http: Http) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    deleteVoter(eventId: number, <span class="attr">session</span>: ISession, <span class="attr">voterName</span>: string) &#123;</span><br><span class="line">        session.voters = session.voters.filter(<span class="function"><span class="params">v</span> =&gt;</span> v !== voterName);</span><br><span class="line">        <span class="keyword">let</span> url = <span class="string">`/api/events/<span class="subst">$&#123;eventId&#125;</span>/sessions/<span class="subst">$&#123;session.id&#125;</span>/voters/<span class="subst">$&#123;voterName&#125;</span>`</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.http.delete(url).catch(<span class="keyword">this</span>.handleError).subscribe();</span><br><span class="line">        <span class="comment">//when we don't care the returning result, use subscribe immediately is fine.</span></span><br><span class="line">        <span class="comment">//Otherwise it's better to call subscribe when you actually called the service.</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    addVoter(eventId: number, <span class="attr">session</span>: ISession, <span class="attr">voterName</span>: string) &#123;</span><br><span class="line">        session.voters.push(voterName);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> headers = <span class="keyword">new</span> Headers(&#123; <span class="string">'Content-Type'</span>: <span class="string">'applicaton/json'</span> &#125;);</span><br><span class="line">        <span class="keyword">let</span> options = <span class="keyword">new</span> RequestOptions(&#123; <span class="attr">headers</span>: headers &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> url = <span class="string">`/api/events/<span class="subst">$&#123;eventId&#125;</span>/sessions/<span class="subst">$&#123;session.id&#125;</span>/voters/<span class="subst">$&#123;voterName&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//put is exactly same code with post</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.http.post(url, <span class="built_in">JSON</span>.stringify(&#123;&#125;), options)</span><br><span class="line">            .map(<span class="function">(<span class="params">res: Response</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> res.json();</span><br><span class="line">            &#125;).catch(<span class="keyword">this</span>.handleError).subscribe();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    userHasVoted(session: ISession, <span class="attr">voterName</span>: string) &#123;</span><br><span class="line">        <span class="keyword">return</span> session.voters.some(<span class="function"><span class="params">v</span> =&gt;</span> v === voterName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private handleError(err: Response) &#123;</span><br><span class="line">        <span class="keyword">return</span> Observable.throw(err.statusText);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Login-Logout"><a href="#Login-Logout" class="headerlink" title="Login/Logout"></a>Login/Logout</h3><p>user/auth.service.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Injectable&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;IUser&#125; <span class="keyword">from</span> <span class="string">'./user.model'</span></span><br><span class="line">+ <span class="keyword">import</span> &#123;Http, Response, Headers, RequestOptions&#125; <span class="keyword">from</span> <span class="string">'@angular/http'</span></span><br><span class="line">+ <span class="keyword">import</span> &#123; Observable &#125; <span class="keyword">from</span> <span class="string">'rxjs/Rx'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AuthService</span> </span>&#123;</span><br><span class="line">+    <span class="keyword">constructor</span>(private http: Http) &#123; &#125;</span><br><span class="line">    currentUser: IUser</span><br><span class="line"></span><br><span class="line">+    loginUser(userName: string, <span class="attr">password</span>: string) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> headers = <span class="keyword">new</span> Headers(&#123; <span class="string">'Content-Type'</span>: <span class="string">'applicaton/json'</span> &#125;);</span><br><span class="line">        <span class="keyword">let</span> options = <span class="keyword">new</span> RequestOptions(&#123; <span class="attr">headers</span>: headers &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> loginInfo = &#123; <span class="attr">username</span>: userName, <span class="attr">password</span>: password &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//put is exactly same code with post</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.http.post(<span class="string">'/api/login'</span>, <span class="built_in">JSON</span>.stringify(loginInfo), options)</span><br><span class="line">            .do(<span class="function">(<span class="params">res: Response</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (res) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.currentUser = <span class="xml"><span class="tag">&lt;<span class="name">IUser</span>&gt;</span>res.json().user;</span></span><br><span class="line"><span class="xml">                &#125;</span></span><br><span class="line"><span class="xml">            &#125;).catch(err =&gt; &#123;</span></span><br><span class="line"><span class="xml">                return Observable.of(false);</span></span><br><span class="line"><span class="xml">            &#125;);</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    isAuthenticated() &#123;</span></span><br><span class="line"><span class="xml">        return !!this.currentUser;</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    updateCurrentUser(firstName: string, lastName: string) &#123;</span></span><br><span class="line"><span class="xml">+        this.currentUser.firstName = firstName;</span></span><br><span class="line"><span class="xml">        this.currentUser.lastName = lastName;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        let headers = new Headers(&#123; 'Content-Type': 'applicaton/json' &#125;);</span></span><br><span class="line"><span class="xml">        let options = new RequestOptions(&#123; headers: headers &#125;);</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        return this.http.put(`/api/users/$&#123;this.currentUser.id&#125;`, JSON.stringify(this.currentUser), options);</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    //persist user authentication status, call this is app.component.ts</span></span><br><span class="line"><span class="xml">+    checkAuthenticationStatus() &#123;</span></span><br><span class="line"><span class="xml">        return this.http.get('/api/currentIdentity').map((res: any) =&gt; &#123;</span></span><br><span class="line"><span class="xml">            if (res._body) &#123;</span></span><br><span class="line"><span class="xml">                return res.json()</span></span><br><span class="line"><span class="xml">            &#125; else &#123;</span></span><br><span class="line"><span class="xml">                return &#123;&#125;</span></span><br><span class="line"><span class="xml">            &#125;</span></span><br><span class="line"><span class="xml">        &#125;).do(currentUser =&gt; &#123;</span></span><br><span class="line"><span class="xml">            if (!!currentUser.userName) &#123;</span></span><br><span class="line"><span class="xml">                this.currentUser = currentUser;</span></span><br><span class="line"><span class="xml">            &#125;</span></span><br><span class="line"><span class="xml">        &#125;).subscribe();</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">+    logout() &#123;</span></span><br><span class="line"><span class="xml">        this.currentUser = undefined;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        let headers = new Headers(&#123; 'Content-Type': 'applicaton/json' &#125;);</span></span><br><span class="line"><span class="xml">        let options = new RequestOptions(&#123; headers: headers &#125;);</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        return this.http.post('api/logout', JSON.stringify(&#123;&#125;), options);</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>app.Component.ts: to persist authentication state, a logged in user should not type username/password within 20 min</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;AuthService&#125; <span class="keyword">from</span> <span class="string">'./user/auth.service'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-app'</span>,</span><br><span class="line">    template: <span class="string">`&lt;nav-bar&gt;&lt;/nav-bar&gt;&lt;router-outlet&gt;&lt;/router-outlet&gt;`</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppComponent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private auth: AuthService) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">        <span class="keyword">this</span>.auth.checkAuthenticationStatus();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>login.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginComponent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(private authService: AuthService, private router: Router) &#123; &#125;</span><br><span class="line">+    loginInvalid: boolean = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">+    login(formValues) &#123;</span><br><span class="line">        <span class="keyword">this</span>.authService.loginUser(formValues.userName, formValues.password)</span><br><span class="line">            .subscribe(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!res) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.loginInvalid = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">this</span>.router.navigate([<span class="string">'events'</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cancel() &#123;</span><br><span class="line">        <span class="keyword">this</span>.router.navigate([<span class="string">'events'</span>])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>profile.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">ProfileComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private authService: AuthService, private router: Router, @Inject(TOASTR_TOKEN) private toastr: Toastr) &#123; &#125;</span><br><span class="line"></span><br><span class="line">+    saveProfile(formValues) &#123;</span><br><span class="line">+        <span class="keyword">if</span> (<span class="keyword">this</span>.profileForm.valid) &#123;</span><br><span class="line">+            <span class="keyword">this</span>.authService.updateCurrentUser(formValues.firstName, formValues.lastName)</span><br><span class="line">+                .subscribe(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">+                    <span class="keyword">this</span>.toastr.success(<span class="string">'Profile saved successfully!'</span>)</span><br><span class="line">+                &#125;);</span><br><span class="line">+            <span class="comment">// this.router.navigate(['events'])</span></span><br><span class="line">+        &#125;</span><br><span class="line">+    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">+    logout()&#123;</span><br><span class="line">+        <span class="keyword">this</span>.authService.logout().subscribe(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">+            <span class="keyword">this</span>.router.navigate([<span class="string">'/user/login'</span>]);</span><br><span class="line">+        &#125;);</span><br><span class="line">+    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/05/10/angular2-chapter12/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter12 -- More Components and Custom Validators">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/05/15/angular2-chapter14/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter14 -- Unit Testing by Jasmine framework and Karma">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Communicating-with-the-Server-Using-HTTP-Observables-and-Rx"><span class="toc-text">Communicating with the Server Using HTTP, Observables, and Rx</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Observable-features"><span class="toc-text">Observable features</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Observables-VS-Promise"><span class="toc-text">Observables VS Promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HttpModule"><span class="toc-text">HttpModule</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EventService-Http"><span class="toc-text">EventService Http</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VoterService-Http"><span class="toc-text">VoterService Http</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Login-Logout"><span class="toc-text">Login/Logout</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/05/13/angular2-chapter13/";
+    var disqus_url = "https://wghglory.github.io/2017/05/13/angular2-chapter13/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

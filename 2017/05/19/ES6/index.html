@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        ES2015 most useful features｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/05/19/ES6/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>ES2015 most useful features</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-05-19
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#ES2015"
+                           title="ES2015">ES2015</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- ES2015 most useful features -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Declaring-Variables-in-ES6"><a href="#Declaring-Variables-in-ES6" class="headerlink" title="Declaring Variables in ES6"></a>Declaring Variables in ES6</h1><h2 id="const"><a href="#const" class="headerlink" title="const"></a>const</h2><p>A constant is a variable that cannot be changed. Like other languages had done before it, JavaScript introduced constants with ES6.</p>
+<p>Before constants, all we had were variables, and variables could be overwritten:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pizza = <span class="literal">true</span></span><br><span class="line">pizza = <span class="literal">false</span></span><br><span class="line"><span class="built_in">console</span>.log(pizza) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>We cannot reset the value of a constant variable, and it will generate a console error if we try to overwrite the value:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pizza = <span class="literal">true</span></span><br><span class="line">pizza = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h2 id="let"><a href="#let" class="headerlink" title="let"></a>let</h2><p>JavaScript now has <em>lexical variable scoping</em>. In JavaScript, we create code blocks with curly braces (<code>{}</code>). With functions, these curly braces block off the scope of variables. On the other hand, think about <code>if/else</code> statements. If you’re coming from other languages, you might assume that these blocks would also block variable scope. This is not the case.</p>
+<p>If a variable is created inside of an <code>if/else</code> block, that variable is not scoped to the block:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> topic = <span class="string">"JavaScript"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (topic) &#123;</span><br><span class="line">  <span class="keyword">var</span> topic = <span class="string">"React"</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'block'</span>, topic)     <span class="comment">// block React</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'global'</span>, topic)      <span class="comment">// global React</span></span><br></pre></td></tr></table></figure>
+<p>The <code>topic</code> variable inside the <code>if</code> block resets the value of <code>topic</code>.</p>
+<p>With the <code>let</code> keyword, we can scope a variable to any code block. Using <code>let</code> protects the value of the global variable:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> topic = <span class="string">"JavaScript"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (topic) &#123;</span><br><span class="line">  <span class="keyword">let</span> topic = <span class="string">"React"</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'block'</span>, topic)     <span class="comment">// React</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'global'</span>, topic)      <span class="comment">// JavaScript</span></span><br></pre></td></tr></table></figure>
+<p>The value of <code>topic</code> is not reset outside of the block.</p>
+<p>Another area where curly braces don’t block off a variable’s scope is in <code>for</code> loops:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> div, </span><br><span class="line">    container = <span class="built_in">document</span>.getElementById(<span class="string">'container'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++) &#123;</span><br><span class="line">  div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</span><br><span class="line">  div.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      alert(<span class="string">'This is box #'</span> + i)</span><br><span class="line">   &#125;</span><br><span class="line">  container.appendChild(div)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In this loop, we create five <code>div</code>s to appear within a container. Each <code>div</code> is assigned an <code>onclick</code> handler that creates an alert box to display the index. Declaring <code>i</code> in the <code>for</code> loop creates a global variable named <code>i</code>, and then iterates it until its value reaches <code>5</code>. When you click on any of these boxes, the alert says that <code>i</code> is equal to <code>5</code> for all <code>div</code>s, because the current value for the global <code>i</code> is <code>5</code>.</p>
+<p>Declaring the loop counter <code>i</code> with <code>let</code> instead of <code>var</code> does block off the scope of <code>i</code>. Now clicking on any box will display the value for <code>i</code> that was scoped to the loop iteration:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> div, container = <span class="built_in">document</span>.getElementById(<span class="string">'container'</span>)</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++) &#123;</span><br><span class="line">  div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</span><br><span class="line">  div.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      alert(<span class="string">'This is box #: '</span> + i)</span><br><span class="line">   &#125;</span><br><span class="line">  container.appendChild(div)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Template-Strings"><a href="#Template-Strings" class="headerlink" title="Template Strings"></a>Template Strings</h2><p>Template strings provide us with an alternative to string concatenation. They also allow us to insert variables into a string.</p>
+<p>Traditional string concatenation uses plus signs or commas to compose a string using variable values and strings:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(lastName + <span class="string">", "</span> + firstName + <span class="string">" "</span> + middleName)</span><br></pre></td></tr></table></figure>
+<p>With a template, we can create one string and insert the variable values by surrounding them with <code>${ }</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;lastName&#125;</span>, <span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;middleName&#125;</span>`</span>)</span><br></pre></td></tr></table></figure>
+<p>Any JavaScript that returns a value can be added to a template string between the <code>${ }</code> in a template string.</p>
+<p>Template strings honor whitespace, making it easier to draft up email templates, code examples, or anything else that contains whitespace. Now you can have a string that spans multiple lines without breaking your code. </p>
+<h5 id="Example-Template-strings-honor-whitespace"><a href="#Example-Template-strings-honor-whitespace" class="headerlink" title="Example: Template strings honor whitespace"></a>Example: Template strings honor whitespace</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">`</span></span><br><span class="line"><span class="string">   Hello <span class="subst">$&#123;firstName&#125;</span>,</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   Thanks for ordering <span class="subst">$&#123;qty&#125;</span> tickets to <span class="subst">$&#123;event&#125;</span>.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   Order Details</span></span><br><span class="line"><span class="string">     <span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;middleName&#125;</span> <span class="subst">$&#123;lastName&#125;</span></span></span><br><span class="line"><span class="string">     <span class="subst">$&#123;qty&#125;</span> x $<span class="subst">$&#123;price&#125;</span> = $<span class="subst">$&#123;qty*price&#125;</span> to <span class="subst">$&#123;event&#125;</span></span></span><br><span class="line"><span class="string">             </span></span><br><span class="line"><span class="string">   You can pick your tickets up at will call 30 minutes before </span></span><br><span class="line"><span class="string">   the show.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   Thanks,</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   <span class="subst">$&#123;ticketAgent&#125;</span></span></span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+<p>Previously, using an HTML string directly in our JavaScript code was not so easy to do because we’d need to run it together on one line. Now that the whitespace is recognized as text, you can insert formatted HTML that is easy to understand:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.body.innerHTML = <span class="string">`</span></span><br><span class="line"><span class="string">&lt;section&gt;</span></span><br><span class="line"><span class="string">  &lt;header&gt;</span></span><br><span class="line"><span class="string">      &lt;h1&gt;The HTML5 Blog&lt;/h1&gt;</span></span><br><span class="line"><span class="string">  &lt;/header&gt;</span></span><br><span class="line"><span class="string">  &lt;article&gt;</span></span><br><span class="line"><span class="string">      &lt;h2&gt;<span class="subst">$&#123;article.title&#125;</span>&lt;/h2&gt;</span></span><br><span class="line"><span class="string">      <span class="subst">$&#123;article.body&#125;</span></span></span><br><span class="line"><span class="string">  &lt;/article&gt;</span></span><br><span class="line"><span class="string">  &lt;footer&gt;</span></span><br><span class="line"><span class="string">      &lt;p&gt;copyright <span class="subst">$&#123;<span class="keyword">new</span> <span class="built_in">Date</span>().getYear()&#125;</span> | The HTML5 Blog&lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;/footer&gt;</span></span><br><span class="line"><span class="string">&lt;/section&gt;</span></span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+<p>Notice that we can include variables for the page title and article text as well.</p>
+<h2 id="Default-Parameters"><a href="#Default-Parameters" class="headerlink" title="Default Parameters"></a>Default Parameters</h2><p>Languages including C++ and Python allow developers to declare default values for function arguments. Default parameters are included in the ES6 spec, so in the event that a value is not provided for the argument, the default value will be used.</p>
+<p>For example, we can set up default strings:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logActivity</span>(<span class="params">name=<span class="string">"Shane McConkey"</span>, activity=<span class="string">"skiing"</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log( <span class="string">`<span class="subst">$&#123;name&#125;</span> loves <span class="subst">$&#123;activity&#125;</span>`</span> )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If no arguments are provided to the <code>favoriteActivity</code> function, it will run correctly using the default values. Default arguments can be any type, not just strings:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> defaultPerson = &#123;</span><br><span class="line">    name: &#123; </span><br><span class="line">        first: <span class="string">"Shane"</span>, </span><br><span class="line">        last: <span class="string">"McConkey"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    favActivity: <span class="string">"skiing"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logActivity</span>(<span class="params">p=defaultPerson</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;p.name.first&#125;</span> loves <span class="subst">$&#123;p.favActivity&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Arrow-Functions"><a href="#Arrow-Functions" class="headerlink" title="Arrow Functions"></a>Arrow Functions</h1><p>Arrow functions are a useful new feature of ES6. With arrow functions, you can create functions without using the <code>function</code> keyword. You also often do not have to use the <code>return</code> keyword. </p>
+<h5 id="Example-As-a-traditional-function"><a href="#Example-As-a-traditional-function" class="headerlink" title="Example: As a traditional function"></a>Example: As a traditional function</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lordify = <span class="function"><span class="keyword">function</span>(<span class="params">firstname</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstname&#125;</span> of Canterbury`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log( lordify(<span class="string">"Dale"</span>) )       <span class="comment">// Dale of Canterbury</span></span><br><span class="line"><span class="built_in">console</span>.log( lordify(<span class="string">"Daryle"</span>) )     <span class="comment">// Daryle of Canterbury</span></span><br></pre></td></tr></table></figure>
+<p>With an arrow function, we can simplify the syntax tremendously.</p>
+<h5 id="Example-As-an-arrow-function"><a href="#Example-As-an-arrow-function" class="headerlink" title="Example: As an arrow function"></a>Example: As an arrow function</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lordify = <span class="function"><span class="params">firstname</span> =&gt;</span> <span class="string">`<span class="subst">$&#123;firstname&#125;</span> of Canterbury`</span></span><br></pre></td></tr></table></figure>
+<p>With the arrow, we now have an entire function declaration on one line. The <code>function</code> keyword is removed. We also remove <code>return</code> because the arrow points to what should be returned. Another benefit is that if the function only takes one argument, we can remove the parentheses around the arguments.</p>
+<p>More than one argument should be surrounded by parentheses:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Old</span></span><br><span class="line"><span class="keyword">var</span> lordify = <span class="function"><span class="keyword">function</span>(<span class="params">firstName, land</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> of <span class="subst">$&#123;land&#125;</span>`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// New</span></span><br><span class="line"><span class="keyword">var</span> lordify = <span class="function">(<span class="params">firstName, land</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> of <span class="subst">$&#123;land&#125;</span>`</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log( lordify(<span class="string">"Dale"</span>, <span class="string">"Maryland"</span>) )    <span class="comment">// Dale of Maryland</span></span><br><span class="line"><span class="built_in">console</span>.log( lordify(<span class="string">"Daryle"</span>, <span class="string">"Culpeper"</span>) )  <span class="comment">// Daryle of Culpeper</span></span><br></pre></td></tr></table></figure>
+<p>We can keep this as a one-line function because there is only one statement that needs to be returned.</p>
+<p>More than one line needs to be surrounded with brackets:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Old</span></span><br><span class="line"><span class="keyword">var</span> lordify = <span class="function"><span class="keyword">function</span>(<span class="params">firstName, land</span>) </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!firstName) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'A firstName is required to lordify'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!land) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'A lord must have a land'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> of <span class="subst">$&#123;land&#125;</span>`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// New</span></span><br><span class="line"><span class="keyword">var</span> _lordify = <span class="function">(<span class="params">firstName, land</span>) =&gt;</span> &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!firstName) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'A firstName is required to lordify'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!land) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'A lord must have a land'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> of <span class="subst">$&#123;land&#125;</span>`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log( lordify(<span class="string">"Kelly"</span>, <span class="string">"Sonoma"</span>) )   <span class="comment">// Kelly of Sonoma</span></span><br><span class="line"><span class="built_in">console</span>.log( lordify(<span class="string">"Dave"</span>) )              <span class="comment">// ! JAVASCRIPT ERROR</span></span><br></pre></td></tr></table></figure>
+<p>These <code>if/else</code> statements are surrounded with brackets but still benefit from the shorter syntax of the arrow function.</p>
+<p>Arrow functions do not block <code>this</code>. For example, <code>this</code> becomes something else in the <code>setTimeout</code> callback, not the <code>tahoe</code> object:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tahoe = &#123;</span><br><span class="line">  resorts: [<span class="string">"Kirkwood"</span>,<span class="string">"Squaw"</span>,<span class="string">"Alpine"</span>,<span class="string">"Heavenly"</span>,<span class="string">"Northstar"</span>],</span><br><span class="line">  print: <span class="function"><span class="keyword">function</span>(<span class="params">delay=<span class="number">1000</span></span>) </span>&#123;</span><br><span class="line">    </span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.resorts.join(<span class="string">","</span>))</span><br><span class="line">    &#125;, delay)</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tahoe.print() <span class="comment">// Cannot read property 'join' of undefined</span></span><br></pre></td></tr></table></figure>
+<p>This error is thrown because it’s trying to use the <code>.join</code> method on what <code>this</code> is. In this case, it’s the window object. Alternatively, we can use the arrow function syntax to protect the scope of <code>this</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tahoe = &#123;</span><br><span class="line">  resorts: [<span class="string">"Kirkwood"</span>,<span class="string">"Squaw"</span>,<span class="string">"Alpine"</span>,<span class="string">"Heavenly"</span>,<span class="string">"Northstar"</span>],</span><br><span class="line">  print: <span class="function"><span class="keyword">function</span>(<span class="params">delay=<span class="number">1000</span></span>) </span>&#123;</span><br><span class="line">    </span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.resorts.join(<span class="string">","</span>))</span><br><span class="line">    &#125;, delay)</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tahoe.print() <span class="comment">// Kirkwood, Squaw, Alpine, Heavenly, Northstar</span></span><br></pre></td></tr></table></figure>
+<p>This works correctly and we can <code>.join</code> the resorts with a comma. Be careful, though, that you’re always keeping scope in mind. Arrow functions do not block off the scope of <code>this</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tahoe = &#123;</span><br><span class="line">  resorts: [<span class="string">"Kirkwood"</span>,<span class="string">"Squaw"</span>,<span class="string">"Alpine"</span>,<span class="string">"Heavenly"</span>,<span class="string">"Northstar"</span>],</span><br><span class="line">  print: <span class="function">(<span class="params">delay=<span class="number">1000</span></span>) =&gt;</span> &#123;</span><br><span class="line">    </span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.resorts.join(<span class="string">","</span>))</span><br><span class="line">    &#125;, delay)</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tahoe.print() <span class="comment">// Cannot read property resorts of undefined</span></span><br></pre></td></tr></table></figure>
+<p>Changing the <code>print</code> function to an arrow function means that <code>this</code> is actually the window.</p>
+<p>To verify, let’s change the console message to evaluate whether this is the window:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tahoe = &#123;</span><br><span class="line">  resorts: [<span class="string">"Kirkwood"</span>,<span class="string">"Squaw"</span>,<span class="string">"Alpine"</span>,<span class="string">"Heavenly"</span>,<span class="string">"Northstar"</span>],</span><br><span class="line">  print: <span class="function">(<span class="params">delay=<span class="number">1000</span></span>)=&gt;</span> &#123;</span><br><span class="line">    </span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>)</span><br><span class="line">    &#125;, delay)</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tahoe.print()</span><br></pre></td></tr></table></figure>
+<p>It evaluates as <code>true</code>. To fix this, we can use a regular function:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tahoe = &#123;</span><br><span class="line">  resorts: [<span class="string">"Kirkwood"</span>,<span class="string">"Squaw"</span>,<span class="string">"Alpine"</span>,<span class="string">"Heavenly"</span>,<span class="string">"Northstar"</span>],</span><br><span class="line">  print: <span class="function"><span class="keyword">function</span>(<span class="params">delay=<span class="number">1000</span></span>) </span>&#123;</span><br><span class="line">    </span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>)</span><br><span class="line">    &#125;, delay)</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tahoe.print() <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<h1 id="Transpiling-ES6"><a href="#Transpiling-ES6" class="headerlink" title="Transpiling ES6"></a>Transpiling ES6</h1><p>Not all web browsers support ES6, and even those that do don’t support everything. The only way to be sure that your ES6 code will work is to convert it to ES5 code before running it in the browser. This process is called <em>transpiling</em>. One of the most popular tools for transpiling is <a href="http://www.babeljs.io/" target="_blank" rel="noopener">Babel</a>.</p>
+<p>In the past, the only way to use the latest JavaScript features was to wait weeks, months, or even years until browsers supported them. Now, transpiling has made it possible to use the latest features of JavaScript right away. The transpiling step makes JavaScript similar to other languages. Transpiling is not compiling: our code isn’t compiled to binary. Instead, it’s transpiled into syntax that can be interpreted by a wider range of browsers. Also, JavaScript now has source code, meaning that there will be some files that belong to your project that don’t run in the browser.</p>
+<p>Below shows some ES6 code. We have an arrow function, already covered, mixed with some default arguments for <code>x</code> and <code>y</code>.</p>
+<h5 id="Example-ES6-code-before-Babel-transpiling"><a href="#Example-ES6-code-before-Babel-transpiling" class="headerlink" title="Example: ES6 code before Babel transpiling"></a>Example: ES6 code before Babel transpiling</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">x=<span class="number">5</span>, y=<span class="number">10</span></span>) =&gt;</span> <span class="built_in">console</span>.log(x+y);</span><br></pre></td></tr></table></figure>
+<p>After we run the transpiler on this code, here is what the output will look like:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">"use strict"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="built_in">arguments</span>.length &lt;= <span class="number">0</span> || <span class="built_in">arguments</span>[<span class="number">0</span>] === <span class="literal">undefined</span> ? </span><br><span class="line">        <span class="number">5</span> : <span class="built_in">arguments</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">var</span> y = <span class="built_in">arguments</span>.length &lt;= <span class="number">1</span> || <span class="built_in">arguments</span>[<span class="number">1</span>] === <span class="literal">undefined</span> ? </span><br><span class="line">        <span class="number">10</span> : <span class="built_in">arguments</span>[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">console</span>.log(x + y);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>The transpiler added a “use strict” declaration to run in strict mode. The variables <code>x</code> and <code>y</code> are defaulted using the <code>arguments</code> array, a technique you may be familiar with. The resulting JavaScript is more widely supported.</p>
+<p>You can transpile JavaScript directly in the browser using the inline Babel transpiler. You just include the <em>browser.js</em> file, and any scripts with <code>type=&quot;text/babel&quot;</code> will be converted (even though Babel 6 is the current version of Babel, only the CDN for Babel 5 will work):</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script </span><br><span class="line">    src=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.js"</span>&gt; </span><br><span class="line">&lt;<span class="regexp">/script&gt; </span></span><br><span class="line"><span class="regexp">&lt;script src="script.js" type="text/</span>babel<span class="string">"&gt;</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="TRANSPILING-IN-THE-BROWSER"><a href="#TRANSPILING-IN-THE-BROWSER" class="headerlink" title="TRANSPILING IN THE BROWSER"></a>TRANSPILING IN THE BROWSER</h1><p>This approach means that the browser does the transpiling at runtime. This is not a good idea for production because it will slow your application down a lot. For now, the CDN link will allow us to discover and use ES6 features.</p>
+<p>You may be thinking to yourself: “Great! When ES6 is supported by all browsers, we won’t have to use Babel anymore!” However, by the time this happens, we will want to use features of the next version of the spec. Unless a tectonic shift occurs, we’ll likely be using Babel in the foreseeable future.</p>
+<h1 id="ES6-Objects-and-Arrays"><a href="#ES6-Objects-and-Arrays" class="headerlink" title="ES6 Objects and Arrays"></a>ES6 Objects and Arrays</h1><p>ES6 gives us new ways for working with objects and arrays and for scoping the variables within these datasets. These features include destructuring, object literal enhancement, and the spread operator.</p>
+<h2 id="Destructuring-Assignment"><a href="#Destructuring-Assignment" class="headerlink" title="Destructuring Assignment"></a>Destructuring Assignment</h2><p>The destructuring assignment allows you to locally scope fields within an object and to declare which values will be used.</p>
+<p>Consider this <code>sandwich</code> object. It has four keys, but we only want to use the values of two. We can scope <code>bread</code> and <code>meat</code> to be used locally:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sandwich =  &#123;</span><br><span class="line">      bread: <span class="string">"dutch crunch"</span>,</span><br><span class="line">      meat: <span class="string">"tuna"</span>,</span><br><span class="line">      cheese: <span class="string">"swiss"</span>,</span><br><span class="line">      toppings: [<span class="string">"lettuce"</span>, <span class="string">"tomato"</span>, <span class="string">"mustard"</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> &#123;bread, meat&#125; = sandwich</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bread, meat) <span class="comment">// dutch crunch tuna</span></span><br></pre></td></tr></table></figure>
+<p>The code pulls <code>bread</code> and <code>meat</code> out of the object and creates local variables for them. Also, the <code>bread</code> and <code>meat</code> variables can be changed:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> &#123;bread, meat&#125; = sandwich</span><br><span class="line"></span><br><span class="line">bread = <span class="string">"garlic"</span></span><br><span class="line">meat = <span class="string">"turkey"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bread) <span class="comment">// garlic</span></span><br><span class="line"><span class="built_in">console</span>.log(meat) <span class="comment">// turkey</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(sandwich.bread, sandwich.meat) <span class="comment">// dutch crunch tuna</span></span><br></pre></td></tr></table></figure>
+<p>We can also destructure incoming function arguments. Consider this function that would log a person’s name as a lord:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lordify = <span class="function"><span class="params">regularPerson</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;regularPerson.firstname&#125;</span> of Canterbury`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> regularPerson = &#123;</span><br><span class="line">  firstname: <span class="string">"Bill"</span>,</span><br><span class="line">  lastname: <span class="string">"Wilson"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lordify(regularPerson)       <span class="comment">// Bill of Canterbury</span></span><br></pre></td></tr></table></figure>
+<p>Instead of using dot notation syntax to dig into objects, we can destructure the values that we need out of <code>regularPerson</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lordify = <span class="function">(<span class="params">&#123;firstname&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;firstname&#125;</span> of Canterbury`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lordify(regularPerson)      <span class="comment">// Bill of Canterbury</span></span><br></pre></td></tr></table></figure>
+<p>Destructuring is also more declarative, meaning that our code is more descriptive about what we are trying to accomplish. By destructuring <code>firstname</code>, we declare that we will only use the <code>firstname</code> variable. We’ll cover more on declarative programming in the next chapter.</p>
+<p>Values can also be destructured from arrays. Imagine that we wanted to assign the first value of an array to a variable name:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> [firstResort] = [<span class="string">"Kirkwood"</span>, <span class="string">"Squaw"</span>, <span class="string">"Alpine"</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(firstResort) <span class="comment">// Kirkwood</span></span><br></pre></td></tr></table></figure>
+<p>We can also pass over unnecessary values with <em>list matching</em> using commas. List matching occurs when commas take the place of elements that should be skipped. With the same array, we can access the last value by replacing the first two values with commas:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> [,,thirdResort] = [<span class="string">"Kirkwood"</span>, <span class="string">"Squaw"</span>, <span class="string">"Alpine"</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(thirdResort) <span class="comment">// Alpine</span></span><br></pre></td></tr></table></figure>
+<p>Later in this section, we’ll take this example a step further by combining array destructuring and the spread operator.</p>
+<h2 id="Object-Literal-Enhancement"><a href="#Object-Literal-Enhancement" class="headerlink" title="Object Literal Enhancement"></a>Object Literal Enhancement</h2><p><em>Object literal enhancement</em> is the opposite of destructuring. It is the process of restructuring or putting back together. With object literal enhancement, we can grab variables from the global scope and turn them into an object:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"Tallac"</span></span><br><span class="line"><span class="keyword">var</span> elevation = <span class="number">9738</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> funHike = &#123;name,elevation&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(funHike) <span class="comment">// &#123;name: "Tallac", elevation: 9738&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>name</code> and <code>elevation</code> are now keys of the <code>funHike</code> object.</p>
+<p>We can also create object methods with object literal enhancement or restructuring:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"Tallac"</span></span><br><span class="line"><span class="keyword">var</span> elevation = <span class="number">9738</span></span><br><span class="line"><span class="keyword">var</span> print = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Mt. <span class="subst">$&#123;<span class="keyword">this</span>.name&#125;</span> is <span class="subst">$&#123;<span class="keyword">this</span>.elevation&#125;</span> feet tall`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> funHike = &#123;name,elevation,print&#125;</span><br><span class="line"></span><br><span class="line">funHike.print()     <span class="comment">// Mt. Tallac is 9738 feet tall</span></span><br></pre></td></tr></table></figure>
+<p>Notice we use <code>this</code> to access the object keys.</p>
+<p>When defining object methods, it is no longer necessary to use the <code>function</code> keyword.</p>
+<h5 id="Example-Old-versus-new-Object-syntax"><a href="#Example-Old-versus-new-Object-syntax" class="headerlink" title="Example: Old versus new: Object syntax"></a>Example: Old versus new: Object syntax</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// OLD</span></span><br><span class="line"><span class="keyword">var</span> skier = &#123;</span><br><span class="line">    name: name,</span><br><span class="line">    sound: sound,</span><br><span class="line">    powderYell: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> yell = <span class="keyword">this</span>.sound.toUpperCase()</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;yell&#125;</span> <span class="subst">$&#123;yell&#125;</span> <span class="subst">$&#123;yell&#125;</span>!!!`</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    speed: <span class="function"><span class="keyword">function</span>(<span class="params">mph</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.speed = mph</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'speed:'</span>, mph)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NEW</span></span><br><span class="line"><span class="keyword">const</span> skier = &#123;</span><br><span class="line">    name,</span><br><span class="line">    sound,</span><br><span class="line">    powderYell() &#123;</span><br><span class="line">        <span class="keyword">let</span> yell = <span class="keyword">this</span>.sound.toUpperCase()</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;yell&#125;</span> <span class="subst">$&#123;yell&#125;</span> <span class="subst">$&#123;yell&#125;</span>!!!`</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    speed(mph) &#123;</span><br><span class="line">        <span class="keyword">this</span>.speed = mph</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'speed:'</span>, mph)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Object literal enhancement allows us to pull global variables into objects and reduces typing by making the <code>function</code> keyword unnecessary.</p>
+<h2 id="The-Spread-Operator"><a href="#The-Spread-Operator" class="headerlink" title="The Spread Operator"></a>The Spread Operator</h2><p>The spread operator is three dots (<code>...</code>) that perform several different tasks. First, the spread operator allows us to combine the contents of arrays. For example, if we had two arrays, we could make a third array that combines the two arrays into one:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> peaks = [<span class="string">"Tallac"</span>, <span class="string">"Ralston"</span>, <span class="string">"Rose"</span>]</span><br><span class="line"><span class="keyword">var</span> canyons = [<span class="string">"Ward"</span>, <span class="string">"Blackwood"</span>]</span><br><span class="line"><span class="keyword">var</span> tahoe = [...peaks, ...canyons]</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(tahoe.join(<span class="string">', '</span>))  <span class="comment">// Tallac, Ralston, Rose, Ward, Blackwood</span></span><br></pre></td></tr></table></figure>
+<p>All of the items from <code>peaks</code> and <code>canyons</code> are pushed into a new array called <code>tahoe</code>.</p>
+<p>Let’s take a look at how the spread operator can help us deal with a problem. Using the <code>peaks</code> array from the previous sample, let’s imagine that we wanted to grab the last item from the array rather than the first. We could use the <code>Array.reverse</code> method to reverse the array in combination with array destructuring:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> peaks = [<span class="string">"Tallac"</span>, <span class="string">"Ralston"</span>, <span class="string">"Rose"</span>]</span><br><span class="line"><span class="keyword">var</span> [last] = peaks.reverse()</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(last) <span class="comment">// Rose</span></span><br><span class="line"><span class="built_in">console</span>.log(peaks.join(<span class="string">', '</span>))  <span class="comment">// Rose, Ralston, Tallac</span></span><br></pre></td></tr></table></figure>
+<p>See what happened? The <code>reverse</code> function has actually altered or mutated the array. In a world with the spread operator, we don’t have to mutate the original array; we can create a copy of the array and then reverse it:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> peaks = [<span class="string">"Tallac"</span>, <span class="string">"Ralston"</span>, <span class="string">"Rose"</span>]</span><br><span class="line"><span class="keyword">var</span> [last] = [...peaks].reverse()</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(last) <span class="comment">// Rose</span></span><br><span class="line"><span class="built_in">console</span>.log(peaks.join(<span class="string">', '</span>))  <span class="comment">// Tallac, Ralston, Rose</span></span><br></pre></td></tr></table></figure>
+<p>Since we used the spread operator to copy the array, the <code>peaks</code> array is still intact and can be used later in its original form.</p>
+<p>The spread operator can also be used to get some, or the rest, of the items in the array:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lakes = [<span class="string">"Donner"</span>, <span class="string">"Marlette"</span>, <span class="string">"Fallen Leaf"</span>, <span class="string">"Cascade"</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> [first, ...rest] = lakes</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(rest.join(<span class="string">", "</span>)) <span class="comment">// "Marlette, Fallen Leaf, Cascade"</span></span><br></pre></td></tr></table></figure>
+<p>We can also use the spread operator to collect function arguments as an array. Here, we build a function that takes in <em>n </em>number of arguments using the spread operator, and then uses those arguments to print some console messages:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">directions</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> [start, ...remaining] = args</span><br><span class="line">  <span class="keyword">var</span> [finish, ...stops] = remaining.reverse()</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`drive through <span class="subst">$&#123;args.length&#125;</span> towns`</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`start in <span class="subst">$&#123;start&#125;</span>`</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`the destination is <span class="subst">$&#123;finish&#125;</span>`</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`stopping <span class="subst">$&#123;stops.length&#125;</span> times in between`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">directions(</span><br><span class="line">    <span class="string">"Truckee"</span>, </span><br><span class="line">    <span class="string">"Tahoe City"</span>, </span><br><span class="line">    <span class="string">"Sunnyside"</span>, </span><br><span class="line">    <span class="string">"Homewood"</span>, </span><br><span class="line">    <span class="string">"Tahoma"</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>The <code>directions</code> function takes in the arguments using the spread operator. The first argument is assigned to the <code>start</code> variable. The last argument is assigned to a <code>finish</code> variable using <code>Array.reverse</code>. We then use the length of the <code>arguments</code> array to display how many towns we’re going through. The number of stops is the length of the <code>arguments</code> array minus the <code>finish</code> stop. This provides incredible flexibility because we could use the <code>directions</code> function to handle any number of stops.</p>
+<p>The spread operator can also be used for objects. Using the spread operator with objects is similar to using it with arrays. In this example, we’ll use it the same way we combined two arrays into a third array, but instead of arrays, we’ll use objects:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> morning = &#123;</span><br><span class="line">  breakfast: <span class="string">"oatmeal"</span>,</span><br><span class="line">  lunch: <span class="string">"peanut butter and jelly"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> dinner = <span class="string">"mac and cheese"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> backpackingMeals = &#123;</span><br><span class="line">  ...morning,</span><br><span class="line">  dinner</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(backpackingMeals) <span class="comment">// &#123;breakfast: "oatmeal",</span></span><br><span class="line">                                  lunch: <span class="string">"peanut butter and jelly"</span>,</span><br><span class="line">                                  dinner: <span class="string">"mac and cheese"</span>&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h1><p><em>Promises</em> give us a way to make sense out of asynchronous behavior. When making an asynchronous request, one of two things can happen: everything goes as we hope or there’s an error. There may be several different types of successful or unsuccessful requests. For example, we could try several ways to obtain the data to reach success. We could also receive multiple types of errors. Promises give us a way to simplify back to a simple pass or fail.</p>
+<p>Let’s create an asynchronous promise for loading data from the <em>randomuser.me</em> API. This API has information like email address, name, phone number, location, and so on for fake members and is great to use as dummy data.</p>
+<p>The <code>getFakeMembers</code> function returns a new promise. The promise makes a request to the API. If the promise is successful, the data will load. If the promise is unsuccessful, an error will occur:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getFakeMembers = <span class="function"><span class="params">count</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolves, rejects</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> api = <span class="string">`https://api.randomuser.me/?nat=US&amp;results=<span class="subst">$&#123;count&#125;</span>`</span></span><br><span class="line">  <span class="keyword">const</span> request = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">  request.open(<span class="string">'GET'</span>, api)</span><br><span class="line">  request.onload = <span class="function"><span class="params">()</span> =&gt;</span> </span><br><span class="line">       (request.status === <span class="number">200</span>) ? </span><br><span class="line">        resolves(<span class="built_in">JSON</span>.parse(request.response).results) : </span><br><span class="line">        reject(<span class="built_in">Error</span>(request.statusText))</span><br><span class="line">  request.onerror = <span class="function">(<span class="params">err</span>) =&gt;</span> rejects(err)</span><br><span class="line">  request.send()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>With that, the promise has been created, but it hasn’t been used yet. We can use the promise by calling the <code>getFakeMembers</code> function and passing in the number of members that should be loaded. The <code>then</code> function can be chained on to do something once the promise has been fulfilled. This is called composition. We’ll also use an additional callback that handles errors:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">getFakeMembers(<span class="number">5</span>).then(</span><br><span class="line">  members =&gt; <span class="built_in">console</span>.log(members),</span><br><span class="line">  err =&gt; <span class="built_in">console</span>.error(</span><br><span class="line">      <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"cannot load members from randomuser.me"</span>))</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>Promises make dealing with asynchronous requests easier, which is good, because we have to deal with a lot of asynchronous data in JavaScript. You’ll also see promises used heavily in Node.js, so a solid understanding of promises is essential for the modern JavaScript engineer.</p>
+<h1 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h1><p>Previously in JavaScript, there were no official classes. Types were defined by functions. We had to create a function and then define methods on the function object using the prototype:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Vacation</span>(<span class="params">destination, length</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.destination = destination</span><br><span class="line">  <span class="keyword">this</span>.length = length</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vacation.prototype.print = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.destination + <span class="string">" | "</span> + <span class="keyword">this</span>.length + <span class="string">" days"</span>) </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> maui = <span class="keyword">new</span> Vacation(<span class="string">"Maui"</span>, <span class="number">7</span>);</span><br><span class="line"></span><br><span class="line">maui.print(); <span class="comment">// Maui | 7</span></span><br></pre></td></tr></table></figure>
+<p>If you were used to classical object orientation, this probably made you mad.</p>
+<p>ES6 introduces class declaration, but JavaScript still works the same way. Functions are objects, and inheritance is handled through the prototype, but this syntax makes more sense if you come from classical object orientation:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vacation</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">constructor</span>(destination, length) &#123;</span><br><span class="line">    <span class="keyword">this</span>.destination = destination</span><br><span class="line">    <span class="keyword">this</span>.length = length</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  print() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.destination&#125;</span> will take <span class="subst">$&#123;<span class="keyword">this</span>.length&#125;</span> days.`</span>)  </span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="CAPITALIZATION-CONVENTIONS"><a href="#CAPITALIZATION-CONVENTIONS" class="headerlink" title="CAPITALIZATION CONVENTIONS"></a>CAPITALIZATION CONVENTIONS</h1><p>The rule of thumb with capitalization is that all types should be capitalized. Due to that, we will capitalize all class names.</p>
+<p>Once you’ve created the class, you can create a new instance of the class using the <code>new</code> keyword. Then you can call the custom method on the class:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> trip = <span class="keyword">new</span> Vacation(<span class="string">"Santiago, Chile"</span>, <span class="number">7</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(trip.print()); <span class="comment">// Chile will take 7 days.</span></span><br></pre></td></tr></table></figure>
+<p>Now that a class object has been created, you can use it as many times as you’d like to create new vacation instances. Classes can also be extended. When a class is extended, the subclass inherits the properties and methods of the superclass. These properties and methods can be manipulated from here, but as a default, all will be inherited.</p>
+<p>You can use <code>Vacation</code> as an abstract class to create different types of vacations. For instance, an <code>Expedition</code> can extend the <code>Vacation</code> class to include gear:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Expedition</span> <span class="keyword">extends</span> <span class="title">Vacation</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">constructor</span>(destination, length, gear) &#123;</span><br><span class="line">   <span class="keyword">super</span>(destination, length)</span><br><span class="line">   <span class="keyword">this</span>.gear = gear</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  print() &#123;</span><br><span class="line">    <span class="keyword">super</span>.print()</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Bring your <span class="subst">$&#123;<span class="keyword">this</span>.gear.join(<span class="string">" and your "</span>)&#125;</span>`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>That’s simple inheritance: the subclass inherits the properties of the superclass. By calling the <code>printDetails</code> method of <code>Vacation</code>, we can append some new content onto what is printed in the <code>printDetails</code> method of <code>Expedition</code>. Creating a new instance works the exact same way—create a variable and use the <code>new</code> keyword:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> trip = <span class="keyword">new</span> Expedition(<span class="string">"Mt. Whitney"</span>, <span class="number">3</span>, </span><br><span class="line">                     [<span class="string">"sunglasses"</span>, <span class="string">"prayer flags"</span>, <span class="string">"camera"</span>])</span><br><span class="line"></span><br><span class="line">trip.print() </span><br><span class="line"></span><br><span class="line"><span class="comment">// Mt. Whitney will take 3 days. </span></span><br><span class="line"><span class="comment">// Bring your sunglasses and your prayer flags and your camera</span></span><br></pre></td></tr></table></figure>
+<h1 id="CLASSES-AND-PROTOTYPAL-INHERITANCE"><a href="#CLASSES-AND-PROTOTYPAL-INHERITANCE" class="headerlink" title="CLASSES AND PROTOTYPAL INHERITANCE"></a>CLASSES AND PROTOTYPAL INHERITANCE</h1><p>Using a class still means that you are using JavaScript’s prototypal inheritance. Log <code>Vacation.prototype</code>, and you’ll notice the constructor and <code>printDetails</code> methods on the prototype.</p>
+<p>We will use classes a bit in this book, but we’re focusing on the functional paradigm. Classes have other features, like getters, setters, and static methods, but this book favors functional techniques over object-oriented techniques. The reason we’re introducing these is because we’ll use them later when creating React components.</p>
+<h1 id="ES6-Modules"><a href="#ES6-Modules" class="headerlink" title="ES6 Modules"></a>ES6 Modules</h1><p>A JavaScript <em>module</em> is a piece of reusable code that can easily be incorporated into other JavaScript files. Until recently, the only way to work with modular JavaScript was to incorporate a library that could handle importing and exporting modules. Now, with ES6, JavaScript itself supports modules.</p>
+<p>JavaScript modules are stored in separate files, one file per module. There are two options when creating and exporting a module: you can export multiple JavaScript objects from a single module, or one JavaScript object per module.</p>
+<p>In <em>text-helpers.js</em>, the module and two functions are exported.</p>
+<h5 id="Example-text-helpers-js"><a href="#Example-text-helpers-js" class="headerlink" title="Example: ./text-helpers.js"></a>Example: ./text-helpers.js</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> print(message) =&gt; log(message, <span class="keyword">new</span> <span class="built_in">Date</span>())</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> log(message, timestamp) =&gt;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;timestamp.toString()&#125;</span>: <span class="subst">$&#123;message&#125;</span>`</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><code>export</code> can be used to export any JavaScript type that will be consumed in another module. In this example the <code>print</code> function and <code>log</code> function are being exported. Any other variables declared in <em>text-helpers.js</em> will be local to that module.</p>
+<p>Sometimes you may want to export only one variable from a module. In these cases you can use <code>export default</code>.</p>
+<h5 id="Example-mt-freel-js"><a href="#Example-mt-freel-js" class="headerlink" title="Example: ./mt-freel.js"></a>Example: ./mt-freel.js</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> freel = <span class="keyword">new</span> Expedition(<span class="string">"Mt. Freel"</span>, <span class="number">2</span>, [<span class="string">"water"</span>, <span class="string">"snack"</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> freel</span><br></pre></td></tr></table></figure>
+<p><code>export default</code> can be used in place of <code>export</code> when you wish to export only one type. Again, both <code>export</code> and <code>export default</code> can be used on any JavaScript type: primitives, objects, arrays, and functions.</p>
+<p>Modules can be consumed in other JavaScript files using the <code>import</code> statement. Modules with multiple exports can take advantage of object destructuring. Modules that use <code>export default</code> are imported into a single variable:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; print, log &#125; <span class="keyword">from</span> <span class="string">'./text-helpers'</span></span><br><span class="line"><span class="keyword">import</span> freel <span class="keyword">from</span> <span class="string">'./mt-freel'</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">'printing a message'</span>)</span><br><span class="line">log(<span class="string">'logging a message'</span>)</span><br><span class="line"></span><br><span class="line">freel.print()</span><br></pre></td></tr></table></figure>
+<p>You can scope module variables locally under different variable names:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; print <span class="keyword">as</span> p, log <span class="keyword">as</span> l &#125; <span class="keyword">from</span> <span class="string">'./text-helpers'</span></span><br><span class="line"></span><br><span class="line">p(<span class="string">'printing a message'</span>)</span><br><span class="line">l(<span class="string">'logging a message'</span>)</span><br></pre></td></tr></table></figure>
+<p>You can also import everything into a single variable using <code>*</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> fns <span class="keyword">from</span> <span class="string">'./text-helpers</span></span><br></pre></td></tr></table></figure>
+<p>ES6 modules are not yet fully supported by all browsers. Babel does support ES6 modules, so we will be using them throughout this book.</p>
+<h1 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h1><p>CommonJS is the module pattern that is supported by all versions of Node.js. You can still use these modules with Babel and webpack. With CommonJS, JavaScript objects are exported using <code>module.exports</code>.</p>
+<h5 id="Example-txt-helpers-js"><a href="#Example-txt-helpers-js" class="headerlink" title="Example: ./txt-helpers.js"></a>Example: ./txt-helpers.js</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> print(message) =&gt; log(message, <span class="keyword">new</span> <span class="built_in">Date</span>())</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> log(message, timestamp) =&gt;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;timestamp.toString()&#125;</span>: <span class="subst">$&#123;message&#125;</span>`</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;print, log&#125;</span><br></pre></td></tr></table></figure>
+<p>CommonJS does not support an <code>import</code> statement. Instead, modules are imported with the <code>require</code> function:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; log, print &#125; = <span class="built_in">require</span>(<span class="string">'./txt-helpers'</span>)</span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/05/18/angular2-chapter16/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter16 -- Production">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/11/22/diary/" data-toggle="tooltip" data-placement="top"
+                           title="反思">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Declaring-Variables-in-ES6"><span class="toc-text">Declaring Variables in ES6</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#const"><span class="toc-text">const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#let"><span class="toc-text">let</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Template-Strings"><span class="toc-text">Template Strings</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-Template-strings-honor-whitespace"><span class="toc-text">Example: Template strings honor whitespace</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Default-Parameters"><span class="toc-text">Default Parameters</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Arrow-Functions"><span class="toc-text">Arrow Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-As-a-traditional-function"><span class="toc-text">Example: As a traditional function</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-As-an-arrow-function"><span class="toc-text">Example: As an arrow function</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Transpiling-ES6"><span class="toc-text">Transpiling ES6</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-ES6-code-before-Babel-transpiling"><span class="toc-text">Example: ES6 code before Babel transpiling</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TRANSPILING-IN-THE-BROWSER"><span class="toc-text">TRANSPILING IN THE BROWSER</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ES6-Objects-and-Arrays"><span class="toc-text">ES6 Objects and Arrays</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Destructuring-Assignment"><span class="toc-text">Destructuring Assignment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-Literal-Enhancement"><span class="toc-text">Object Literal Enhancement</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-Old-versus-new-Object-syntax"><span class="toc-text">Example: Old versus new: Object syntax</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Spread-Operator"><span class="toc-text">The Spread Operator</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Promises"><span class="toc-text">Promises</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Classes"><span class="toc-text">Classes</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CAPITALIZATION-CONVENTIONS"><span class="toc-text">CAPITALIZATION CONVENTIONS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CLASSES-AND-PROTOTYPAL-INHERITANCE"><span class="toc-text">CLASSES AND PROTOTYPAL INHERITANCE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ES6-Modules"><span class="toc-text">ES6 Modules</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-text-helpers-js"><span class="toc-text">Example: ./text-helpers.js</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-mt-freel-js"><span class="toc-text">Example: ./mt-freel.js</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CommonJS"><span class="toc-text">CommonJS</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Example-txt-helpers-js"><span class="toc-text">Example: ./txt-helpers.js</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#ES2015"
+                           title="ES2015">ES2015</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/05/19/ES6/";
+    var disqus_url = "https://wghglory.github.io/2017/05/19/ES6/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

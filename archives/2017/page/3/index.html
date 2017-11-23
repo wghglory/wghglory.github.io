@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/archives/2017/page/3/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+
+<!-- Page Header -->
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
+    <div class="row">
+        <header class="intro-header">
+            <div class="container">
+                <div class="site-heading text-center">
+                    <div class="about-me">
+                        <!--移动端头部显示-->
+                        <img src="/images/avatar.jpg"/>
+                        <h5><a href="/about/">Guanghui Wang</a></h5>
+                        <p>A very lame cool person</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+</div>
+<!-- Main Content -->
+<div class="container custom-haojen-container">
+    <!-- Post Container -->
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+            <!-- Main Content -->
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/images/default-post.jpg')">
+    
+    <a href="/2017/02/19/mvc-lesson7/">
+        <h2 class="post-title">
+            Asp.net MVC系列教程7——创建与登录用户相关的接口和实现类
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-19
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简述本文转自http://yuangang.cnblogs.com并加以整理。 今天我们创建几个与登录用户相关的数据表的接口和实现类
+索引Asp.net MVC项目系列教程
+项目开始一、新建登录用户类Account之前lesson5我们登录验证直接返回了管理员实体类SYS_USER，但是在实际的..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/images/default-post.jpg')">
+    
+    <a href="/2017/02/17/mvc-lesson6/">
+        <h2 class="post-title">
+            Asp.net MVC系列教程6——丰富数据表、建立关联
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-17
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简述本文转自http://yuangang.cnblogs.com并加以整理。 今天我们来建立几个表，考虑到他们之间的关系，并根据数据库生成EF实体模型。
+索引Asp.net MVC项目系列教程
+项目开始表名：SYS_CODE
+
+
+序号
+列名
+数据类型
+长度
+小数位
+主键
+允许空
+说明
+
+
+
+
+..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/images/default-post.jpg')">
+    
+    <a href="/2017/02/17/mvc-lesson5/">
+        <h2 class="post-title">
+            Asp.net MVC系列教程5——登录功能, Spring, log4net
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-17
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简述本文转自http://yuangang.cnblogs.com并加以整理。 本文用到了Spring的IOC和DI、接口的使用、实现
+索引Asp.net MVC项目系列教程
+项目开始一、Log4netlog4net是一个功能著名的开源日志记录组件。利用log4net可以方便地将日志信息记录到文..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/images/default-post.jpg')">
+    
+    <a href="/2017/02/16/mvc-lesson4/">
+        <h2 class="post-title">
+            Asp.net MVC系列教程4——Spring IOC、DI
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-16
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简述本文转自http://yuangang.cnblogs.com并加以整理。 本文用到了Spring的IOC和DI、接口的使用、实现
+索引Asp.net MVC项目系列教程
+项目开始一、IOC和DI
+Ioc：Inversion of Control，即“控制反转”，是一种设计思想。
+传统的设计..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/images/default-post.jpg')">
+    
+    <a href="/2017/02/16/mvc-lesson3/">
+        <h2 class="post-title">
+            Asp.net MVC系列教程3——公共基础数据操作类
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-16
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简述本文转自http://yuangang.cnblogs.com并加以整理。 以下内容包括Common类库添加公共帮助类和Service类库对数据库操作接口、实现
+索引Asp.net MVC项目系列教程
+项目开始一、Common类库添加大家可以在网上搜C#公共帮助类，把他们添加到Common项..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/images/default-post.jpg')">
+    
+    <a href="/2017/02/15/mvc-lesson2/">
+        <h2 class="post-title">
+            Asp.net MVC系列教程2——创建数据库和数据模型
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-15
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简述本文转自http://yuangang.cnblogs.com并加以整理。 以下内容介绍了数据库、表格创建，EF模型创建和数据库连接字符串的提取类。
+索引Asp.net MVC项目系列教程
+项目开始一、创建一个数据库和用户表
+
+
+序号
+列名
+数据类型
+长度
+小数位
+允许空
+说明
+
+
+
+
+1
+..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/images/default-post.jpg')">
+    
+    <a href="/2017/02/14/mvc-lesson1/">
+        <h2 class="post-title">
+            Asp.net MVC系列教程1——搭建MVC环境、注册区域
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-14
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简述本系列是我学习果冻布丁喜之郎(http://yuangang.cnblogs.com)教程亲自实践整理的，有很多内容摘自原文。我在打算学习.net core时候偶然发现的这一系列教程，想按照这个教程回顾和巩固一下自己对MVC的理解。刚好这也是我第一篇技术文章，转自前辈的文章熟悉下写博客的脉络..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/2017/02/11/afterwork/afterwork.jpg')">
+
+    
+    <a href="/2017/02/11/afterwork/">
+        <h2 class="post-title">
+            What do you do after work?
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-11
+        </p>
+        
+        <!-- <h3 class="post-subtitle">
+            Enjoy your time and make a progress
+        </h3> -->
+        
+        <div class="post-content-preview">
+            <p>
+                This article is from Kalyana Sundaram. Thanks for your great advices!
+You finish work at 6 pm, go to bed at 12 midnight. Within these six hours, how..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+    
+        <div class="post-preview  "
+             style="background-image: url('/2017/02/08/helloworld/helloworld.jpg')">
+
+    
+    <a href="/2017/02/08/helloworld/">
+        <h2 class="post-title">
+            Hello World
+        </h2>
+        <p class="post-meta" style="margin:8px 0;">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-08
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                This is my first post. Hello world!I’m glad to join this “world” for several years. I met many nice guys and they helped me a lot. Thank you!
+I crea..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<!-- 翻页 pager -->
+
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/archives/2017/page/2/">&larr; Newer Posts</a>
+    </li>
+    
+    
+</ul>
+
+        </div>
+        <!-- Sidebar Container -->
+        <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+
+            <!-- About Me -->
+            <section class="visible-md visible-lg" style="padding: 0 18px">
+                <div class="short-about">
+                    <!--侧边栏头像-->
+                    
+                    <img src="/images/avatar.jpg"/>
+                    
+                    <!--<h5><a href="/about/">Guanghui Wang</a></h5>-->
+                    <h5><a href="#">Guanghui Wang</a></h5>
+                    
+                    <p>A very lame cool person</p>
+                    
+                    <hr>
+                    <!-- SNS Link 社交 -->
+                    <ul class="list-inline">
+                        
+                        
+                        
+
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                        <span class="fa-stack fa-lg" style="color:#e58c7c;">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-stack-1x fa-inverse">简</i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="https://www.facebook.com/wghglory">
+                                        <span class="fa-stack fa-lg" style="color:#3b5998;">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="https://github.com/wghglory">
+                                        <span class="fa-stack fa-lg" style="color:#0d2636;">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="https://www.linkedin.com/in/guanghuiwang">
+                                        <span class="fa-stack fa-lg" style="color:#0177b5;">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Featured Tags  标签 -->
+            
+            <section>
+                <div class="tags">
+                    
+                    
+                    <a href="/tags/#Life" title="Life"
+                       rel="2">Life</a>
+                    
+                    
+                    
+                    <a href="/tags/#Asp.net" title="Asp.net"
+                       rel="3">Asp.net</a>
+                    
+                    
+                    
+                    <a href="/tags/#MVC" title="MVC"
+                       rel="3">MVC</a>
+                    
+                    
+                    
+                    <a href="/tags/#IOC" title="IOC"
+                       rel="1">IOC</a>
+                    
+                    
+                    
+                    <a href="/tags/#Spring" title="Spring"
+                       rel="2">Spring</a>
+                    
+                    
+                    
+                    <a href="/tags/#c#" title="c#"
+                       rel="3">c#</a>
+                    
+                    
+                    
+                    <a href="/tags/#Repository" title="Repository"
+                       rel="1">Repository</a>
+                    
+                    
+                    
+                    <a href="/tags/#EntityFramework" title="EntityFramework"
+                       rel="1">EntityFramework</a>
+                    
+                    
+                    
+                    <a href="/tags/#log4net" title="log4net"
+                       rel="1">log4net</a>
+                    
+                    
+                    
+                    <a href="/tags/#Angular2" title="Angular2"
+                       rel="16">Angular2</a>
+                    
+                    
+                    
+                    <a href="/tags/#sql" title="sql"
+                       rel="1">sql</a>
+                    
+                    
+                    
+                    <a href="/tags/#ES2015" title="ES2015"
+                       rel="1">ES2015</a>
+                    
+                    
+                </div>
+            </section>
+            
+
+            
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        my works｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/works/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+--- 
+layout: layout 
+---
+<style>
+    * {
+        /*border: thin red solid;*/
+    }
+
+    header .bg-header {
+        height: 560px;
+        background-color: #62A4FF;
+    }
+    /*头像*/
+
+    .bg-header .avatar img {
+        border-radius: 50%;
+        margin-top: 100px;
+        max-width: 170px;
+    }
+
+    .bg-header h1,
+    .bg-header h2 {
+        color: white;
+    }
+    /*姓名*/
+
+    .bg-header h1 {
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(15, 15, 15, .3);
+    }
+    /*描述*/
+
+    .bg-header h2 {
+        font-size: 18px;
+        margin-top: 12px;
+    }
+    /*整个作品展示区*/
+
+    section .works-area {
+        margin-top: -150px;
+    }
+
+    .works-area .works-item {
+        border-radius: 2px;
+        border: 1px solid #eee8d5;
+        margin-bottom: 50px;
+        box-shadow: 8px 5px 10px rgba(0, 0, 0, .2);
+    }
+
+    .works-item-img {
+        margin: auto -26px;
+        padding: 1px;
+    }
+
+    .works-item-img img {
+        width: 100%;
+    }
+
+    .works-area .works-item {
+        background: white;
+        padding: 5px 25px;
+    }
+
+    .works-area .footer {
+        padding-top: 10px;
+        border-top: thin #eee solid;
+    }
+
+    .works-area .footer .btn {
+        padding: 7px 9px;
+        border-radius: 2px;
+        float: right;
+        margin: 8px 0;
+        text-transform: none;
+        font-size: 12px;
+        font-style: italic;
+        background: #0085a1;
+        border: none;
+        color: #fff;
+    }
+
+    .works-item .works-content {
+        padding-top: 15px;
+    }
+
+    .works-item .title {
+        padding-top: 6px;
+    }
+
+    .works-item .title h3 {
+        display: inline-block;
+        margin: 0;
+        height: 33px;
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    .works-item .title .title-date {
+        float: right;
+        font-size: 18px;
+    }
+
+    .works-item .tag span {
+        display: inline-block;
+        font-size: 12px;
+        border-radius: 3px;
+        padding: 0 4px;
+        border: thin solid #795548;
+    }
+
+    .works-item .subtitle {
+        margin: 0;
+        font-size: 17px;
+    }
+
+    @media screen and (max-width: 400px) {
+        .works-item .footer .tag {
+            font-size: 14px;
+        }
+
+        .works-item .works-item-img {
+            height: 200px;
+        }
+
+        .bg-header .avatar img {
+            max-width: 150px;
+        }
+
+        .bg-header h1 {
+            font-size: 24px;
+        }
+
+        section .works-area {
+            margin-top: -210px;
+        }
+    }
+</style>
+
+<div class="works-container" style="background-color: #fafafa">
+    <header>
+        <div class="bg-header text-center">
+            <div class="profile">
+                <div class="avatar">
+                    <img src="/images/avatar.jpg">
+                </div>
+                <div class="personal-profile">
+                    <h1>
+                        Guanghui Wang
+                    </h1>
+                    <!-- type quote will not load article title, -->
+<!-- to add a new work, edit _data project file and add image to images folder -->
+<!-- if needing to add content like below, go next theme works.swig and modify margin-top
+
+/*整个作品展示区*/
+section .works-area {
+    margin-top: 46px;
+}
+
+anisina: must be h2
+
+-->
+<h2 id="You’re-welcome-to-review-some-of-my-personal-projects"><a href="#You’re-welcome-to-review-some-of-my-personal-projects" class="headerlink" title="You’re welcome to review some of my personal projects!"></a>You’re welcome to review some of my personal projects!</h2>
+                        <!-- <h2>my personal works</h2> -->
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <section class="row">
+            <div class="col-sm-10 col-sm-offset-1
+                        col-md-8 col-md-offset-2
+                      works-area">
+                
+                    <div class="works-item">
+                        <div class="title">
+                            <h3>
+                                Github Battle
+                            </h3>
+                            <span class="title-date text-muted">
+                            2017.5
+                        </span>
+                        </div>
+                        <div class="works-item-img">
+                            <img src="/images/react-github-battle.png">
+                        </div>
+                        <div class="works-content">
+                            <div class="tag text-warning">
+                                
+                                    <span>
+                                    React
+                                </span>
+                                    
+                            </div>
+                        
+                            <p class="subtitle">
+                                React
+                            </p>
+
+                            <p class="text-muted">
+                                React project includes basic react implementations, animation, github api interaction and chartjs visualization. You can find the most popular projects in github by language. Source code: https://github.com/wghglory/react-fundamental. Main concepts: components, props, state, react-router, etc.
+                            </p>
+                        </div>
+                        <div class="footer clearfix">
+                            <a class=" btn btn-default" href="https://github-battle-react-cf433.firebaseapp.com" target="_blank"> Open
+                            it</a>
+                        </div>
+                    </div>
+                    
+                    <div class="works-item">
+                        <div class="title">
+                            <h3>
+                                Angular Events
+                            </h3>
+                            <span class="title-date text-muted">
+                            2017.4
+                        </span>
+                        </div>
+                        <div class="works-item-img">
+                            <img src="/images/angular2.png">
+                        </div>
+                        <div class="works-content">
+                            <div class="tag text-warning">
+                                
+                                    <span>
+                                    Angular2
+                                </span>
+                                    
+                            </div>
+                        
+                            <p class="subtitle">
+                                Angular2
+                            </p>
+
+                            <p class="text-muted">
+                                Angular2 fundamentals tutorials.
+                            </p>
+                        </div>
+                        <div class="footer clearfix">
+                            <a class=" btn btn-default" href="https://github.com/wghglory/angular2-fundamental" target="_blank"> Open
+                            it</a>
+                        </div>
+                    </div>
+                    
+                    <div class="works-item">
+                        <div class="title">
+                            <h3>
+                                MEAN blog demo
+                            </h3>
+                            <span class="title-date text-muted">
+                            2017.1
+                        </span>
+                        </div>
+                        <div class="works-item-img">
+                            <img src="/images/nodejs.blog.ejs.png">
+                        </div>
+                        <div class="works-content">
+                            <div class="tag text-warning">
+                                
+                                    <span>
+                                    Mongodb
+                                </span>
+                                    
+                                    <span>
+                                    Angular1
+                                </span>
+                                    
+                                    <span>
+                                    Nodejs
+                                </span>
+                                    
+                                    <span>
+                                    Express
+                                </span>
+                                    
+                                    <span>
+                                    Mongoose
+                                </span>
+                                    
+                            </div>
+                        
+                            <p class="subtitle">
+                                Nodejs, jQuery, ES2015
+                            </p>
+
+                            <p class="text-muted">
+                                This project includes admin CRUD, regular user authentication, article review, etc.
+                            </p>
+                        </div>
+                        <div class="footer clearfix">
+                            <a class=" btn btn-default" href="https://github.com/wghglory/nodejs.blog.ejs" target="_blank"> Open
+                            it</a>
+                        </div>
+                    </div>
+                    
+                    <div class="works-item">
+                        <div class="title">
+                            <h3>
+                                MEAN web basic architect
+                            </h3>
+                            <span class="title-date text-muted">
+                            2016.12
+                        </span>
+                        </div>
+                        <div class="works-item-img">
+                            <img src="/images/mean.png">
+                        </div>
+                        <div class="works-content">
+                            <div class="tag text-warning">
+                                
+                                    <span>
+                                    Mongodb
+                                </span>
+                                    
+                                    <span>
+                                    Angular1
+                                </span>
+                                    
+                                    <span>
+                                    Nodejs
+                                </span>
+                                    
+                                    <span>
+                                    Express
+                                </span>
+                                    
+                                    <span>
+                                    Mongoose
+                                </span>
+                                    
+                            </div>
+                        
+                            <p class="subtitle">
+                                Nodejs, Angular1, socketIO, test framework, grunt automation
+                            </p>
+
+                            <p class="text-muted">
+                                This demo porjects uses Nodejs, Angular1, socketIO, test framework, grunt automation and horizontal architecture.
+                            </p>
+                        </div>
+                        <div class="footer clearfix">
+                            <a class=" btn btn-default" href="https://github.com/wghglory/nodejs.mea1n4.testAndAutomation" target="_blank"> Open
+                            it</a>
+                        </div>
+                    </div>
+                    
+                    <div class="works-item">
+                        <div class="title">
+                            <h3>
+                                World weather demo
+                            </h3>
+                            <span class="title-date text-muted">
+                            2015.2
+                        </span>
+                        </div>
+                        <div class="works-item-img">
+                            <img src="/images/worldWeather.png">
+                        </div>
+                        <div class="works-content">
+                            <div class="tag text-warning">
+                                
+                                    <span>
+                                    MVC
+                                </span>
+                                    
+                                    <span>
+                                    WebAPI
+                                </span>
+                                    
+                                    <span>
+                                    Angular1
+                                </span>
+                                    
+                                    <span>
+                                    Bootstrap
+                                </span>
+                                    
+                            </div>
+                        
+                            <p class="subtitle">
+                                A demo web application that retreving data by AngularJs service
+                            </p>
+
+                            <p class="text-muted">
+                                This project uses ado.net to retrieve data from local sqlserve db. AngularJs controller, service, filter, directive are used to talk with server.
+                            </p>
+                        </div>
+                        <div class="footer clearfix">
+                            <a class=" btn btn-default" href="https://github.com/wghglory/guanghui.Weather" target="_blank"> Open
+                            it</a>
+                        </div>
+                    </div>
+                    
+            </div>
+        </section>
+    </div>
+</div>
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

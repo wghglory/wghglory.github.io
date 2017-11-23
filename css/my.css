@@ -1,0 +1,49 @@
+@media screen and (min-width: 992px) {
+    #music {
+        width: 50px;
+        height: 50px;
+        background: url(/images/music.png) no-repeat;
+        background-size: cover;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 3;
+        cursor: pointer;
+    }
+    #music.active {
+        animation: 2s linear infinite musicMove;
+        -webkit-animation: 2s linear infinite musicMove;
+    }
+    @keyframes musicMove {
+        0% {
+            transform: rotate(0);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes -webkit-musicMove {
+        0% {
+            transform: rotate(0);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .gotoTop {
+        position: fixed;
+        bottom: 16px;
+        right: 100px;
+        width: 46px;
+        height: 70px;
+        background: url(/images/gotoTop.png) no-repeat;
+        z-index: 2;
+        background-size: contain;
+        cursor: pointer;
+        transition: 1s all;
+        opacity: 0;
+    }
+}

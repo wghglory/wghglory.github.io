@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Asp.net MVC系列教程2——创建数据库和数据模型｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/02/15/mvc-lesson2/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Asp.net MVC系列教程2——创建数据库和数据模型</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-02-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Asp.net"
+                           title="Asp.net">Asp.net</a>
+                        
+                        <a class="tag" href="/tags/#MVC"
+                           title="MVC">MVC</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- Asp.net MVC系列教程2——创建数据库和数据模型 -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文转自<a href="http://yuangang.cnblogs.com并加以整理。" target="_blank" rel="noopener">http://yuangang.cnblogs.com并加以整理。</a> 以下内容介绍了数据库、表格创建，EF模型创建和数据库连接字符串的提取类。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p><a href="/2017/02/14/mvc-lesson1/" target="_blank">Asp.net MVC项目系列教程</a></p>
+<h1 id="项目开始"><a href="#项目开始" class="headerlink" title="项目开始"></a>项目开始</h1><h3 id="一、创建一个数据库和用户表"><a href="#一、创建一个数据库和用户表" class="headerlink" title="一、创建一个数据库和用户表"></a>一、创建一个数据库和用户表</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">序号</th>
+<th style="text-align:left">列名</th>
+<th style="text-align:left">数据类型</th>
+<th style="text-align:left">长度</th>
+<th style="text-align:left">小数位</th>
+<th style="text-align:left">允许空</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">ID</td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">主键ID</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">NAME</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">50</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">真实姓名</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">ACCOUNT</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">用户帐号</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">PASSWORD</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">1000</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">用户密码</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">ISCANLOGIN</td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是否锁定（0否1是）</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">SHOWORDER1</td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">部门内的排序</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">SHOWORDER2</td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">公司内的排序</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">PINYIN1</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">50</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">姓名全拼</td>
+</tr>
+<tr>
+<td style="text-align:left">9</td>
+<td style="text-align:left">PINYIN2</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">50</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">姓名首字符</td>
+</tr>
+<tr>
+<td style="text-align:left">10</td>
+<td style="text-align:left">FACE_IMG</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">200</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">用户头像</td>
+</tr>
+<tr>
+<td style="text-align:left">11</td>
+<td style="text-align:left">LEVELS</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">36</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">级别（对接SYS_CODE）</td>
+</tr>
+<tr>
+<td style="text-align:left">12</td>
+<td style="text-align:left">DPTID</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">36</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">主部门ID，用户所在的部门</td>
+</tr>
+<tr>
+<td style="text-align:left">13</td>
+<td style="text-align:left">CREATEPER</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">36</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">创建者</td>
+</tr>
+<tr>
+<td style="text-align:left">14</td>
+<td style="text-align:left">CREATEDATE</td>
+<td style="text-align:left">datetime</td>
+<td style="text-align:left">8</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">创建时间</td>
+</tr>
+<tr>
+<td style="text-align:left">15</td>
+<td style="text-align:left">UPDATEUSER</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">36</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">修改者</td>
+</tr>
+<tr>
+<td style="text-align:left">16</td>
+<td style="text-align:left">UPDATEDATE</td>
+<td style="text-align:left">datetime</td>
+<td style="text-align:left">8</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">修改时间</td>
+</tr>
+<tr>
+<td style="text-align:left">17</td>
+<td style="text-align:left">LastLoginIP</td>
+<td style="text-align:left">nvarchar</td>
+<td style="text-align:left">50</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">最后一次登录IP</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">USE</span> [wkmvc_db]</span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line"><span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line"><span class="keyword">SET</span> QUOTED_IDENTIFIER <span class="keyword">ON</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [dbo].[SYS_USER](</span><br><span class="line">    [<span class="keyword">ID</span>] [<span class="built_in">int</span>] <span class="keyword">IDENTITY</span>(<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    [<span class="keyword">NAME</span>] [<span class="keyword">nvarchar</span>](<span class="number">50</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [<span class="keyword">ACCOUNT</span>] [<span class="keyword">nvarchar</span>](<span class="number">20</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [<span class="keyword">PASSWORD</span>] [<span class="keyword">nvarchar</span>](<span class="number">1000</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [ISCANLOGIN] [<span class="built_in">int</span>] <span class="literal">NULL</span>,</span><br><span class="line">    [SHOWORDER1] [<span class="built_in">int</span>] <span class="literal">NULL</span>,</span><br><span class="line">    [SHOWORDER2] [<span class="built_in">int</span>] <span class="literal">NULL</span>,</span><br><span class="line">    [PINYIN1] [<span class="keyword">nvarchar</span>](<span class="number">50</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [PINYIN2] [<span class="keyword">nvarchar</span>](<span class="number">50</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [FACE_IMG] [<span class="keyword">nvarchar</span>](<span class="number">200</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [<span class="keyword">LEVELS</span>] [<span class="keyword">nvarchar</span>](<span class="number">36</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [DPTID] [<span class="keyword">nvarchar</span>](<span class="number">36</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [CREATEPER] [<span class="keyword">nvarchar</span>](<span class="number">36</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [CREATEDATE] [datetime] <span class="literal">NULL</span>,</span><br><span class="line">    [UPDATEUSER] [<span class="keyword">nvarchar</span>](<span class="number">36</span>) <span class="literal">NULL</span>,</span><br><span class="line">    [UPDATEDATE] [datetime] <span class="literal">NULL</span>,</span><br><span class="line">    [LastLoginIP] [<span class="keyword">nvarchar</span>](<span class="number">50</span>) <span class="literal">NULL</span>,</span><br><span class="line"> <span class="keyword">CONSTRAINT</span> [PK_SYS_USER] PRIMARY <span class="keyword">KEY</span> CLUSTERED</span><br><span class="line">(</span><br><span class="line">    [<span class="keyword">ID</span>] <span class="keyword">ASC</span></span><br><span class="line">)<span class="keyword">WITH</span> (PAD_INDEX = <span class="keyword">OFF</span>, STATISTICS_NORECOMPUTE = <span class="keyword">OFF</span>, IGNORE_DUP_KEY = <span class="keyword">OFF</span>, ALLOW_ROW_LOCKS = <span class="keyword">ON</span>, ALLOW_PAGE_LOCKS = <span class="keyword">ON</span>) <span class="keyword">ON</span> [PRIMARY]</span><br><span class="line">) <span class="keyword">ON</span> [PRIMARY]</span><br><span class="line"></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'主键ID'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'ID'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'真实姓名'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'NAME'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'用户帐号'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'ACCOUNT'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'用户密码'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'PASSWORD'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'是否锁定（0否1是）'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'ISCANLOGIN'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'部门内的排序'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'SHOWORDER1'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'公司内的排序'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'SHOWORDER2'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'姓名全拼'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'PINYIN1'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'姓名首字符'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'PINYIN2'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'用户头像'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'FACE_IMG'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'级别（对接SYS_CODE）'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'LEVELS'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'主部门ID，用户所在的部门'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'DPTID'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'创建者'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'CREATEPER'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'创建时间'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'CREATEDATE'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'修改者'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'UPDATEUSER'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'修改时间'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'UPDATEDATE'</span></span><br><span class="line"><span class="keyword">GO</span></span><br><span class="line">EXEC sys.sp_addextendedproperty @<span class="keyword">name</span>=N<span class="string">'MS_Description'</span>, @<span class="keyword">value</span>=N<span class="string">'最后一次登录IP'</span> , @level0type=N<span class="string">'SCHEMA'</span>,@level0name=N<span class="string">'dbo'</span>, @level1type=N<span class="string">'TABLE'</span>,@level1name=N<span class="string">'SYS_USER'</span>, @level2type=N<span class="string">'COLUMN'</span>,@level2name=N<span class="string">'LastLoginIP'</span></span><br><span class="line"><span class="keyword">GO</span></span><br></pre></td></tr></table></figure>
+<h3 id="二、添加ADO-NET实体数据模型-Sql-Wkdb"><a href="#二、添加ADO-NET实体数据模型-Sql-Wkdb" class="headerlink" title="二、添加ADO.NET实体数据模型 Sql_Wkdb"></a>二、添加ADO.NET实体数据模型 Sql_Wkdb</h3><ol>
+<li>在我们的Domain中，我们添加一个ADO.NET实体数据模型叫做<strong>Sql_Wkdb</strong></li>
+<li>右击Domain→添加→ADO.NET实体数据模型 Sql_Wkdb</li>
+<li>app.config连接改成Entities<br><img src="/2017/02/15/mvc-lesson2/mvc2-ef.png" style="height:460px;"></li>
+<li>模型命名空间改成Domain<br><img src="/2017/02/15/mvc-lesson2/mvc2-ef2.png" style="height:460px;"></li>
+</ol>
+<h3 id="三、新建配置类-MyConfig-cs，用于数据库连接字符串的提取"><a href="#三、新建配置类-MyConfig-cs，用于数据库连接字符串的提取" class="headerlink" title="三、新建配置类 MyConfig.cs，用于数据库连接字符串的提取"></a>三、新建配置类 MyConfig.cs，用于数据库连接字符串的提取</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Configuration;</span><br><span class="line"><span class="keyword">using</span> System.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Domain</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 数据库连接字符串提取操作</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 字符串对应应用程序中配置文件</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 模型对应Domain中的数据库模型Context.cs构造函数</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyConfig</span> : <span class="title">Entities</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 封装EF实体模型，供Dao使用，</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="keyword">public</span> System.Data.Entity.DbContext db &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyConfig</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="comment">//实例化EF数据上下文</span></span><br><span class="line">            db = <span class="keyword">new</span> Entities();<span class="comment">//注：Entities()要修改成与EF上下文统一</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">region</span> 连接数据库配置</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 数据库连接字符串</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> DefaultConnectionString = <span class="string">""</span>;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 通用数据库链接对象配置</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> IDbConnection DefaultConnection</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">get</span></span><br><span class="line">            &#123;</span><br><span class="line">                IDbConnection defaultConn = <span class="literal">null</span>;</span><br><span class="line">                <span class="comment">//数据库类型</span></span><br><span class="line">                <span class="keyword">string</span> action = ConfigurationManager.AppSettings[<span class="string">"daoType"</span>];</span><br><span class="line">                <span class="keyword">switch</span> (action)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//case "oracle":</span></span><br><span class="line">                    <span class="comment">//    defaultConn = new Oracle.ManagedDataAccess.Client.OracleConnection();</span></span><br><span class="line">                    <span class="comment">//    DefaultConnectionString = ConfigurationManager.ConnectionStrings["OracleConnectionString"].ConnectionString;</span></span><br><span class="line">                    <span class="comment">//    break;</span></span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"mssql"</span>:</span><br><span class="line">                        defaultConn = <span class="keyword">new</span> System.Data.SqlClient.SqlConnection();</span><br><span class="line">                        DefaultConnectionString = ConfigurationManager.ConnectionStrings[<span class="string">"SqlConnectionString"</span>].ConnectionString;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">default</span>:</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> defaultConn;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 构造数据库连接字符串 注：数据库切换要修改</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">DataBaseConnectionString</span>(<span class="params"><span class="keyword">string</span> entityName</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            IDbConnection con = DefaultConnection;</span><br><span class="line">            <span class="keyword">return</span> EFConnectionStringModle(entityName, DefaultConnectionString);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 构造EF使用数据库连接字符串</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="entityName"&gt;</span>数据上下文坏境<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="dbSource"&gt;</span>数据字符串<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">string</span> <span class="title">EFConnectionStringModle</span>(<span class="params"><span class="keyword">string</span> entityName, <span class="keyword">string</span> dbSource</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">string</span>.Concat(<span class="string">"metadata=res://*/"</span>,</span><br><span class="line">                entityName, <span class="string">".csdl|res://*/"</span>,</span><br><span class="line">                entityName, <span class="string">".ssdl|res://*/"</span>,</span><br><span class="line">                entityName, <span class="string">".msl;provider=System.Data.SqlClient;provider connection string='"</span>,</span><br><span class="line">                dbSource, <span class="string">"'"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">#<span class="meta-keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">region</span> SQL拦截器</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 配置EF执行SQL拦截器</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="comment">//public static void EFTracingConfig(log4net.ILog log4net)</span></span><br><span class="line">        <span class="comment">//&#123;</span></span><br><span class="line">        <span class="comment">//    //注册拦截器</span></span><br><span class="line">        <span class="comment">//    EFTracingProviderConfiguration.RegisterProvider();</span></span><br><span class="line">        <span class="comment">//    //SQL日志</span></span><br><span class="line">        <span class="comment">//    log4net.ILog log = null;</span></span><br><span class="line">        <span class="comment">//    bool isdebug = (ConfigurationManager.AppSettings["isdebug"] == "true");</span></span><br><span class="line">        <span class="comment">//    if (isdebug)</span></span><br><span class="line">        <span class="comment">//    &#123;</span></span><br><span class="line">        <span class="comment">//        log = log4net;</span></span><br><span class="line">        <span class="comment">//    &#125;</span></span><br><span class="line">        <span class="comment">//    EFTracingProviderConfiguration.LogToLog4net = log;</span></span><br><span class="line">        <span class="comment">//&#125;</span></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="四、把EF添加到Webpage项目中"><a href="#四、把EF添加到Webpage项目中" class="headerlink" title="四、把EF添加到Webpage项目中"></a>四、把EF添加到Webpage项目中</h3><ul>
+<li>通过nuget添加EntityFramework</li>
+<li>拷贝Domain/app.config connectionString到Webpage的web.config中</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>下一篇，我们就来创建个公共操作接口和实现类，还有Spring注入，再次感谢作者和大家的关注！</p>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/14/mvc-lesson1/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程1——搭建MVC环境、注册区域">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/16/mvc-lesson3/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程3——公共基础数据操作类">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简述"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目开始"><span class="toc-text">项目开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、创建一个数据库和用户表"><span class="toc-text">一、创建一个数据库和用户表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、添加ADO-NET实体数据模型-Sql-Wkdb"><span class="toc-text">二、添加ADO.NET实体数据模型 Sql_Wkdb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、新建配置类-MyConfig-cs，用于数据库连接字符串的提取"><span class="toc-text">三、新建配置类 MyConfig.cs，用于数据库连接字符串的提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、把EF添加到Webpage项目中"><span class="toc-text">四、把EF添加到Webpage项目中</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Asp.net"
+                           title="Asp.net">Asp.net</a>
+                        
+                        <a class="tag" href="/tags/#MVC"
+                           title="MVC">MVC</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/02/15/mvc-lesson2/";
+    var disqus_url = "https://wghglory.github.io/2017/02/15/mvc-lesson2/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

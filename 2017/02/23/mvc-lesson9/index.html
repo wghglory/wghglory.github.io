@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Asp.net MVC系列教程9——控制器基类 主要做登录用户、权限认证、日志记录等工作｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/02/23/mvc-lesson9/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Asp.net MVC系列教程9——控制器基类 主要做登录用户、权限认证、日志记录等工作</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-02-23
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#c#"
+                           title="c#">c#</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- Asp.net MVC系列教程9——控制器基类 主要做登录用户、权限认证、日志记录等工作 -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文转自<a href="http://yuangang.cnblogs.com并加以整理。" target="_blank" rel="noopener">http://yuangang.cnblogs.com并加以整理。</a> 今天我们来写一个控制器基类 主要做登录用户、权限认证、日志记录等工作</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p><a href="/2017/02/14/mvc-lesson1/" target="_blank">Asp.net MVC项目系列教程</a></p>
+<h1 id="项目开始"><a href="#项目开始" class="headerlink" title="项目开始"></a>项目开始</h1><h3 id="一、在Controllers文件夹下新建一个控制器BaseController"><a href="#一、在Controllers文件夹下新建一个控制器BaseController" class="headerlink" title="一、在Controllers文件夹下新建一个控制器BaseController"></a>一、在Controllers文件夹下新建一个控制器BaseController</h3><p>用于控制器基类，主要做登录用户、权限认证、日志记录等工作</p>
+<h3 id="二、声明公共变量和容器"><a href="#二、声明公共变量和容器" class="headerlink" title="二、声明公共变量和容器"></a>二、声明公共变量和容器</h3><p>变量主要用于我们查询分页的时候用户传递关键字、页码和分页条数</p>
+<p>这个用户容器 主要是用户后台用户的一些操作</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">region</span> 公用变量</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 查询关键词</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">string</span> Keywords &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 视图传递的分页页码</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> Page &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 视图传递的分页条数</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> Pagesize &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 用户容器，公用</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> IUserManage UserManage = Spring.Context.Support.ContextRegistry.GetContext().GetObject(<span class="string">"Service.User"</span>) <span class="keyword">as</span> IUserManage;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="三、获取当前用户对象"><a href="#三、获取当前用户对象" class="headerlink" title="三、获取当前用户对象"></a>三、获取当前用户对象</h3><p>从Sesssion中获取用户对象，Session过期后 通过 Cookies重新获取用户对象</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 获取当前用户对象</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> Account CurrentUser</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">get</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//从Session中获取用户对象</span></span><br><span class="line">        <span class="keyword">if</span> (SessionHelper.GetSession(<span class="string">"CurrentUser"</span>) != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> SessionHelper.GetSession(<span class="string">"CurrentUser"</span>) <span class="keyword">as</span> Account;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//Session过期 通过Cookies中的信息 重新获取用户对象 并存储于Session中</span></span><br><span class="line">        <span class="keyword">var</span> account = UserManage.GetAccountByCookie();</span><br><span class="line">        SessionHelper.SetSession(<span class="string">"CurrentUser"</span>, account);</span><br><span class="line">        <span class="keyword">return</span> account;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="四、重写OnActionExecuting方法"><a href="#四、重写OnActionExecuting方法" class="headerlink" title="四、重写OnActionExecuting方法"></a>四、重写OnActionExecuting方法</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnActionExecuting</span>(<span class="params">ActionExecutingContext filterContext</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//登录用户验证 1、判断Session对象是否存在 || 2、登录验证</span></span><br><span class="line">    <span class="keyword">if</span> (filterContext.HttpContext.Session == <span class="literal">null</span> || <span class="keyword">this</span>.CurrentUser == <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        filterContext.HttpContext.Response.Write(</span><br><span class="line">               <span class="string">" &lt;script type='text/javascript'&gt; alert('~登录已过期，请重新登录');window.top.location='/'; &lt;/script&gt;"</span>);</span><br><span class="line">        filterContext.RequestContext.HttpContext.Response.End();</span><br><span class="line">        filterContext.Result = <span class="keyword">new</span> EmptyResult();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">region</span> 公共Get变量</span></span><br><span class="line">    <span class="comment">//分页页码</span></span><br><span class="line">    <span class="keyword">string</span> p = filterContext.HttpContext.Request[<span class="string">"page"</span>];</span><br><span class="line">    Page = <span class="keyword">string</span>.IsNullOrEmpty(p) ? <span class="number">1</span> : <span class="keyword">int</span>.Parse(p);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//搜索关键词</span></span><br><span class="line">    <span class="keyword">string</span> search = filterContext.HttpContext.Request.QueryString[<span class="string">"search"</span>];</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">string</span>.IsNullOrEmpty(search))</span><br><span class="line">    &#123;</span><br><span class="line">        Keywords = search;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//显示分页条数</span></span><br><span class="line">    <span class="keyword">string</span> size = filterContext.HttpContext.Request.QueryString[<span class="string">"example_length"</span>];  <span class="comment">//todo: change name</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">string</span>.IsNullOrEmpty(size) &amp;&amp; System.Text.RegularExpressions.Regex.IsMatch(size.ToString(), <span class="string">@"^\d+$"</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        Pagesize = <span class="keyword">int</span>.Parse(size.ToString());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        Pagesize = <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">#<span class="meta-keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="五、模块权限验证功能"><a href="#五、模块权限验证功能" class="headerlink" title="五、模块权限验证功能"></a>五、模块权限验证功能</h3><ol>
+<li>根据模块别名验证对应模块</li>
+<li>根据模块操作Action验证是否可操作按钮。</li>
+</ol>
+<p>如果用户对相应的模块没有相应的操作权限（添加、修改、删除、审核、发布等等，包含自定义操作类型），我们拒绝执行。网站的权限判断是非常普遍的需求，只要自定义一个类继承自AuthorizeAttribute或者实现IAuthorizeFilter，重写相关的判断逻辑就可以了。</p>
+<p>原作者在basecontroller下面新建一个权限验证类UserAuthorizeAttribute，继承自AuthorizeAttribute。你也可以在合适的位置单独创建文件，会更好。</p>
+<p>添加一个自定义的Attribute，通过AttributeUsage的Attribute来限定Attribute所施加的元素的类型。作为参数的AttributeTarges的值允许通过“或”操作来进行多个值得组合，如果你没有指定参数，那么默认参数就是All 。</p>
+<p>AttributeUsage除了继承Attribute的方法和属性之外，还定义了以下三个属性：</p>
+<ul>
+<li><strong>AllowMultiple</strong>: 表示是否可以对一个程序元素施加多个Attribute</li>
+<li><strong>Inherited</strong>: 表示是否施加的Attribute 可以被派生类继承或者重载。</li>
+<li><strong>ValidOn</strong>: 指明Attribute可以被施加的元素的类型。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line">[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = <span class="literal">false</span>)]</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserAuthorizeAttribute</span> :</span> AuthorizeAttribute</span><br><span class="line">&#123;</span><br><span class="line">    <span class="meta">#region 字段和属性</span></span><br><span class="line">    <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">    <span class="comment">/// 模块别名，可配置更改</span></span><br><span class="line">    <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> ModuleAlias &#123; get; <span class="built_in">set</span>; &#125;</span><br><span class="line">    <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">    <span class="comment">/// 权限动作</span></span><br><span class="line">    <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> OperationAction &#123; get; <span class="built_in">set</span>; &#125;</span><br><span class="line">    <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">    <span class="comment">/// 权限访问控制器参数</span></span><br><span class="line">    <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">string</span> Sign &#123; get; <span class="built_in">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">    <span class="comment">/// 基类实例化</span></span><br><span class="line">    <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">    <span class="keyword">public</span> BaseController baseController = <span class="keyword">new</span> BaseController();</span><br><span class="line"></span><br><span class="line">    <span class="meta">#endregion</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//权限验证</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> override <span class="keyword">void</span> <span class="title">OnAuthorization</span><span class="params">(AuthorizationContext filterContext)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//1、判断模块是否对应</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(ModuleAlias))</span><br><span class="line">        &#123;</span><br><span class="line">            filterContext.HttpContext.Response.Write(<span class="string">" &lt;script type='text/javascript'&gt; alert('^您没有访问该页面的权限！'); &lt;/script&gt;"</span>);</span><br><span class="line">            filterContext.RequestContext.HttpContext.Response.End();</span><br><span class="line">            filterContext.Result = <span class="keyword">new</span> EmptyResult();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//2、判断用户是否存在</span></span><br><span class="line">        <span class="keyword">if</span> (baseController.CurrentUser == null)</span><br><span class="line">        &#123;</span><br><span class="line">            filterContext.HttpContext.Response.Write(<span class="string">" &lt;script type='text/javascript'&gt; alert('^登录已过期，请重新登录！');window.top.location='/'; &lt;/script&gt;"</span>);</span><br><span class="line">            filterContext.RequestContext.HttpContext.Response.End();</span><br><span class="line">            filterContext.Result = <span class="keyword">new</span> EmptyResult();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对比变量，用于权限认证</span></span><br><span class="line">        <span class="built_in">string</span> alias = ModuleAlias;</span><br><span class="line"></span><br><span class="line">        <span class="meta">#region 配置Sign调取控制器标识</span></span><br><span class="line">        Sign = filterContext.RequestContext.HttpContext.Request.QueryString[<span class="string">"sign"</span>];</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">string</span>.IsNullOrEmpty(Sign))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> ((<span class="string">","</span> + ModuleAlias.ToLower()).Contains(<span class="string">","</span> + Sign.ToLower()))</span><br><span class="line">            &#123;</span><br><span class="line">                alias = Sign;</span><br><span class="line">                filterContext.Controller.ViewData[<span class="string">"Sign"</span>] = Sign;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">#endregion</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//3、调用下面的方法，验证是否有访问此页面的权限，查看加操作</span></span><br><span class="line">        <span class="keyword">int</span> moduleId = baseController.CurrentUser.Modules.Where(p =&gt; p.ALIAS.ToLower() == alias.ToLower()).Select(p =&gt; p.ID).FirstOrDefault();</span><br><span class="line">        <span class="keyword">bool</span> _blAllowed = IsAllowed(baseController.CurrentUser, moduleId, OperationAction);</span><br><span class="line">        <span class="keyword">if</span> (!_blAllowed)</span><br><span class="line">        &#123;</span><br><span class="line">            filterContext.HttpContext.Response.Write(<span class="string">" &lt;script type='text/javascript'&gt; alert('您没有访问当前页面的权限！');&lt;/script&gt;"</span>);</span><br><span class="line">            filterContext.RequestContext.HttpContext.Response.End();</span><br><span class="line">            filterContext.Result = <span class="keyword">new</span> EmptyResult();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//4、有权限访问页面，将此页面的权限集合传给页面</span></span><br><span class="line">        filterContext.Controller.ViewData[<span class="string">"PermissionList"</span>] = GetPermissByJson(baseController.CurrentUser, moduleId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">    <span class="comment">/// 获取操作权限Json字符串，供视图JS判断使用。前台按钮没有这个权限就移除掉</span></span><br><span class="line">    <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">GetPermissByJson</span><span class="params">(Account account, <span class="keyword">int</span> moduleId)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//操作权限</span></span><br><span class="line">        var _varPerListThisModule = account.Permissions.Where(p =&gt; p.MODULEID == moduleId).Select(R =&gt; <span class="keyword">new</span> &#123; R.PERVALUE &#125;).ToList();</span><br><span class="line">        <span class="keyword">return</span> Common.JsonHelper.JsonConverter.Serialize(_varPerListThisModule);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/// &lt;summary&gt;</span></span><br><span class="line">    <span class="comment">/// 功能描述：判断用户是否有此模块的操作权限。</span></span><br><span class="line">    <span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">bool</span> <span class="title">IsAllowed</span><span class="params">(Account user, <span class="keyword">int</span> moduleId, <span class="built_in">string</span> action)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//判断入口</span></span><br><span class="line">        <span class="keyword">if</span> (user == null || user.Id &lt;= <span class="number">0</span> || moduleId == <span class="number">0</span> || <span class="built_in">string</span>.IsNullOrEmpty(action)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="comment">//验证权限</span></span><br><span class="line">        var permission = user.Permissions.Where(p =&gt; p.MODULEID == moduleId);</span><br><span class="line">        action = action.Trim(<span class="string">','</span>);</span><br><span class="line">        <span class="keyword">if</span> (action.IndexOf(<span class="string">','</span>) &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            permission = permission.Where(p =&gt; action.ToLower().Contains(p.PERVALUE.ToLower()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            permission = permission.Where(p =&gt; p.PERVALUE.ToLower() == action.ToLower());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> permission.Any();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// &lt;summary&gt;</span></span><br><span class="line"><span class="comment">/// 模型去重，非常重要</span></span><br><span class="line"><span class="comment">/// add yuangang by 2016-05-25</span></span><br><span class="line"><span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ModuleDistinct</span> :</span> IEqualityComparer&lt;Domain.SYS_MODULE&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">bool</span> <span class="title">Equals</span><span class="params">(Domain.SYS_MODULE x, Domain.SYS_MODULE y)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x.ID == y.ID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">GetHashCode</span><span class="params">(Domain.SYS_MODULE obj)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> obj.ToString().GetHashCode();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>后面我们就用到这个基类，我先给大家看一下这个权限认证在后台是如何使用的，加上这一句就OK了</p>
+<img src="/2017/02/23/mvc-lesson9/authorize.jpg"> 
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/20/mvc-lesson8/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程8——完善登录功能">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/04/18/angular2-chapter01/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter01 -- systemJS, tsconfig, package.json; first component, module and bootstrap module">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简述"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目开始"><span class="toc-text">项目开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、在Controllers文件夹下新建一个控制器BaseController"><span class="toc-text">一、在Controllers文件夹下新建一个控制器BaseController</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、声明公共变量和容器"><span class="toc-text">二、声明公共变量和容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、获取当前用户对象"><span class="toc-text">三、获取当前用户对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、重写OnActionExecuting方法"><span class="toc-text">四、重写OnActionExecuting方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、模块权限验证功能"><span class="toc-text">五、模块权限验证功能</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#c#"
+                           title="c#">c#</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/02/23/mvc-lesson9/";
+    var disqus_url = "https://wghglory.github.io/2017/02/23/mvc-lesson9/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

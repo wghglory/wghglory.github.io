@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        angular2-chapter12 -- More Components and Custom Validators｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/05/10/angular2-chapter12/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>angular2-chapter12 -- More Components and Custom Validators</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-05-10
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- angular2-chapter12 -- More Components and Custom Validators -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="More-Components-and-Custom-Validators"><a href="#More-Components-and-Custom-Validators" class="headerlink" title="More Components and Custom Validators"></a>More Components and Custom Validators</h1><p>Check code at: <a href="https://github.com/wghglory/angular2-fundamental" target="_blank" rel="noopener">https://github.com/wghglory/angular2-fundamental</a></p>
+<p>We can vote for sessions whatever user likes.</p>
+<h3 id="Voter-function"><a href="#Voter-function" class="headerlink" title="Voter function"></a>Voter function</h3><p>1) events/event-detail/session-list.component.html add this:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> *<span class="attr">ngIf</span>=<span class="string">"auth.isAuthenticated()"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">upvote</span> (<span class="attr">vote</span>)=<span class="string">"toggleVote(session)"</span> [<span class="attr">count</span>]=<span class="string">"session.voters.length"</span> [<span class="attr">voted</span>]=<span class="string">"userHasVoted(session)"</span>&gt;</span><span class="tag">&lt;/<span class="name">upvote</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>2) events/event-detail/session-list.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component, Input, OnChanges &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; ISession &#125; <span class="keyword">from</span> <span class="string">'../shared/index'</span></span><br><span class="line">+ <span class="keyword">import</span> &#123; AuthService &#125; <span class="keyword">from</span> <span class="string">'../../user/auth.service'</span></span><br><span class="line">+ <span class="keyword">import</span> &#123; VoterService &#125; <span class="keyword">from</span> <span class="string">'./voter.service'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'session-list'</span>,</span><br><span class="line">    templateUrl: <span class="string">'app/events/event-detail/session-list.component.html'</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">SessionListComponent</span> <span class="title">implements</span> <span class="title">OnChanges</span> </span>&#123;</span><br><span class="line">    @Input() sessions: ISession[]</span><br><span class="line">    @Input() filterBy: string</span><br><span class="line">    visibleSessions: ISession[] = [];</span><br><span class="line">    @Input() sortBy: string</span><br><span class="line"></span><br><span class="line">+    <span class="keyword">constructor</span>(private auth: AuthService, private voterService: VoterService) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//whenever the input variable changes</span></span><br><span class="line">    ngOnChanges() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.sessions) &#123;</span><br><span class="line">            <span class="keyword">this</span>.filterSessions(<span class="keyword">this</span>.filterBy);</span><br><span class="line">            <span class="keyword">this</span>.sortBy === <span class="string">'name'</span> ? <span class="keyword">this</span>.visibleSessions.sort(sortByNameAsc) : <span class="keyword">this</span>.visibleSessions.sort(sortByVotesDesc)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    filterSessions(filter) &#123;</span><br><span class="line">        <span class="keyword">if</span> (filter === <span class="string">'all'</span>) &#123;</span><br><span class="line">            <span class="comment">// this.visibleSessions = this.sessions;  //wrong, we want to make a copy</span></span><br><span class="line">            <span class="keyword">this</span>.visibleSessions = <span class="keyword">this</span>.sessions.slice(<span class="number">0</span>);  <span class="comment">//clone the arr</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.visibleSessions = <span class="keyword">this</span>.sessions.filter(<span class="function"><span class="params">s</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> s.level.toLocaleLowerCase() == filter;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">+    toggleVote(session: ISession) &#123;</span><br><span class="line">+        <span class="keyword">if</span> (<span class="keyword">this</span>.userHasVoted(session)) &#123;</span><br><span class="line">+            <span class="keyword">this</span>.voterService.deleteVoter(session, <span class="keyword">this</span>.auth.currentUser.userName);</span><br><span class="line">+        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">+            <span class="keyword">this</span>.voterService.addVoter(session, <span class="keyword">this</span>.auth.currentUser.userName);</span><br><span class="line">+        &#125;</span><br><span class="line"></span><br><span class="line">+        <span class="keyword">if</span> (<span class="keyword">this</span>.sortBy === <span class="string">'votes'</span>) &#123;</span><br><span class="line">+            <span class="keyword">this</span>.visibleSessions.sort(sortByVotesDesc);</span><br><span class="line">+        &#125;</span><br><span class="line">+    &#125;</span><br><span class="line"></span><br><span class="line">+    userHasVoted(session: ISession) &#123;</span><br><span class="line">+        <span class="keyword">return</span> <span class="keyword">this</span>.voterService.userHasVoted(session, <span class="keyword">this</span>.auth.currentUser.userName);</span><br><span class="line">+    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sortByNameAsc</span>(<span class="params">s1: ISession, s2: ISession</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s1.name &gt; s2.name) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (s1.name === s2.name) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sortByVotesDesc</span>(<span class="params">s1: ISession, s2: ISession</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (s2.voters.length - s1.voters.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3) add events/event-detail/upvote.component.ts, register in barrel and app.module.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component, EventEmitter, Input, Output &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'upvote'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div class="votingWidgetContainer pointable" (click)="onClick()"&gt;</span></span><br><span class="line"><span class="string">        &lt;div class="well votingWidget"&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="votingButton"&gt;</span></span><br><span class="line"><span class="string">                &lt;i *ngIf="voted" class="glyphicon glyphicon-heart"&gt;&lt;/i&gt;</span></span><br><span class="line"><span class="string">                &lt;i *ngIf="!voted" class="glyphicon glyphicon-heart-empty"&gt;&lt;/i&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="badge badge-inverse votingCount"&gt;</span></span><br><span class="line"><span class="string">                &lt;div&gt;&#123;&#123;count&#125;&#125;&lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span>,</span><br><span class="line">    styleUrls: [<span class="string">'/app/events/event-detail/upvote.component.css'</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">UpvoteComponent</span> </span>&#123;</span><br><span class="line">    @Input() count: number;</span><br><span class="line">    @Input() voted: boolean;</span><br><span class="line">    @Output() vote = <span class="keyword">new</span> EventEmitter();</span><br><span class="line"></span><br><span class="line">    onClick() &#123;</span><br><span class="line">        <span class="keyword">this</span>.vote.emit(&#123;&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4) voter.service.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Injectable &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; ISession &#125; <span class="keyword">from</span> <span class="string">'../shared/event.model'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">VoterService</span> </span>&#123;</span><br><span class="line">    deleteVoter(session: ISession, <span class="attr">voterName</span>: string) &#123;</span><br><span class="line">        session.voters = session.voters.filter(<span class="function"><span class="params">v</span> =&gt;</span> v !== voterName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    addVoter(session: ISession, <span class="attr">voterName</span>: string) &#123;</span><br><span class="line">        session.voters.push(voterName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    userHasVoted(session: ISession, <span class="attr">voterName</span>: string) &#123;</span><br><span class="line">        <span class="keyword">return</span> session.voters.some(<span class="function"><span class="params">v</span> =&gt;</span> v === voterName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Update-feature-voted-red-color-unvoted-white-color"><a href="#Update-feature-voted-red-color-unvoted-white-color" class="headerlink" title="Update feature: voted red color, unvoted white color"></a>Update feature: voted red color, unvoted white color</h3><p><strong>Using @Input Setters</strong></p>
+<p>upvote.component.ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component, EventEmitter, Input, Output &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'upvote'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div class="votingWidgetContainer pointable" (click)="onClick()"&gt;</span></span><br><span class="line"><span class="string">        &lt;div class="well votingWidget"&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="votingButton"&gt;</span></span><br><span class="line"><span class="string">+                &lt;i [style.color]="iconColor" class="glyphicon glyphicon-heart"&gt;&lt;/i&gt;</span></span><br><span class="line"><span class="string">-                &lt;!--</span></span><br><span class="line"><span class="string">-                    &lt;i *ngIf="voted" class="glyphicon glyphicon-heart"&gt;&lt;/i&gt;</span></span><br><span class="line"><span class="string">-                    &lt;i *ngIf="!voted" class="glyphicon glyphicon-heart-empty"&gt;&lt;/i&gt;</span></span><br><span class="line"><span class="string">-                --&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="badge badge-inverse votingCount"&gt;</span></span><br><span class="line"><span class="string">                &lt;div&gt;&#123;&#123;count&#125;&#125;&lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span>,</span><br><span class="line">    styleUrls: [<span class="string">'/app/events/event-detail/upvote.component.css'</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">UpvoteComponent</span> </span>&#123;</span><br><span class="line">    @Input() count: number;</span><br><span class="line">+    iconColor: string;</span><br><span class="line">+    @Input() set voted(val) &#123;</span><br><span class="line">+        <span class="keyword">this</span>.iconColor = val ? <span class="string">'red'</span> : <span class="string">'white'</span>;</span><br><span class="line">+    &#125;</span><br><span class="line">    @Output() vote = <span class="keyword">new</span> EventEmitter();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    onClick() &#123;</span><br><span class="line">        <span class="keyword">this</span>.vote.emit(&#123;&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Creating-a-Complex-Custom-Validator"><a href="#Creating-a-Complex-Custom-Validator" class="headerlink" title="Creating a Complex Custom Validator"></a>Creating a Complex Custom Validator</h3><p>when user creates a new event, we want to make sure all 3 location fields or onlineUrl are typed.</p>
+<p>location-validator.directive.ts, register it in barrel and app.module.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Directive &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; Validator, FormGroup, NG_VALIDATORS &#125; <span class="keyword">from</span> <span class="string">'@angular/forms'</span></span><br><span class="line"></span><br><span class="line">@Directive(&#123;</span><br><span class="line">    selector: <span class="string">'[validateLocation]'</span>,</span><br><span class="line">    providers: [&#123; <span class="attr">provide</span>: NG_VALIDATORS, <span class="attr">useExisting</span>: LocationValidator, <span class="attr">multi</span>: <span class="literal">true</span> &#125;] <span class="comment">//use multi:true to add LocationValidator to NG_VALIDATORS which is a list of angular built-in validators, otherwise can replace/override</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">LocationValidator</span> <span class="title">implements</span> <span class="title">Validator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    validate(formGroup: FormGroup): &#123; [key: string]: any &#125; &#123;</span><br><span class="line">        <span class="keyword">let</span> addressControl = formGroup.controls[<span class="string">'address'</span>];</span><br><span class="line">        <span class="keyword">let</span> cityControl = formGroup.controls[<span class="string">'city'</span>];</span><br><span class="line">        <span class="keyword">let</span> countryControl = formGroup.controls[<span class="string">'country'</span>];</span><br><span class="line">        <span class="keyword">let</span> onlineUrlControl = (<span class="xml"><span class="tag">&lt;<span class="name">FormGroup</span>&gt;</span>formGroup.root).controls['onlineUrl'];</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        console.log(addressControl &amp;&amp; addressControl.value)</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        if ((addressControl &amp;&amp; addressControl.value</span></span><br><span class="line"><span class="xml">            &amp;&amp; cityControl &amp;&amp; cityControl.value</span></span><br><span class="line"><span class="xml">            &amp;&amp; countryControl &amp;&amp; countryControl.value)</span></span><br><span class="line"><span class="xml">            || (onlineUrlControl &amp;&amp; onlineUrlControl.value)) &#123;</span></span><br><span class="line"><span class="xml">            return null;</span></span><br><span class="line"><span class="xml">        &#125; else &#123;</span></span><br><span class="line"><span class="xml">            return &#123; validateLocation: false &#125;</span></span><br><span class="line"><span class="xml">        &#125;</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>create-event.component.ts</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> #<span class="attr">newEventForm</span>=<span class="string">"ngForm"</span> (<span class="attr">ngSubmit</span>)=<span class="string">"saveEvent(newEventForm.value)"</span> <span class="attr">autocomplete</span>=<span class="string">"off"</span> <span class="attr">novalidate</span>&gt;</span></span><br><span class="line"></span><br><span class="line">+    <span class="tag">&lt;<span class="name">div</span> <span class="attr">ngModelGroup</span>=<span class="string">"location"</span> <span class="attr">validateLocation</span> #<span class="attr">locationGroup</span>=<span class="string">"ngModelGroup"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"address"</span>&gt;</span>Event Location:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">+            <span class="tag">&lt;<span class="name">em</span> *<span class="attr">ngIf</span>=<span class="string">"locationGroup?.invalid &amp;&amp; locationGroup?.touched"</span>&gt;</span>You must enter either flll location or online url<span class="tag">&lt;/<span class="name">em</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> [(<span class="attr">ngModel</span>)]=<span class="string">"address"</span> <span class="attr">name</span>=<span class="string">"address"</span> <span class="attr">id</span>=<span class="string">"address"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">placeholder</span>=<span class="string">"Address of event..."</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"row"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-6"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> [(<span class="attr">ngModel</span>)]=<span class="string">"city"</span> <span class="attr">name</span>=<span class="string">"city"</span> <span class="attr">id</span>=<span class="string">"city"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">placeholder</span>=<span class="string">"City..."</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-6"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> [(<span class="attr">ngModel</span>)]=<span class="string">"country"</span> <span class="attr">name</span>=<span class="string">"country"</span> <span class="attr">id</span>=<span class="string">"country"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">placeholder</span>=<span class="string">"Country..."</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"onlineUrl"</span>&gt;</span>Online Url:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">+        <span class="tag">&lt;<span class="name">input</span> (<span class="attr">change</span>)=<span class="string">"locationGroup.control.controls.address.updateValueAndValidity()"</span> [(<span class="attr">ngModel</span>)]=<span class="string">"onlineUrl"</span> <span class="attr">name</span>=<span class="string">"onlineUrl"</span> <span class="attr">id</span>=<span class="string">"onlineUrl"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">placeholder</span>=<span class="string">"Online Url..."</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/05/09/angular2-chapter11/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter11 -- Create Directives and Advanced Component">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/05/13/angular2-chapter13/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter13 -- Communicating with the Server Using HTTP, Observables, and Rx">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#More-Components-and-Custom-Validators"><span class="toc-text">More Components and Custom Validators</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Voter-function"><span class="toc-text">Voter function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Update-feature-voted-red-color-unvoted-white-color"><span class="toc-text">Update feature: voted red color, unvoted white color</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-a-Complex-Custom-Validator"><span class="toc-text">Creating a Complex Custom Validator</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/05/10/angular2-chapter12/";
+    var disqus_url = "https://wghglory.github.io/2017/05/10/angular2-chapter12/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

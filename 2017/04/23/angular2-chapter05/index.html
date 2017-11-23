@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        angular2-chapter05 -- Routing and Navigation｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/04/23/angular2-chapter05/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>angular2-chapter05 -- Routing and Navigation</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-04-23
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- angular2-chapter05 -- Routing and Navigation -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Routing-and-Navigation"><a href="#Routing-and-Navigation" class="headerlink" title="Routing and Navigation"></a>Routing and Navigation</h1><p>Check code at: <a href="https://github.com/wghglory/angular2-fundamental" target="_blank" rel="noopener">https://github.com/wghglory/angular2-fundamental</a></p>
+<h3 id="Adding-event-detail-page"><a href="#Adding-event-detail-page" class="headerlink" title="Adding event-detail page"></a>Adding event-detail page</h3><p>1) shared/event.service.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventService</span> </span>&#123;</span><br><span class="line">    getEvents() &#123;</span><br><span class="line">        <span class="keyword">return</span> EVENTS</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//add getEvent by id</span></span><br><span class="line">    getEvent(id: number) &#123;</span><br><span class="line">        <span class="keyword">return</span> EVENTS.find(<span class="function"><span class="params">e</span> =&gt;</span> e.id === id)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) <strong>Access url parameter</strong>, create app/events/event-detail/event-detail.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//http://localhost:8808/events/3</span></span><br><span class="line"><span class="keyword">import</span> &#123;Component, OnInit&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventService&#125; <span class="keyword">from</span> <span class="string">'../shared/event.service'</span></span><br><span class="line"><span class="keyword">import</span> &#123;ActivatedRoute&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    templateUrl: <span class="string">'/app/events/event-detail/event-detail.component.html'</span>,</span><br><span class="line">    styles: [<span class="string">`</span></span><br><span class="line"><span class="string">        .container&#123;padding:0 20px;&#125;</span></span><br><span class="line"><span class="string">        .event-img&#123;height:100px;&#125;</span></span><br><span class="line"><span class="string">    `</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventDetailComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService, private route: ActivatedRoute) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    event: any</span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">        <span class="comment">//+ convert string to number</span></span><br><span class="line">        <span class="keyword">this</span>.event = <span class="keyword">this</span>.eventService.getEvent(+<span class="keyword">this</span>.route.snapshot.params[<span class="string">'id'</span>])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3) create its template:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> [<span class="attr">src</span>]=<span class="string">"event?.imageUrl"</span> [<span class="attr">alt</span>]=<span class="string">"event?.name"</span> <span class="attr">class</span>=<span class="string">"event-img"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"row"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-11"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123;event?.name&#125;&#125; <span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"row"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-6"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>Date:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> &#123;&#123;event?.date&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>Time:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> &#123;&#123;event?.time&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>Price:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> $&#123;&#123;event?.price&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-6"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">address</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">strong</span>&gt;</span>Address:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">                &#123;&#123;event?.location?.address&#125;&#125;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">                &#123;&#123;event?.location?.city&#125;&#125;, &#123;&#123;event?.location?.country&#125;&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">address</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>4) register component in module</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; EventDetailComponent &#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-detail.component'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    declarations: [AppComponent, EventsListComponent, EventThumbnailComponent, NavBarComponent, EventDetailComponent],</span><br><span class="line">    providers: [EventService, ToastrService],</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Adding-Routing"><a href="#Adding-Routing" class="headerlink" title="Adding Routing"></a>Adding Routing</h3><p>1) Current app load component like below (app.component.ts). It has <code>nav-bar</code> and <code>events-list</code> components. <code>Nav-bar</code> should show all the time while <code>events-list</code> should show only when url is “/“, so we should remove <code>events-list</code> and use <code>router-outlet</code> instead.</p>
+<p>old app.component.ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-app'</span>,</span><br><span class="line">    template: <span class="string">`&lt;nav-bar&gt;&lt;/nav-bar&gt;&lt;events-list&gt;&lt;/events-list&gt;`</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>new app.component.ts using router:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'events-app'</span>,</span><br><span class="line">    template: <span class="string">`&lt;nav-bar&gt;&lt;/nav-bar&gt;&lt;router-outlet&gt;&lt;/router-outlet&gt;`</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>2) create app/routes.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Routes&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventsListComponent&#125; <span class="keyword">from</span> <span class="string">'./events/events-list.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventDetailComponent&#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-detail.component'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> appRoutes: Routes = [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events'</span>, <span class="attr">component</span>: EventsListComponent &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events/:id'</span>, <span class="attr">component</span>: EventDetailComponent &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">''</span>, <span class="attr">redirectTo</span>: <span class="string">'/events'</span>, <span class="attr">pathMatch</span>: <span class="string">'full'</span> &#125;  <span class="comment">//pathMatch: prefix or full</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>3) register routes array and Router module</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; RouterModule &#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123; appRoutes &#125; <span class="keyword">from</span> <span class="string">'./routes'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [BrowserModule, RouterModule.forRoot(appRoutes)],</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>4) tell angular where app is hosted. Add base in index.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">base</span> <span class="attr">href</span>=<span class="string">"/"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Linking-to-Routes"><a href="#Linking-to-Routes" class="headerlink" title="Linking to Routes"></a>Linking to Routes</h3><p>events-list any thumbnail click =&gt; specific events/id page<br>nav-bar “allEvents” click =&gt; load all events: localhost/</p>
+<p>event-thumbnail.component.ts: <code>[routerLink]=&quot;[&#39;/events&#39;, event.id]&quot;</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events', event.id]"</span> <span class="attr">class</span>=<span class="string">"well hoverwell thumbnail"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Event: &#123;&#123;event?.name&#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>Price: \$&#123;&#123;event?.price&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>Date: &#123;&#123;event?.date&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>nav.component.html:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events']"</span>&gt;</span>All Events<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Navigating-from-Code"><a href="#Navigating-from-Code" class="headerlink" title="Navigating from Code"></a>Navigating from Code</h3><p>1) create events/create-event.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//click cancel will use router to navigate to /events (load all events)</span></span><br><span class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;Router&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;h1&gt;New Event&lt;/h1&gt;</span></span><br><span class="line"><span class="string">    &lt;div class="col-md-6"&gt;</span></span><br><span class="line"><span class="string">        &lt;h3&gt;[Create Event Form will go here]&lt;/h3&gt;</span></span><br><span class="line"><span class="string">        &lt;button type="submit" class="btn btn-primary"&gt;Save&lt;/button&gt;</span></span><br><span class="line"><span class="string">        &lt;button type="button" class="btn btn-default" (click)="cancel()"&gt;Cancel&lt;/button&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">    `</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">CreateEventComponent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private router:Router)&#123;&#125;</span><br><span class="line"></span><br><span class="line">    cancel()&#123;</span><br><span class="line">        <span class="keyword">this</span>.router.navigate([<span class="string">'/events'</span>])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) update routes.ts with CreateEventComponent and route <code>events/new</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Routes&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventsListComponent&#125; <span class="keyword">from</span> <span class="string">'./events/events-list.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventDetailComponent&#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-detail.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123;CreateEventComponent&#125; <span class="keyword">from</span> <span class="string">'./events/create-event.component'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> appRoutes: Routes = [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events/new'</span>, <span class="attr">component</span>: CreateEventComponent &#125;, <span class="comment">//order matters</span></span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events'</span>, <span class="attr">component</span>: EventsListComponent &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events/:id'</span>, <span class="attr">component</span>: EventDetailComponent &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">''</span>, <span class="attr">redirectTo</span>: <span class="string">'/events'</span>, <span class="attr">pathMatch</span>: <span class="string">'full'</span> &#125;  <span class="comment">//pathMatch: prefix or full</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>3) nav/nav.component.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"nav navbar-nav"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events']"</span>&gt;</span>All Events<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events/new']"</span>&gt;</span>Create Event<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>4) register component in module:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; CreateEventComponent&#125; <span class="keyword">from</span> <span class="string">'./events/create-event.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123; RouterModule &#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123; appRoutes &#125; <span class="keyword">from</span> <span class="string">'./routes'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [BrowserModule, RouterModule.forRoot(appRoutes)],</span><br><span class="line">    declarations: [AppComponent, EventsListComponent, EventThumbnailComponent, NavBarComponent, EventDetailComponent, CreateEventComponent],</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Guarding-Against-Route-Activation-Invalid-event-id-like-1000-which-doesn’t-exist-navigate-to-404"><a href="#Guarding-Against-Route-Activation-Invalid-event-id-like-1000-which-doesn’t-exist-navigate-to-404" class="headerlink" title="Guarding Against Route Activation (Invalid event id like 1000 which doesn’t exist, navigate to 404)"></a>Guarding Against Route Activation (Invalid event id like 1000 which doesn’t exist, navigate to 404)</h3><p>1) create errors/404.component.ts, register module, register router</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;h1 class="errorMessage"&gt;404'd&lt;/h1&gt;</span></span><br><span class="line"><span class="string">      `</span>,</span><br><span class="line">    styles: [<span class="string">`</span></span><br><span class="line"><span class="string">        .errorMessage &#123;</span></span><br><span class="line"><span class="string">             margin-top:150px;</span></span><br><span class="line"><span class="string">             font-size: 170px;</span></span><br><span class="line"><span class="string">             text-align: center;</span></span><br><span class="line"><span class="string">        &#125;`</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Error404Component</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) create events/event-detail/event-route-activator.service.ts and register this EventRouteActivator service into app.module.ts providers</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Router, ActivatedRouteSnapshot, CanActivate &#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123; Injectable &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; EventService&#125; <span class="keyword">from</span> <span class="string">'../shared/event.service'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventRouteActivator</span> <span class="title">implements</span> <span class="title">CanActivate</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService, private router: Router) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    canActivate(route: ActivatedRouteSnapshot) &#123;</span><br><span class="line">        <span class="keyword">const</span> eventExists = !!<span class="keyword">this</span>.eventService.getEvent(+route.params[<span class="string">'id'</span>])  <span class="comment">//+ convert</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!eventExists)</span><br><span class="line">            <span class="keyword">this</span>.router.navigate([<span class="string">'/404'</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> eventExists</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>app.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Error404Component &#125; <span class="keyword">from</span> <span class="string">'./errors/404.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123; EventRouteActivator &#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-route-activator.service'</span></span><br><span class="line"><span class="keyword">import</span> &#123; RouterModule &#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123; appRoutes &#125; <span class="keyword">from</span> <span class="string">'./routes'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [BrowserModule, RouterModule.forRoot(appRoutes)],</span><br><span class="line">    declarations: [</span><br><span class="line">        AppComponent,</span><br><span class="line">        NavBarComponent,</span><br><span class="line">        EventsListComponent, EventThumbnailComponent, EventDetailComponent, CreateEventComponent,</span><br><span class="line">        Error404Component</span><br><span class="line">    ],</span><br><span class="line">+    providers: [EventService, ToastrService, EventRouteActivator],</span><br><span class="line">    bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>3) routes.ts add canActivate and EventRouteActivator service</p>
+<blockquote>
+<p>note: route canActivate can use both service and function. Here we’re using service</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Routes&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventsListComponent&#125; <span class="keyword">from</span> <span class="string">'./events/events-list.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventDetailComponent&#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-detail.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123;CreateEventComponent&#125; <span class="keyword">from</span> <span class="string">'./events/create-event.component'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;Error404Component&#125; <span class="keyword">from</span> <span class="string">'./errors/404.component'</span></span><br><span class="line"></span><br><span class="line">+ <span class="keyword">import</span> &#123;EventRouteActivator&#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-route-activator.service'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> appRoutes: Routes = [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events/new'</span>, <span class="attr">component</span>: CreateEventComponent &#125;, <span class="comment">//order matters</span></span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events'</span>, <span class="attr">component</span>: EventsListComponent &#125;,</span><br><span class="line">+    &#123; <span class="attr">path</span>: <span class="string">'events/:id'</span>, <span class="attr">component</span>: EventDetailComponent, <span class="attr">canActivate</span>: [EventRouteActivator] &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'404'</span>, <span class="attr">component</span>: Error404Component &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">''</span>, <span class="attr">redirectTo</span>: <span class="string">'/events'</span>, <span class="attr">pathMatch</span>: <span class="string">'full'</span> &#125;  <span class="comment">//pathMatch: prefix or full</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h3 id="Guarding-Against-Route-De-activation-User-navigates-to-other-url-before-saving-data-like-cancel-button-clicking"><a href="#Guarding-Against-Route-De-activation-User-navigates-to-other-url-before-saving-data-like-cancel-button-clicking" class="headerlink" title="Guarding Against Route De-activation (User navigates to other url before saving data, like cancel button clicking)"></a>Guarding Against Route De-activation (User navigates to other url before saving data, like cancel button clicking)</h3><p>1) routes.ts add canDeactivate, and we’re using function.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Routes&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventsListComponent&#125; <span class="keyword">from</span> <span class="string">'./events/events-list.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventDetailComponent&#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-detail.component'</span></span><br><span class="line"><span class="keyword">import</span> &#123;CreateEventComponent&#125; <span class="keyword">from</span> <span class="string">'./events/create-event.component'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;Error404Component&#125; <span class="keyword">from</span> <span class="string">'./errors/404.component'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;EventRouteActivator&#125; <span class="keyword">from</span> <span class="string">'./events/event-detail/event-route-activator.service'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> appRoutes: Routes = [</span><br><span class="line">+    &#123; <span class="attr">path</span>: <span class="string">'events/new'</span>, <span class="attr">component</span>: CreateEventComponent, <span class="attr">canDeactivate</span>: [<span class="string">'canDeactivateCreateEvent'</span>] &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events'</span>, <span class="attr">component</span>: EventsListComponent &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events/:id'</span>, <span class="attr">component</span>: EventDetailComponent, <span class="attr">canActivate</span>: [EventRouteActivator] &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'404'</span>, <span class="attr">component</span>: Error404Component &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">''</span>, <span class="attr">redirectTo</span>: <span class="string">'/events'</span>, <span class="attr">pathMatch</span>: <span class="string">'full'</span> &#125;  <span class="comment">//pathMatch: prefix or full</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>We defined <code>canDeactivateCreateEvent</code> function, and we should register this in module’s providers. Now our providers are like <code>providers: [EventService, ToastrService, EventRouteActivator]</code>. Actually we already used the shorthand way for providers. Take EventService for instance, the longhand is <code>providers: [{provide:EventService, useValue:EventService}]</code>. So below is how we register the <code>canDeactivateCreateEvent</code> function into the providers.</p>
+<p>app.module.ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [BrowserModule, RouterModule.forRoot(appRoutes)],</span><br><span class="line">    declarations: [</span><br><span class="line">        AppComponent,</span><br><span class="line">        NavBarComponent,</span><br><span class="line">        EventsListComponent, EventThumbnailComponent, EventDetailComponent, CreateEventComponent,</span><br><span class="line">        Error404Component</span><br><span class="line">    ],</span><br><span class="line">    providers: [</span><br><span class="line">        EventService,</span><br><span class="line">        ToastrService,</span><br><span class="line">        EventRouteActivator,</span><br><span class="line">+        &#123;</span><br><span class="line">+            provide: <span class="string">'canDeactivateCreateEvent'</span>,</span><br><span class="line">+            useValue: checkDirtyState</span><br><span class="line">+        &#125;</span><br><span class="line">    ],</span><br><span class="line">    bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//this function can be defined in another file</span></span><br><span class="line">+<span class="function"><span class="keyword">function</span> <span class="title">checkDirtyState</span>(<span class="params">component: CreateEventComponent</span>) </span>&#123;</span><br><span class="line">+    <span class="keyword">if</span>(component.isDirty)&#123;</span><br><span class="line">+        <span class="keyword">return</span> confirm(<span class="string">'you haven\'t save the event. Are you sure to cancel?'</span>)</span><br><span class="line">+    &#125;</span><br><span class="line">+    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">+&#125;</span><br></pre></td></tr></table></figure>
+<p>2) create-event.component.ts add isDirty</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//click cancel will use router to navigate to /events (load all events)</span></span><br><span class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;Router&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">CreateEventComponent</span> </span>&#123;</span><br><span class="line">+    isDirty: boolean = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(private router: Router) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    cancel() &#123;</span><br><span class="line">        <span class="keyword">this</span>.router.navigate([<span class="string">'/events'</span>])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Pre-loading-Data-for-Components"><a href="#Pre-loading-Data-for-Components" class="headerlink" title="Pre-loading Data for Components"></a>Pre-loading Data for Components</h3><p>In real world, we may have some delay to receive data from ajax call. To show this issue,</p>
+<p>1) simulate ajax loading data in event.service.ts, so it takes 2 second to get data</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="keyword">import</span> &#123; Subject &#125; <span class="keyword">from</span> <span class="string">'rxjs/RX'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventService</span> </span>&#123;</span><br><span class="line">    getEvents() &#123;</span><br><span class="line">        <span class="comment">//simulate async loading data operation, return subject. Need to change events-list.component.ts</span></span><br><span class="line">+        <span class="keyword">let</span> subject = <span class="keyword">new</span> Subject()</span><br><span class="line">+        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">+            subject.next(EVENTS);</span><br><span class="line">+            subject.complete();</span><br><span class="line">+        &#125;, <span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">+        <span class="keyword">return</span> subject;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) in events-list.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsListComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">+    events: any   <span class="comment">//before was events: any[], now compiler won't complain</span></span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">-        <span class="comment">// this.events = this.eventService.getEvents()</span></span><br><span class="line">+        <span class="keyword">this</span>.eventService.getEvents().subscribe(<span class="function"><span class="params">events</span> =&gt;</span> &#123; <span class="keyword">this</span>.events = events &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Now when we navigate to base page, we can immediately see <code>&lt;h1&gt;Upcoming Angular 2 Events&lt;/h1&gt;</code>, but it takes 2 second before showing data. Similar issue is like table header shows immediately but data is still loading. So we will use a resolver to make sure the template html along with data will be loaded once at the same time</p>
+<p>3) create events-list-resolver.service.ts and then register provider in module</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Injectable&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;Resolve&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventService&#125; <span class="keyword">from</span> <span class="string">'./shared/event.service'</span></span><br><span class="line"></span><br><span class="line">@Injectable()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventListResolver</span> <span class="title">implements</span> <span class="title">Resolve</span>&lt;<span class="title">any</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    resolve() &#123;</span><br><span class="line">        <span class="comment">// map() return Observable; subscribe() return subscription</span></span><br><span class="line">        <span class="comment">// in resolve, we need to return Observable. angular can watch Observable and see if it finishes</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.eventService.getEvents().map(<span class="function"><span class="params">events</span> =&gt;</span> events);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4) use resolver in the routes by <code>resolve: { events:1 EventListResolver }</code>. events1 is property that will be passed to component after calling Resolver.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="keyword">import</span> &#123;EventListResolver&#125; <span class="keyword">from</span> <span class="string">'./events/events-list-resolver.service'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> appRoutes: Routes = [</span><br><span class="line">    <span class="comment">//order matters</span></span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events/new'</span>, <span class="attr">component</span>: CreateEventComponent, <span class="attr">canDeactivate</span>: [<span class="string">'canDeactivateCreateEvent'</span>] &#125;, <span class="comment">//Guarding Against Route De-activation using function, canDeactivateCreateEvent is provider name which points to a function</span></span><br><span class="line">+    &#123; <span class="attr">path</span>: <span class="string">'events'</span>, <span class="attr">component</span>: EventsListComponent, <span class="attr">resolve</span>: &#123; <span class="attr">events1</span>: EventListResolver &#125; &#125;, <span class="comment">//call EventListResolver before using the component, bind resolver result to a property events1, and this property will be passed to the component</span></span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'events/:id'</span>, <span class="attr">component</span>: EventDetailComponent, <span class="attr">canActivate</span>: [EventRouteActivator] &#125;, <span class="comment">//Guarding Against Route Activation using service</span></span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'404'</span>, <span class="attr">component</span>: Error404Component &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">''</span>, <span class="attr">redirectTo</span>: <span class="string">'/events'</span>, <span class="attr">pathMatch</span>: <span class="string">'full'</span> &#125;  <span class="comment">//pathMatch: prefix or full</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>5) consume the events property in events-list.component</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;ActivatedRoute&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventsListComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    events: any[]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService, private toastrService: ToastrService, private route: ActivatedRoute) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">        <span class="comment">// // this.events = this.eventService.getEvents()</span></span><br><span class="line">        <span class="comment">// this.eventService.getEvents().subscribe(events =&gt; &#123; this.events = events &#125;)  //since we are using resolver</span></span><br><span class="line">        <span class="keyword">this</span>.events = <span class="keyword">this</span>.route.snapshot.data[<span class="string">'events1'</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Styling-Active-Links"><a href="#Styling-Active-Links" class="headerlink" title="Styling Active Links"></a>Styling Active Links</h3><p>1) define active class in nav.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'nav-bar'</span>,</span><br><span class="line">    templateUrl: <span class="string">'app/nav/nav.component.html'</span>,</span><br><span class="line">    styles: [<span class="string">`</span></span><br><span class="line"><span class="string">        .nav.navbar-nav &#123;font-size:15px;&#125;</span></span><br><span class="line"><span class="string">        #searchForm &#123;margin-right:100px;&#125;</span></span><br><span class="line"><span class="string">        @media(max-width:1200px) &#123;#searchForm &#123;display:none;&#125;&#125;</span></span><br><span class="line"><span class="string">+        li&gt;a.active&#123;color:#f97924;&#125;</span></span><br><span class="line"><span class="string">    `</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">NavBarComponent</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>2) in nav.component.html add <code>routerLinkActive=&quot;active&quot;</code></p>
+<p>When navigating to events/new, both will have active class by default. This is because routerLinkActive finds both start with <strong>/events</strong>. So we also add <code>[routerLinkActiveOptions]=&quot;{exact:true}&quot;</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events']"</span> <span class="attr">routerLinkActive</span>=<span class="string">"active"</span> [<span class="attr">routerLinkActiveOptions</span>]=<span class="string">"&#123;exact:true&#125;"</span>&gt;</span>All Events<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events/new']"</span> <span class="attr">routerLinkActive</span>=<span class="string">"active"</span>&gt;</span>Create Event<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Lazily-Loading-Feature-Modules"><a href="#Lazily-Loading-Feature-Modules" class="headerlink" title="Lazily Loading Feature Modules"></a>Lazily Loading Feature Modules</h3><p>For now we only have 1 module.</p>
+<p>let’s create a user profile and since user is different part of our app, we want to use another lazily loading feature module. This module will be loaded only when user navigates to the module, so it affects the performance for a larger application.</p>
+<p>1) user/user.module.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; NgModule &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123; RouterModule &#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"><span class="keyword">import</span> &#123; CommonModule &#125; <span class="keyword">from</span> <span class="string">'@angular/common'</span></span><br><span class="line"><span class="keyword">import</span> &#123;userRoutes&#125; <span class="keyword">from</span> <span class="string">'./user.routes'</span></span><br><span class="line"><span class="keyword">import</span> &#123;ProfileComponent&#125; <span class="keyword">from</span> <span class="string">'./profile.component'</span></span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    imports: [</span><br><span class="line">        CommonModule,</span><br><span class="line">        RouterModule.forChild(userRoutes)</span><br><span class="line">    ],</span><br><span class="line">    declarations: [</span><br><span class="line">        ProfileComponent</span><br><span class="line">    ],</span><br><span class="line">    providers: [</span><br><span class="line"></span><br><span class="line">    ],</span><br><span class="line">    bootstrap: []</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">UserModule</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>2) user/profile.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;h1&gt;Edit Your Profile&lt;/h1&gt;</span></span><br><span class="line"><span class="string">    &lt;hr&gt;</span></span><br><span class="line"><span class="string">    &lt;div class="col-md-6"&gt;</span></span><br><span class="line"><span class="string">      &lt;h3&gt;[Edit profile form will go here]&lt;/h3&gt;</span></span><br><span class="line"><span class="string">      &lt;br /&gt;</span></span><br><span class="line"><span class="string">      &lt;br /&gt;</span></span><br><span class="line"><span class="string">      &lt;button type="submit" class="btn btn-primary"&gt;Save&lt;/button&gt;</span></span><br><span class="line"><span class="string">      &lt;button type="button" class="btn btn-default"&gt;Cancel&lt;/button&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">  `</span>,</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">ProfileComponent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>3) user/user.routes.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;ProfileComponent&#125; <span class="keyword">from</span> <span class="string">'./profile.component'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> userRoutes = [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'profile'</span>, <span class="attr">component</span>: ProfileComponent &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>4) In routes.ts:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> appRoutes: Routes = [</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// user prefix, localhost/user/x, will load module here: app/user/user.module and the module name is UserModule, concat '#'</span></span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'user'</span>, <span class="attr">loadChildren</span>: <span class="string">'app/user/user.module#UserModule'</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>5) in nav/nav.component.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> [<span class="attr">routerLink</span>]=<span class="string">"['user/profile']"</span>&gt;</span>Welcome Guanghui<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Organizing-Your-Exports-with-Barrels"><a href="#Organizing-Your-Exports-with-Barrels" class="headerlink" title="Organizing Your Exports with Barrels"></a>Organizing Your Exports with Barrels</h3><p>Now our app.component.ts has too many import, we can use Barrels to simplify the <strong>Event</strong> import</p>
+<p>1) create index.ts under events folder and its subfolder. In this case, there should be 3 index.ts</p>
+<p>events/index.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./create-event.component'</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./event-thumbnail.component'</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./events-list-resolver.service'</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./events-list.component'</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./shared/index'</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./event-detail/index'</span></span><br></pre></td></tr></table></figure>
+<p>events/shared/index.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./event.service'</span></span><br></pre></td></tr></table></figure>
+<p>events/event-detail/index.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./event-detail.component'</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./event-route-activator.service'</span></span><br></pre></td></tr></table></figure>
+<p>2) delete all event related import, and use below:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">    EventsListComponent,</span><br><span class="line">    EventThumbnailComponent,</span><br><span class="line">    EventDetailComponent,</span><br><span class="line">    CreateEventComponent,</span><br><span class="line">    EventRouteActivator,</span><br><span class="line">    EventService,</span><br><span class="line">    EventListResolver</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'./events/index'</span></span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/04/22/angular2-chapter04/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter04 -- Create Services">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/04/24/angular2-chapter06/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter06 -- Collecting Data with Forms and Validation">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Routing-and-Navigation"><span class="toc-text">Routing and Navigation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Adding-event-detail-page"><span class="toc-text">Adding event-detail page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Adding-Routing"><span class="toc-text">Adding Routing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linking-to-Routes"><span class="toc-text">Linking to Routes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Navigating-from-Code"><span class="toc-text">Navigating from Code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Guarding-Against-Route-Activation-Invalid-event-id-like-1000-which-doesn’t-exist-navigate-to-404"><span class="toc-text">Guarding Against Route Activation (Invalid event id like 1000 which doesn’t exist, navigate to 404)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Guarding-Against-Route-De-activation-User-navigates-to-other-url-before-saving-data-like-cancel-button-clicking"><span class="toc-text">Guarding Against Route De-activation (User navigates to other url before saving data, like cancel button clicking)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pre-loading-Data-for-Components"><span class="toc-text">Pre-loading Data for Components</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Styling-Active-Links"><span class="toc-text">Styling Active Links</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lazily-Loading-Feature-Modules"><span class="toc-text">Lazily Loading Feature Modules</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Organizing-Your-Exports-with-Barrels"><span class="toc-text">Organizing Your Exports with Barrels</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/04/23/angular2-chapter05/";
+    var disqus_url = "https://wghglory.github.io/2017/04/23/angular2-chapter05/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

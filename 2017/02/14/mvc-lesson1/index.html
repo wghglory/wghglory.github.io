@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Asp.net MVC系列教程1——搭建MVC环境、注册区域｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/02/14/mvc-lesson1/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Asp.net MVC系列教程1——搭建MVC环境、注册区域</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-02-14
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Asp.net"
+                           title="Asp.net">Asp.net</a>
+                        
+                        <a class="tag" href="/tags/#MVC"
+                           title="MVC">MVC</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- Asp.net MVC系列教程1——搭建MVC环境、注册区域 -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本系列是我学习果冻布丁喜之郎(<a href="http://yuangang.cnblogs.com)教程亲自实践整理的，有很多内容摘自原文。我在打算学习.net" target="_blank" rel="noopener">http://yuangang.cnblogs.com)教程亲自实践整理的，有很多内容摘自原文。我在打算学习.net</a> core时候偶然发现的这一系列教程，想按照这个教程回顾和巩固一下自己对MVC的理解。刚好这也是我第一篇技术文章，转自前辈的文章熟悉下写博客的脉络，谢谢作者<strong>果冻布丁喜之郎</strong>！由于我是边学边写，可能有些错误或者需要修改的地方，等完成整个教程后我会回过头来修正。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><ol>
+<li><a href="/2017/02/14/mvc-lesson1/" target="_blank">Asp.net MVC系列教程——1.搭建MVC环境、注册区域</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" target="_blank">Asp.net MVC系列教程——2.创建数据库和数据模型</a></li>
+<li><a href="/2017/02/16/mvc-lesson3/" target="_blank">Asp.net MVC系列教程——3.公共基础数据操作类RepositoryBase</a></li>
+<li><a href="/2017/02/16/mvc-lesson4/" target="_blank">Asp.net MVC系列教程——4.Spring IOC, DI</a></li>
+<li><a href="/2017/02/17/mvc-lesson5/" target="_blank">Asp.net MVC系列教程——5.登录功能, Spring, log4net</a></li>
+<li><a href="/2017/02/17/mvc-lesson6/" target="_blank">Asp.net MVC系列教程——（5.2） 登录功能的实现，接口注入、log4net的使用</a></li>
+<li><a href="/2017/02/19/mvc-lesson7/" target="_blank">Asp.net MVC系列教程——（5.3） 登录功能的实现，丰富数据表、建立关联</a></li>
+<li><a href="/2017/02/20/mvc-lesson8/" target="_blank">Asp.net MVC系列教程——（5.4） 登录功能，创建与登录用户相关的接口和实现类</a></li>
+<li><a href="/2017/02/23/mvc-lesson9/" target="_blank">Asp.net MVC系列教程——（5.5） 登录功能的实现，完善登录功能</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程——（6） 控制器基类 主要做登录用户、权限认证、日志记录</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程——（7.1） 模块管理，验证权限，展示模块列表</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程——（7.2） 模块管理，模块的添加、修改、删除</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程——（8） 权限管理，自定义权限，扩展权限</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程——（9） 角色管理，分配权限</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程—— （10）部门管理、岗位管理和员工管理</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程—— （11）文件管理</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程—— （12）程序与数据备份</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程—— （13）客户管理</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程—— （14）附数据库、发布项目</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程—— （15）修改仓储IRepository、RepositoryBase</a></li>
+<li><a href="" target="_blank">Asp.net MVC系列教程—— （16）登录功能以及UI、数据库、仓储源码分享</a></li>
+</ol>
+<h1 id="项目准备"><a href="#项目准备" class="headerlink" title="项目准备"></a>项目准备</h1><p>我们用的工具是：VS 2017RC + SqlServer 2014</p>
+<p>希望大家对ASP.NET MVC有一个初步的理解，理论性的东西我们不做过多解释，有些地方不理解也没关系，会用就行了，用的多了自然就理解了。</p>
+<h1 id="项目开始"><a href="#项目开始" class="headerlink" title="项目开始"></a>项目开始</h1><h3 id="一、我们来创建一个MVC项目"><a href="#一、我们来创建一个MVC项目" class="headerlink" title="一、我们来创建一个MVC项目"></a>一、我们来创建一个MVC项目</h3><p>解决方案名称叫做Mvc.Architect，为了方便管理我们的项目，创建三个解决方案文件夹，分别是：应用程序App、应用服务Services、应用类库CommonLib。</p>
+<h3 id="二、我们在应用服务里新建两个类库"><a href="#二、我们在应用服务里新建两个类库" class="headerlink" title="二、我们在应用服务里新建两个类库"></a>二、我们在应用服务里新建两个类库</h3><ul>
+<li>Domain: EntityFramework数据模型，Model层</li>
+<li>Service: 数据访问层，数据库操作类库，引用Domain类库</li>
+</ul>
+<p>暂时看来作者没有提供服务层，而是服务层和数据访问层在一起</p>
+<h3 id="三、我们在应用类库里新建一个类库"><a href="#三、我们在应用类库里新建一个类库" class="headerlink" title="三、我们在应用类库里新建一个类库"></a>三、我们在应用类库里新建一个类库</h3><p>Common: 应用类库</p>
+<h3 id="四、创建区域"><a href="#四、创建区域" class="headerlink" title="四、创建区域"></a>四、创建区域</h3><p>我们先新建个文件夹Areas然后在文件夹下创建两个区域（右击→添加→区域）</p>
+<ul>
+<li>ComManage: 一些公用的控制器和视图，比如文件上传等</li>
+<li>SysManage: 我们的后台管理</li>
+</ul>
+<p><img src="/2017/02/14/mvc-lesson1/mvc1_areas.png" style="height:460px;"></p>
+<h3 id="五、修改注册类"><a href="#五、修改注册类" class="headerlink" title="五、修改注册类"></a>五、修改注册类</h3><p>新建完两个区域后，发现在每个区域下面都有一个注册的类文件，分别是ComManageAreaRegistration.cs和SysManageAreaRegistration.cs</p>
+<p>我们来修改一下这两个注册类文件。修改了路由url，添加了new string[] { }命名空间。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Web.Mvc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">WebPage.Areas.ComManage</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ComManageAreaRegistration</span> : <span class="title">AreaRegistration</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">string</span> AreaName</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">get</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"ComManage"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">RegisterArea</span>(<span class="params">AreaRegistrationContext context</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            context.MapRoute(</span><br><span class="line">                <span class="string">"ComManage_default"</span>,</span><br><span class="line">                <span class="string">"Com/&#123;controller&#125;/&#123;action&#125;/&#123;id&#125;"</span>,</span><br><span class="line">                <span class="keyword">new</span> &#123; action = <span class="string">"Index"</span>, id = UrlParameter.Optional &#125;,</span><br><span class="line">                <span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"WebPage.Areas.ComManage.Controllers"</span> &#125;</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Web.Mvc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">WebPage.Areas.SysManage</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SysManageAreaRegistration</span> : <span class="title">AreaRegistration</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">string</span> AreaName</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">get</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"SysManage"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">RegisterArea</span>(<span class="params">AreaRegistrationContext context</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            context.MapRoute(</span><br><span class="line">                <span class="string">"SysManage_default"</span>,</span><br><span class="line">                <span class="string">"Sys/&#123;controller&#125;/&#123;action&#125;/&#123;id&#125;"</span>,</span><br><span class="line">                <span class="keyword">new</span> &#123; action = <span class="string">"Index"</span>, id = UrlParameter.Optional &#125;,</span><br><span class="line">                <span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"WebPage.Areas.SysManage.Controllers"</span> &#125;</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="六、修改路由配置类"><a href="#六、修改路由配置类" class="headerlink" title="六、修改路由配置类"></a>六、修改路由配置类</h3><p>我们修改一下路由配置类/App_Start/RouteConfig.cs，添加命名空间</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">routes.MapRoute(</span><br><span class="line">    name: <span class="string">"Default"</span>,</span><br><span class="line">    url: <span class="string">"&#123;controller&#125;/&#123;action&#125;/&#123;id&#125;"</span>,</span><br><span class="line">    defaults: <span class="keyword">new</span> &#123; controller = <span class="string">"Home"</span>, action = <span class="string">"Index"</span>, id = UrlParameter.Optional &#125;,</span><br><span class="line">    namespaces: <span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"WebPage.Controllers"</span> &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>到此我们MVC就搭建好了，包括区域。我们下一篇创建个数据库和用户表。因为公共基础数据操作类要用到数据模型</p>
+<!--
+1. <a href="/2017/02/14/mvc-lesson1/" title="Asp.net MVC系列教程——（1）搭建MVC环境、注册区域">Asp.net MVC系列教程——（1）搭建MVC环境、注册区域</a>
+<ol>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（2）创建数据库和数据模型">Asp.net MVC系列教程——（2）创建数据库和数据模型</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（3）公共基础数据操作类 RepositoryBase">Asp.net MVC系列教程——（3）公共基础数据操作类 RepositoryBase</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（4）对前面的一些问题汇总和总结">Asp.net MVC系列教程——（4）对前面的一些问题汇总和总结</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（5.1） 登录功能的实现，开始接触Spring IOC、DI">Asp.net MVC系列教程——（5.1） 登录功能的实现，开始接触Spring IOC、DI</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（5.2） 登录功能的实现，接口注入、log4net的使用">Asp.net MVC系列教程——（5.2） 登录功能的实现，接口注入、log4net的使用</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（5.3） 登录功能的实现，丰富数据表、建立关联">Asp.net MVC系列教程——（5.3） 登录功能的实现，丰富数据表、建立关联</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（5.4） 登录功能的实现，创建与登录用户相关的接口和实现类">Asp.net MVC系列教程——（5.4） 登录功能的实现，创建与登录用户相关的接口和实现类</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（5.5） 登录功能的实现，完善登录功能">Asp.net MVC系列教程——（5.5） 登录功能的实现，完善登录功能</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（6） 控制器基类 主要做登录用户、权限认证、日志记录等工作">Asp.net MVC系列教程——（6） 控制器基类 主要做登录用户、权限认证、日志记录等工作</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（7.1） 模块管理，验证权限，展示模块列表">Asp.net MVC系列教程——（7.1） 模块管理，验证权限，展示模块列表</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（7.2） 模块管理，模块的添加、修改、删除">Asp.net MVC系列教程——（7.2） 模块管理，模块的添加、修改、删除</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（8） 权限管理，自定义权限，扩展权限">Asp.net MVC系列教程——（8） 权限管理，自定义权限，扩展权限</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程——（9） 角色管理，分配权限">Asp.net MVC系列教程——（9） 角色管理，分配权限</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程—— （10）部门管理、岗位管理和员工管理">Asp.net MVC系列教程—— （10）部门管理、岗位管理和员工管理</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程—— （11）文件管理">Asp.net MVC系列教程—— （11）文件管理</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程—— （12）程序与数据备份">Asp.net MVC系列教程—— （12）程序与数据备份</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程—— （13）客户管理">Asp.net MVC系列教程—— （13）客户管理</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程—— （14）附数据库、发布项目">Asp.net MVC系列教程—— （14）附数据库、发布项目</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程—— （15）源码分享一：修改仓储IRepository、RepositoryBase">Asp.net MVC系列教程—— （15）源码分享一：修改仓储IRepository、RepositoryBase</a></li>
+<li><a href="/2017/02/15/mvc-lesson2/" title="Asp.net MVC系列教程—— （16）源码分享二：登录功能以及UI、数据库、仓储源码分享">Asp.net MVC系列教程—— （16）源码分享二：登录功能以及UI、数据库、仓储源码分享</a> –&gt;
+</li>
+</ol>
+-->
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/11/afterwork/" data-toggle="tooltip" data-placement="top"
+                           title="What do you do after work?">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/15/mvc-lesson2/" data-toggle="tooltip" data-placement="top"
+                           title="Asp.net MVC系列教程2——创建数据库和数据模型">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简述"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目准备"><span class="toc-text">项目准备</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目开始"><span class="toc-text">项目开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、我们来创建一个MVC项目"><span class="toc-text">一、我们来创建一个MVC项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、我们在应用服务里新建两个类库"><span class="toc-text">二、我们在应用服务里新建两个类库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、我们在应用类库里新建一个类库"><span class="toc-text">三、我们在应用类库里新建一个类库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、创建区域"><span class="toc-text">四、创建区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、修改注册类"><span class="toc-text">五、修改注册类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六、修改路由配置类"><span class="toc-text">六、修改路由配置类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Asp.net"
+                           title="Asp.net">Asp.net</a>
+                        
+                        <a class="tag" href="/tags/#MVC"
+                           title="MVC">MVC</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/02/14/mvc-lesson1/";
+    var disqus_url = "https://wghglory.github.io/2017/02/14/mvc-lesson1/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>

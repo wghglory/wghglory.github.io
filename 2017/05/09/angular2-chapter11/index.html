@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A very lame cool person">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Guanghui" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        angular2-chapter11 -- Create Directives and Advanced Component｜Guanghui&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://wghglory.github.io/2017/05/09/angular2-chapter11/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <link rel="stylesheet" href="/css/my.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('/images/tag.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Guanghui
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/works/">my works</a>
+                        </li>
+							
+						
+                    
+
+					
+                        <li>
+                            <a href="https://wghglory.github.io/guanghui.resume/" target="_blank">Resume</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="/images/default-post.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('/images/default-post.jpg');
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>angular2-chapter11 -- Create Directives and Advanced Component</h1>
+                    
+                    <span class="meta">
+                         作者 Guanghui Wang
+                        <span>
+                          日期 2017-05-09
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            <!-- angular2-chapter11 -- Create Directives and Advanced Component -->
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Create-Directives-and-Advanced-Component"><a href="#Create-Directives-and-Advanced-Component" class="headerlink" title="Create Directives and Advanced Component"></a>Create Directives and Advanced Component</h1><p>Check code at: <a href="https://github.com/wghglory/angular2-fundamental" target="_blank" rel="noopener">https://github.com/wghglory/angular2-fundamental</a></p>
+<h2 id="Implementing-the-Session-Search"><a href="#Implementing-the-Session-Search" class="headerlink" title="Implementing the Session Search"></a>Implementing the Session Search</h2><p>Todo: implement logic for search session textbox, click search, modal window pops up showing sessions</p>
+<p>nav.component.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="tag">&lt;<span class="name">form</span> (<span class="attr">ngSubmit</span>)=<span class="string">"searchSessions(searchTerm)"</span> <span class="attr">id</span>=<span class="string">"searchForm"</span> <span class="attr">class</span>=<span class="string">"navbar-form navbar-right"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">+        <span class="tag">&lt;<span class="name">input</span> [(<span class="attr">ngModel</span>)]=<span class="string">"searchTerm"</span> <span class="attr">name</span>=<span class="string">"searchTerm"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">placeholder</span>=<span class="string">"Search Sessions"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span>&gt;</span>Search<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>event.service.ts add searchSessions function</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">searchSessions(searchTerm: string) &#123;</span><br><span class="line">    <span class="keyword">var</span> term = searchTerm.toLocaleLowerCase();</span><br><span class="line">    <span class="keyword">var</span> result: ISession[] = [];</span><br><span class="line"></span><br><span class="line">    EVENTS.forEach(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> matchingSessions = e.sessions.filter(<span class="function"><span class="params">s</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> s.name.toLocaleLowerCase().indexOf(term) &gt; <span class="number">-1</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//we also want to add event id to all filtered sessions</span></span><br><span class="line">        matchingSessions = matchingSessions.map(<span class="function">(<span class="params">session: any</span>) =&gt;</span> &#123;</span><br><span class="line">            session.eventId = e.id;</span><br><span class="line">            <span class="keyword">return</span> session;</span><br><span class="line">        &#125;);</span><br><span class="line">        result.push(...matchingSessions);</span><br><span class="line">        <span class="comment">// result = result.concat(matchingSessions);</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> emitter = <span class="keyword">new</span> EventEmitter(<span class="literal">true</span>); <span class="comment">//async</span></span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        emitter.emit(result);</span><br><span class="line">    &#125;, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> emitter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>nav.component.html</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;ISession&#125; <span class="keyword">from</span> <span class="string">'../events/shared/event.model'</span></span><br><span class="line"><span class="keyword">import</span> &#123;EventService&#125; <span class="keyword">from</span> <span class="string">'../events/shared/event.service'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">NavBarComponent</span> </span>&#123;</span><br><span class="line">+    <span class="keyword">constructor</span>(private authService: AuthService, private eventService: EventService) &#123; &#125;</span><br><span class="line"></span><br><span class="line">+    searchTerm: string = <span class="string">""</span>;</span><br><span class="line">+    foundSessions: ISession[];</span><br><span class="line"></span><br><span class="line">+    searchSessions(searchTerm) &#123;</span><br><span class="line">+        <span class="keyword">this</span>.eventService.searchSessions(searchTerm)</span><br><span class="line">+            .subscribe(<span class="function"><span class="params">sessions</span> =&gt;</span> &#123;</span><br><span class="line">+                <span class="keyword">this</span>.foundSessions = sessions;</span><br><span class="line">+                <span class="built_in">console</span>.log(<span class="keyword">this</span>.foundSessions)</span><br><span class="line">+            &#125;);</span><br><span class="line">+    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Now if you search “pipe”, there should be one matching session in your console.</p>
+<h3 id="Adding-jQuery"><a href="#Adding-jQuery" class="headerlink" title="Adding jQuery"></a>Adding jQuery</h3><p>create common/jQuery.service.ts and create common index barrel.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; OpaqueToken &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> JQ_TOKEN = <span class="keyword">new</span> OpaqueToken(<span class="string">'jQuery'</span>);</span><br></pre></td></tr></table></figure>
+<p>register in app.module.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; TOASTR_TOKEN, Toastr,</span><br><span class="line">    JQ_TOKEN,</span><br><span class="line">    CollapsibleWellComponent</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'./common/index'</span></span><br><span class="line"></span><br><span class="line">declare <span class="keyword">let</span> toastr: Toastr;</span><br><span class="line">declare <span class="keyword">let</span> jQuery: <span class="built_in">Object</span>;</span><br><span class="line"></span><br><span class="line">providers: [</span><br><span class="line">    &#123; <span class="attr">provide</span>: JQ_TOKEN, <span class="attr">useValue</span>: jQuery &#125;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<h3 id="Creating-a-Modal-Component"><a href="#Creating-a-Modal-Component" class="headerlink" title="Creating a Modal Component"></a>Creating a Modal Component</h3><p><img src="http://om1o84p1p.bkt.clouddn.com//1493243877.png"></p>
+<p>1) create common/simpleModal.component.ts. Add it to barrel and register in app.module.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Component, Input&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'simple-modal'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;div id="simple-modal" class="modal fade" tabindex="-1"&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="modal-dialog"&gt;</span></span><br><span class="line"><span class="string">                &lt;div class="modal-content"&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-header"&gt;</span></span><br><span class="line"><span class="string">                        &lt;button type="button" class="close" data-dismiss="modal"&gt;</span></span><br><span class="line"><span class="string">                            &lt;span&gt;&amp;times;&lt;/span&gt;</span></span><br><span class="line"><span class="string">                        &lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;h4 class="modal-title"&gt;&#123;&#123;title&#125;&#125;&lt;/h4&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-body"&gt;</span></span><br><span class="line"><span class="string">                        &lt;ng-content&gt;&lt;/ng-content&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                &lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    `</span>,</span><br><span class="line">    styles: [</span><br><span class="line">        <span class="string">`</span></span><br><span class="line"><span class="string">        .modal-body &#123;height:250px;overflow-y:scroll;&#125;</span></span><br><span class="line"><span class="string">        `</span></span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleModal</span> </span>&#123;</span><br><span class="line">    @Input() title: string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) nav.component.html add below at bottom</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> (<span class="attr">ngSubmit</span>)=<span class="string">"searchSessions(searchTerm)"</span> <span class="attr">id</span>=<span class="string">"searchForm"</span> <span class="attr">class</span>=<span class="string">"navbar-form navbar-right"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> [(<span class="attr">ngModel</span>)]=<span class="string">"searchTerm"</span> <span class="attr">name</span>=<span class="string">"searchTerm"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">placeholder</span>=<span class="string">"Search Sessions"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">+    <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> <span class="attr">modal-trigger</span>&gt;</span>Search<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- content projection for modal window when clicking search --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">simple-modal</span> <span class="attr">title</span>=<span class="string">"Matching Sessions"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"list-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"list-group-item"</span> *<span class="attr">ngFor</span>=<span class="string">"let session of foundSessions"</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events', session.eventId]"</span>&gt;</span>&#123;&#123;session.name&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">simple-modal</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Creating-Directives-The-Trigger-Directive"><a href="#Creating-Directives-The-Trigger-Directive" class="headerlink" title="Creating Directives - The Trigger Directive"></a>Creating Directives - The Trigger Directive</h3><p>I don’t want bind a click event on the search button and write the function with something like $(‘#id’).modal() in nav.component.ts because this will tightly bind modal openup functions with nav.component. Modal feature should be independent on the nav.component. We want to hide the concrete implements, a good way is directive!</p>
+<p>create common/modalTrigger.directive.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Directive, OnInit, Inject, ElementRef &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;JQ_TOKEN&#125; <span class="keyword">from</span> <span class="string">'./jQuery.service'</span></span><br><span class="line"></span><br><span class="line">@Directive(&#123;</span><br><span class="line">    selector: <span class="string">'[modal-trigger]'</span>  <span class="comment">//attribute selector</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">ModalTriggerDirective</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    private el: HTMLElement;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(ref: ElementRef, @Inject(JQ_TOKEN) private $: any) &#123;</span><br><span class="line">        <span class="keyword">this</span>.el = ref.nativeElement;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">        <span class="keyword">this</span>.el.addEventListener(<span class="string">'click'</span>, e =&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.$(<span class="string">'#simple-modal'</span>).modal(&#123;&#125;)</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Add it to barrel and register Directive in app.module.ts’s declarations</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; TOASTR_TOKEN, Toastr,</span><br><span class="line">    JQ_TOKEN,</span><br><span class="line">    CollapsibleWellComponent,</span><br><span class="line">+    SimpleModal, ModalTriggerDirective</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'./common/index'</span></span><br><span class="line"></span><br><span class="line">declare <span class="keyword">let</span> toastr: Toastr;</span><br><span class="line">declare <span class="keyword">let</span> jQuery: <span class="built_in">Object</span>;</span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">    declarations: [</span><br><span class="line">        CollapsibleWellComponent,</span><br><span class="line">+        SimpleModal, ModalTriggerDirective,</span><br><span class="line">        DurationPipe</span><br><span class="line">    ]&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="Binding-an-ID"><a href="#Binding-an-ID" class="headerlink" title="Binding an ID"></a>Binding an ID</h3><p>issue: we may have many modal windows for different purpose, so we need to pass id dynamically</p>
+<p>current common/modalTrigger.directive.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Directive, OnInit, Inject, ElementRef &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;JQ_TOKEN&#125; <span class="keyword">from</span> <span class="string">'./jQuery.service'</span></span><br><span class="line"></span><br><span class="line">@Directive(&#123;</span><br><span class="line">    selector: <span class="string">'[modal-trigger]'</span>  <span class="comment">//attribute selector</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">ModalTriggerDirective</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    private el: HTMLElement;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(ref: ElementRef, @Inject(JQ_TOKEN) private $: any) &#123;</span><br><span class="line">        <span class="keyword">this</span>.el = ref.nativeElement;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">        <span class="keyword">this</span>.el.addEventListener(<span class="string">'click'</span>, e =&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.$(<span class="string">'#simple-modal'</span>).modal(&#123;&#125;)  <span class="comment">// bad because we hardcode the id</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>So we add <code>elementId=&quot;searchResult&quot;</code> in nav.component. Note modal-trigger value and elementId value are same! So I can tell which button triggers which modal.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> <span class="attr">modal-trigger</span>=<span class="string">"searchResult"</span>&gt;</span>Search<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- content projection for modal window when clicking search --&gt;</span></span><br><span class="line">+ <span class="tag">&lt;<span class="name">simple-modal</span> <span class="attr">title</span>=<span class="string">"Matching Sessions"</span> <span class="attr">elementId</span>=<span class="string">"searchResult"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"list-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"list-group-item"</span> *<span class="attr">ngFor</span>=<span class="string">"let session of foundSessions"</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events', session.eventId]"</span>&gt;</span>&#123;&#123;session.name&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">simple-modal</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>SimpleModal.component.ts, we pass the elementId:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Component, Input&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'simple-modal'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">+        &lt;div id="&#123;&#123;elementId&#125;&#125;" class="modal fade" tabindex="-1"&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="modal-dialog"&gt;</span></span><br><span class="line"><span class="string">                &lt;div class="modal-content"&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-header"&gt;</span></span><br><span class="line"><span class="string">                        &lt;button type="button" class="close" data-dismiss="modal"&gt;</span></span><br><span class="line"><span class="string">                            &lt;span&gt;&amp;times;&lt;/span&gt;</span></span><br><span class="line"><span class="string">                        &lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;h4 class="modal-title"&gt;&#123;&#123;title&#125;&#125;&lt;/h4&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-body"&gt;</span></span><br><span class="line"><span class="string">                        &lt;ng-content&gt;&lt;/ng-content&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                &lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    `</span>,</span><br><span class="line">    styles: [</span><br><span class="line">        <span class="string">`</span></span><br><span class="line"><span class="string">        .modal-body &#123;height:250px;overflow-y:scroll;&#125;</span></span><br><span class="line"><span class="string">        `</span></span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleModal</span> </span>&#123;</span><br><span class="line">    @Input() title: string;</span><br><span class="line">+    @Input() elementId: string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ModalTriggerDirective</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Directive, OnInit, Inject, ElementRef, Input &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;JQ_TOKEN&#125; <span class="keyword">from</span> <span class="string">'./jQuery.service'</span></span><br><span class="line"></span><br><span class="line">@Directive(&#123;</span><br><span class="line">    selector: <span class="string">'[modal-trigger]'</span>  <span class="comment">//attribute selector</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">ModalTriggerDirective</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    private el: HTMLElement;</span><br><span class="line">    <span class="comment">// @Input() modal-trigger: string  I want to write like this but typescript cannot compile dash...So use alias</span></span><br><span class="line">+    @Input(<span class="string">'modal-trigger'</span>) modalId: string;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(ref: ElementRef, @Inject(JQ_TOKEN) private $: any) &#123;</span><br><span class="line">        <span class="keyword">this</span>.el = ref.nativeElement;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">        <span class="keyword">this</span>.el.addEventListener(<span class="string">'click'</span>, e =&gt; &#123;</span><br><span class="line">            <span class="comment">// issue: we may have many modal windows for different purpose, so need to pass id dynamically</span></span><br><span class="line">            <span class="comment">// this.$('#simple-modal').modal(&#123;&#125;)</span></span><br><span class="line"></span><br><span class="line">+            <span class="keyword">this</span>.$(<span class="string">'#$&#123;this.modalId&#125;'</span>).modal(&#123;&#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Routing-to-the-Same-Component"><a href="#Routing-to-the-Same-Component" class="headerlink" title="Routing to the Same Component"></a>Routing to the Same Component</h3><p>Current event-detail page has a bug: when clicking any item in modal window, the url does change, but page doesn’t navigate to the right url…</p>
+<p>event-detail.Component.ts</p>
+<p>snapshot.params is good for the first time to load the page. We need use observable</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="keyword">import</span> &#123;ActivatedRoute, Params&#125; <span class="keyword">from</span> <span class="string">'@angular/router'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    templateUrl: <span class="string">'/app/events/event-detail/event-detail.component.html'</span>,</span><br><span class="line">    styles: [<span class="string">`</span></span><br><span class="line"><span class="string">        .container&#123;padding:0 20px;&#125;</span></span><br><span class="line"><span class="string">        .event-img&#123;height:100px;&#125;</span></span><br><span class="line"><span class="string">        a &#123;cursor:pointer;&#125;</span></span><br><span class="line"><span class="string">    `</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">EventDetailComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(private eventService: EventService, private route: ActivatedRoute) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    event: IEvent</span><br><span class="line">    addMode: boolean = <span class="literal">false</span></span><br><span class="line">    filterBy: string = <span class="string">'all'</span>;</span><br><span class="line">    sortBy: string = <span class="string">'votes'</span>;  <span class="comment">//default sortBy votes</span></span><br><span class="line"></span><br><span class="line">    ngOnInit() &#123;</span><br><span class="line">-        <span class="comment">// //+ convert string to number</span></span><br><span class="line">-        <span class="comment">// this.event = this.eventService.getEvent(+this.route.snapshot.params['id'])</span></span><br><span class="line"></span><br><span class="line">+        <span class="comment">// whenever route params changes, reset all the states</span></span><br><span class="line">+        <span class="keyword">this</span>.route.params.forEach(<span class="function">(<span class="params">params: Params</span>) =&gt;</span> &#123;</span><br><span class="line">+            <span class="keyword">this</span>.event = <span class="keyword">this</span>.eventService.getEvent(+params[<span class="string">'id'</span>]);</span><br><span class="line">+            <span class="keyword">this</span>.addMode = <span class="literal">false</span>;</span><br><span class="line">+            <span class="keyword">this</span>.filterBy = <span class="string">'all'</span>;</span><br><span class="line">+            <span class="keyword">this</span>.sortBy = <span class="string">'votes'</span>;</span><br><span class="line">+        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Using-the-ViewChild-Decorator"><a href="#Using-the-ViewChild-Decorator" class="headerlink" title="Using the @ViewChild Decorator"></a>Using the @ViewChild Decorator</h3><p>We want to close the modal when clicking any item</p>
+<p>simpleModal.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="keyword">import</span> &#123;Component, Input, ViewChild, ElementRef, Inject&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line">+ <span class="keyword">import</span> &#123;JQ_TOKEN&#125; <span class="keyword">from</span> <span class="string">'./jQuery.service'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'simple-modal'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">+        &lt;div id="&#123;&#123;elementId&#125;&#125;" #modalcontainer class="modal fade" tabindex="-1"&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="modal-dialog"&gt;</span></span><br><span class="line"><span class="string">                &lt;div class="modal-content"&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-header"&gt;</span></span><br><span class="line"><span class="string">                        &lt;button type="button" class="close" data-dismiss="modal"&gt;</span></span><br><span class="line"><span class="string">                            &lt;span&gt;&amp;times;&lt;/span&gt;</span></span><br><span class="line"><span class="string">                        &lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;h4 class="modal-title"&gt;&#123;&#123;title&#125;&#125;&lt;/h4&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-body" (click)="closeModal()"&gt;</span></span><br><span class="line"><span class="string">                        &lt;ng-content&gt;&lt;/ng-content&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                &lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    `</span>,</span><br><span class="line">    styles: [</span><br><span class="line">        <span class="string">`</span></span><br><span class="line"><span class="string">        .modal-body &#123;height:250px;overflow-y:scroll;&#125;</span></span><br><span class="line"><span class="string">        `</span></span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleModal</span> </span>&#123;</span><br><span class="line">    @Input() title: string;</span><br><span class="line">    @Input() elementId: string;</span><br><span class="line">+    @ViewChild(<span class="string">'modalcontainer'</span>) containerEl: ElementRef;</span><br><span class="line"></span><br><span class="line">+    <span class="keyword">constructor</span>( @Inject(JQ_TOKEN) private $: any) &#123; &#125;</span><br><span class="line"></span><br><span class="line">+    closeModal() &#123;</span><br><span class="line">+        <span class="keyword">this</span>.$(<span class="keyword">this</span>.containerEl.nativeElement).modal(<span class="string">'hide'</span>);  <span class="comment">// we can still use previous way like modalTrigger.directive.ts</span></span><br><span class="line">+    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Creating-Settings-on-Components"><a href="#Creating-Settings-on-Components" class="headerlink" title="Creating Settings on Components"></a>Creating Settings on Components</h3><p>For some modal windows, we may want to close modal when clicking body while others don’t. So we create settings for this purpose.</p>
+<p>nav.component.html add <code>closeOnBodyClick=&quot;true&quot;</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="tag">&lt;<span class="name">simple-modal</span> <span class="attr">closeOnBodyClick</span>=<span class="string">"true"</span> <span class="attr">title</span>=<span class="string">"Matching Sessions"</span> <span class="attr">elementId</span>=<span class="string">"searchResult"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"list-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"list-group-item"</span> *<span class="attr">ngFor</span>=<span class="string">"let session of foundSessions"</span> [<span class="attr">routerLink</span>]=<span class="string">"['/events', session.eventId]"</span>&gt;</span>&#123;&#123;session.name&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">simple-modal</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>SimpleModal.component.ts</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Component, Input, ViewChild, ElementRef, Inject&#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></span><br><span class="line"><span class="keyword">import</span> &#123;JQ_TOKEN&#125; <span class="keyword">from</span> <span class="string">'./jQuery.service'</span></span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">    selector: <span class="string">'simple-modal'</span>,</span><br><span class="line">    template: <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;div id="&#123;&#123;elementId&#125;&#125;" #modalcontainer class="modal fade" tabindex="-1"&gt;</span></span><br><span class="line"><span class="string">            &lt;div class="modal-dialog"&gt;</span></span><br><span class="line"><span class="string">                &lt;div class="modal-content"&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-header"&gt;</span></span><br><span class="line"><span class="string">                        &lt;button type="button" class="close" data-dismiss="modal"&gt;</span></span><br><span class="line"><span class="string">                            &lt;span&gt;&amp;times;&lt;/span&gt;</span></span><br><span class="line"><span class="string">                        &lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;h4 class="modal-title"&gt;&#123;&#123;title&#125;&#125;&lt;/h4&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                    &lt;div class="modal-body" (click)="closeModal()"&gt;</span></span><br><span class="line"><span class="string">                        &lt;ng-content&gt;&lt;/ng-content&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                &lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    `</span>,</span><br><span class="line">    styles: [</span><br><span class="line">        <span class="string">`</span></span><br><span class="line"><span class="string">        .modal-body &#123;height:250px;overflow-y:scroll;&#125;</span></span><br><span class="line"><span class="string">        `</span></span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleModal</span> </span>&#123;</span><br><span class="line">    @Input() title: string;</span><br><span class="line">    @Input() elementId: string;</span><br><span class="line">    @ViewChild(<span class="string">'modalcontainer'</span>) containerEl: ElementRef;</span><br><span class="line">+    @Input() closeOnBodyClick: string;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>( @Inject(JQ_TOKEN) private $: any) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    closeModal() &#123;</span><br><span class="line">+        <span class="keyword">if</span> (<span class="keyword">this</span>.closeOnBodyClick.toLocaleLowerCase() === <span class="string">'true'</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.$(<span class="keyword">this</span>.containerEl.nativeElement).modal(<span class="string">'hide'</span>);  <span class="comment">// we can still use previous way like modalTrigger.directive.ts</span></span><br><span class="line">+        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+                <!-- <hr> -->
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/05/05/angular2-chapter10/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter10 -- DI">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/05/10/angular2-chapter12/" data-toggle="tooltip" data-placement="top"
+                           title="angular2-chapter12 -- More Components and Custom Validators">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- social-share start -->
+                <div class="social-share" style="padding-top:20px;text-align:center;"></div>
+                <!--  css & js -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css
+                ">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                <!-- social-share end -->
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Create-Directives-and-Advanced-Component"><span class="toc-text">Create Directives and Advanced Component</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Implementing-the-Session-Search"><span class="toc-text">Implementing the Session Search</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Adding-jQuery"><span class="toc-text">Adding jQuery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-a-Modal-Component"><span class="toc-text">Creating a Modal Component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-Directives-The-Trigger-Directive"><span class="toc-text">Creating Directives - The Trigger Directive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Binding-an-ID"><span class="toc-text">Binding an ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Routing-to-the-Same-Component"><span class="toc-text">Routing to the Same Component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-the-ViewChild-Decorator"><span class="toc-text">Using the @ViewChild Decorator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-Settings-on-Components"><span class="toc-text">Creating Settings on Components</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Angular2"
+                           title="Angular2">Angular2</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<div id="music">
+    <audio id="bell" src="/music/Faded.mp3" preload="auto" loop autoplay></audio>
+</div>
+<!-- <embed style="position:fixed;right:0;bottom:0;"; src="http://www.xiami.com/widget/274513503_1776204257/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed> -->
+<!-- <embed style="position:fixed;right:0;bottom:-44px;"; src="http://www.xiami.com/widget/274513503_1775988866,1774426379,1770760772,1772121439,3567313,_235_246_FF8719_494949/multiPlayer.swf" allowscriptaccess="always" quality="high" wmode="opaque" menu="false" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="235" height="246" title="Adobe Flash Player"> -->
+<!-- music control -->
+<script src="/js/music.js"></script>
+
+<div class="gotoTop"></div>
+<script src="/js/gotoTop.js"></script>
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "guanghuiwang";
+    var disqus_identifier = "https://wghglory.github.io/2017/05/09/angular2-chapter11/";
+    var disqus_url = "https://wghglory.github.io/2017/05/09/angular2-chapter11/";
+
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.jianshu.com/u/85d2cacc9fcd">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-stack-1x fa-inverse">简</i>
+                                </span>
+                    </a>
+                </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/wghglory">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/guanghuiwang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Guanghui 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Modified theme based on <a href="https://haojen.github.io/">Haojen Ma</a>' Anisina
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- code block fold/unfold button and copy button -->
+<script src="/js/codeBlockEnhance.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wghglory.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-91771069-1';
+    var _gaDomain = 'wghglory.github.io';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  // (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  // (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  // e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  // })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  //
+  // _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpg">
+</body>
+
+</html>
